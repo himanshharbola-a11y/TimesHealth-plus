@@ -23,6 +23,7 @@ import timeshealth.app.core.domain.isAppRoute
  * | /race/{id}/results             | RaceResults(id)                   |
  * | /bib/{id}                      | Bib(id)                           |
  * | /session/{id}                  | SessionDetail(id)                 |
+ * | /live/{id}                     | LiveClass(id)                     |
  * | /paywall                       | Paywall()                         |
  * | /run-tracker                   | RunTracker                        |
  * | /yoga-explorer                 | YogaExplorer()                    |
@@ -42,6 +43,7 @@ fun appRouteToDestination(route: String?): Route? {
         "race" -> if (parts.getOrNull(2) == "results") Route.RaceResults(parts[1]) else Route.RaceDetail(parts[1])
         "bib" -> Route.Bib(parts[1])
         "session" -> Route.SessionDetail(parts[1])
+        "live" -> Route.LiveClass(parts[1])
         "paywall" -> Route.Paywall()
         "run-tracker" -> Route.RunTracker
         "yoga-explorer" -> Route.YogaExplorer()

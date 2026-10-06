@@ -26,6 +26,8 @@ import androidx.navigation.toRoute
 import timeshealth.app.core.data.session.SessionStatus
 import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.SheetDestination
+import timeshealth.app.ui.home.YOGA_PLAN_ID
+import timeshealth.app.ui.live.LiveClassRoute
 import timeshealth.app.ui.components.TagPill
 import timeshealth.app.ui.gate.GateDestination
 import timeshealth.app.ui.gate.GateRoute
@@ -168,9 +170,12 @@ fun AppNavHost(
         composable<Route.LiveClass>(
             enterTransition = Transitions.fadeEnter,
             popExitTransition = Transitions.fadeExit,
-        ) { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.LiveClass>()
-            ComingSoonScreen("Live class", detail = "Class ${route.id}", onBack = navController::back)
+        ) {
+            LiveClassRoute(
+                viewModel = hiltViewModel(),
+                onBack = navController::back,
+                onOpenPaywall = { navController.navigate(Route.Paywall(YOGA_PLAN_ID)) },
+            )
         }
 
         // Instructor reels play in-app (§6.3 "plays inline"), full screen.

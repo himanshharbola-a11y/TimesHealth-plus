@@ -195,6 +195,8 @@ class FakeTimesHealthApi(private val log: EventLog = EventLog()) : TimesHealthAp
     var onRemovePushToken: suspend (RemovePushTokenRequest) -> RemovePushTokenResponse =
         { RemovePushTokenResponse(removed = true) }
     var onNotifications: suspend () -> NotificationListResponse = { unexpected("notifications") }
+    var onLiveClasses: suspend () -> timeshealth.app.core.model.LiveClassListResponse = { unexpected("liveClasses") }
+    var onJoinLiveClass: suspend (String) -> timeshealth.app.core.model.LiveClassJoinResponse = { unexpected("joinLiveClass") }
 
     override suspend fun config() = record("config") { onConfig() }
     override suspend fun session() = record("session") { onSession() }
@@ -204,6 +206,8 @@ class FakeTimesHealthApi(private val log: EventLog = EventLog()) : TimesHealthAp
     override suspend fun deleteAccount() = record("deleteAccount") { onDeleteAccount() }
     override suspend fun home() = record("home") { onHome() }
     override suspend fun yogaToday() = record("yogaToday") { onYogaToday() }
+    override suspend fun liveClasses() = record("liveClasses") { onLiveClasses() }
+    override suspend fun joinLiveClass(liveClassId: String) = record("joinLiveClass $liveClassId") { onJoinLiveClass(liveClassId) }
     override suspend fun joinSession(body: JoinSessionRequest) = record("joinSession ${body.batchId}") { onJoinSession(body) }
     override suspend fun yogaAttendance() = record("yogaAttendance") { onYogaAttendance() }
     override suspend fun setReminderSlot(body: SetReminderSlotRequest) = record("setReminderSlot ${body.batchId}") { onSetReminderSlot(body) }

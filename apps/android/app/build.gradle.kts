@@ -117,6 +117,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    // In-app video: live classes (premieres), sessions and reels. PlayerView comes in via AndroidView.
+    implementation(libs.media3.exoplayer)
+    implementation(libs.media3.exoplayer.hls)
+    implementation(libs.media3.ui)
     debugImplementation(libs.androidx.compose.ui.tooling)
     // Hosts composables in Robolectric tests (an empty activity in the manifest).
     debugImplementation(libs.androidx.compose.ui.test.manifest)

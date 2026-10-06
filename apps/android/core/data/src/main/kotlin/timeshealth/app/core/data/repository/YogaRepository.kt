@@ -13,6 +13,8 @@ import timeshealth.app.core.data.cache.ResponseCache
 import timeshealth.app.core.model.CompletedResponse
 import timeshealth.app.core.model.JoinSessionRequest
 import timeshealth.app.core.model.JoinSessionResponse
+import timeshealth.app.core.model.LiveClassJoinResponse
+import timeshealth.app.core.model.LiveClassListResponse
 import timeshealth.app.core.model.MySessionsResponse
 import timeshealth.app.core.model.OkResponse
 import timeshealth.app.core.model.PlaybackResponse
@@ -41,6 +43,16 @@ class YogaRepository @Inject constructor(
 
     val catalog: CachedResource<YogaCatalogResponse> =
         CachedResource(cache, CacheKeys.YogaCatalog, 5.minutes) { api.yogaCatalog() }
+
+    /** GET /yoga/live: scheduled live classes (premieres). Their state moves with the clock. */
+    val liveClasses: CachedResource<LiveClassListResponse> =
+        CachedResource(cache, CacheKeys.YogaLive, 30.seconds) { api.liveClasses() }
+
+    /** Joins a live class: the stream to play. A member's join wrote an attendance mark. */
+    suspend fun joinLiveClass(liveClassId: String): LiveClassJoinResponse =
+        api.joinLiveClass(liveClassId).also {
+            if (it.attendanceRecorded) cache.invalidate(CacheKeys.YogaAttendance, CacheKeys.Home)
+        }
 
     /** GET /yoga/attendance. 403 NOT_ENTITLED for non-subscribers: only fetch it for subscribers. */
     val attendance: CachedResource<YogaAttendance> =

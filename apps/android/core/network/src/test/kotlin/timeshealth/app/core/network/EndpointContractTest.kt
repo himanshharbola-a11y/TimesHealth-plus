@@ -78,6 +78,19 @@ class EndpointContractTest(private val case: Case) {
             // Yoga
             Case("yogaToday", "GET", "/v1/yoga/today", null, Fixtures.text("yoga-today.json")) { yogaToday() },
             Case(
+                "liveClasses", "GET", "/v1/yoga/live", null,
+                """{"items":[{"id":"lc1","title":"Sunrise flow","description":"","imageUrl":null,
+                   "startsAt":"2026-10-08T00:30:00.000Z","endsAt":"2026-10-08T01:30:00.000Z","durationMinutes":60,
+                   "isFree":true,"state":"STARTING_SOON","instructorName":"Asha","instructorAvatarUrl":null,
+                   "batchId":"b1","canJoin":true}],"serverTime":"2026-10-08T00:00:00.000Z"}""",
+            ) { liveClasses() },
+            Case(
+                "joinLiveClass", "POST", "/v1/yoga/live/lc1/join", null,
+                """{"liveClassId":"lc1","video":{"provider":"slike","ref":"sl_1"},"startsAt":"2026-10-08T00:30:00.000Z",
+                   "endsAt":"2026-10-08T01:30:00.000Z","serverTime":"2026-10-08T00:40:00.000Z","positionMs":600000,
+                   "attendanceRecorded":true}""",
+            ) { joinLiveClass("lc1") },
+            Case(
                 "joinSession", "POST", "/v1/yoga/join", """{"batchId":"b_0600"}""",
                 """{"joinUrl":"https://meet.invalid/live","mode":"EXTERNAL_APP","attendanceRecorded":true,"source":"APP"}""",
             ) { joinSession(JoinSessionRequest("b_0600")) },

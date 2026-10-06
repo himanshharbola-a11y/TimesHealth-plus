@@ -44,6 +44,7 @@ object CacheKeys {
     val YogaCatalog = CacheKey("yoga", "catalog")
     val YogaAttendance = CacheKey("yoga", "attendance")
     val YogaMine = CacheKey("yoga", "mine")
+    val YogaLive = CacheKey("yoga", "live")
 
     val Marathon = CacheKey("marathon")
     fun marathonEvents(lat: Double?, lng: Double?) = CacheKey("marathon", "events", lat, lng)

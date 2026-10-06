@@ -54,6 +54,8 @@ val APP_ROUTES: List<Regex> = listOf(
     Regex("^/race/[\\w-]{1,64}(/results)?$"),
     Regex("^/bib/[\\w-]{1,64}$"),
     Regex("^/session/[\\w-]{1,64}$"),
+    // A live class (premiere): its reminder notification opens it.
+    Regex("^/live/[\\w-]{1,64}$"),
     Regex("^/(paywall|run-tracker|yoga-explorer)$"),
 )
 

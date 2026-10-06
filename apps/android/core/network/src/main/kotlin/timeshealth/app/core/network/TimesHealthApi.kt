@@ -23,6 +23,8 @@ import timeshealth.app.core.model.DietLeadResponse
 import timeshealth.app.core.model.HomeFeedResponse
 import timeshealth.app.core.model.JoinSessionRequest
 import timeshealth.app.core.model.JoinSessionResponse
+import timeshealth.app.core.model.LiveClassJoinResponse
+import timeshealth.app.core.model.LiveClassListResponse
 import timeshealth.app.core.model.MarathonListResponse
 import timeshealth.app.core.model.MySessionsResponse
 import timeshealth.app.core.model.NotificationListResponse
@@ -129,6 +131,21 @@ interface TimesHealthApi {
      */
     @POST("yoga/join")
     suspend fun joinSession(@Body body: JoinSessionRequest): JoinSessionResponse
+
+    /**
+     * Live classes ("premieres") scheduled in the admin dashboard: today's and the coming week's,
+     * soonest first, cancellations included. Carries no stream (see [joinLiveClass]).
+     */
+    @GET("yoga/live")
+    suspend fun liveClasses(): LiveClassListResponse
+
+    /**
+     * Joins a live class: the stream and where "now" is in it. Members' joins write the
+     * attendance mark (one per IST day). 403 NOT_ENTITLED (members-only class), 404 NOT_FOUND,
+     * 409 CLASS_NOT_OPEN (before the wait room) / CLASS_ENDED / CLASS_CANCELLED.
+     */
+    @POST("yoga/live/{id}/join")
+    suspend fun joinLiveClass(@Path("id") liveClassId: String): LiveClassJoinResponse
 
     /** The attendance tracker (§7.1). 403 NOT_ENTITLED for non-subscribers. */
     @GET("yoga/attendance")

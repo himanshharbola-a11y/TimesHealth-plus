@@ -77,7 +77,7 @@ class LinksTest {
         for (route in listOf(
             "/(tabs)", "/(tabs)/yoga", "/(tabs)/marathon", "/(tabs)/diet",
             "/race/abc-123", "/race/abc_123/results",
-            "/bib/BIB-0042", "/session/s_1",
+            "/bib/BIB-0042", "/session/s_1", "/live/cmlc1",
             "/paywall", "/run-tracker", "/yoga-explorer",
             "/race/" + "a".repeat(64),
         )) {
