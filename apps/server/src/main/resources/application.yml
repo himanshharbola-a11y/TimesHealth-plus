@@ -85,6 +85,11 @@ th:
     razorpay-key-secret: ${RAZORPAY_KEY_SECRET:}
     cors-origins: ${CORS_ORIGINS:*}
     yoga-class-link: ${YOGA_CLASS_LINK:https://timeshealthplus.invalid/live}
+    # Kotlin-only settings (not read by the Node server).
+    node-upstream-url: ${NODE_UPSTREAM_URL:}
+    admin-bootstrap-email: ${ADMIN_BOOTSTRAP_EMAIL:}
+    admin-bootstrap-password: ${ADMIN_BOOTSTRAP_PASSWORD:}
+    admin-session-secret: ${ADMIN_SESSION_SECRET:}
   demo:
     # none | seed | personas | all  (DEMO_DATA=all ./gradlew bootRun, or ./gradlew loadDemoData)
     load: ${DEMO_DATA:none}

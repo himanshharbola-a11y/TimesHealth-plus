@@ -59,6 +59,12 @@ class FastifyCorsFilter(env: ServerEnv) : OncePerRequestFilter() {
     private val allowList = env.corsOrigins
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
+        // The admin dashboard is same-origin only and authenticates with a cookie: reflecting
+        // origins with credentials there would let any website act as a signed-in admin.
+        if (request.requestURI.startsWith("/admin")) {
+            chain.doFilter(request, response)
+            return
+        }
         appendVary(response, "Origin")
         val origin = request.getHeader("Origin")
         val allowed = origin != null && (reflectAny || allowList.contains(origin))

@@ -4,3 +4,4 @@ build/
 *.log
 out/
 .idea/
+build-cli/

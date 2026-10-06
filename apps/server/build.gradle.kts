@@ -16,6 +16,11 @@ plugins {
     kotlin("plugin.serialization") version "2.1.20"
 }
 
+// The VS Code Java extension builds this project in the background into build/. A command-line
+// build running at the same moment collides with it ("Failed to create MD5 hash ..."), so CLI
+// builds can use their own folder: ./gradlew test -PbuildDirName=build-cli
+(findProperty("buildDirName") as String?)?.let { layout.buildDirectory.set(layout.projectDirectory.dir(it)) }
+
 group = "timeshealth"
 version = "1.0.0"
 

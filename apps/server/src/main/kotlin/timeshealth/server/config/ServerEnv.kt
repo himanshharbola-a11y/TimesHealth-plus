@@ -45,6 +45,16 @@ class ServerEnv(
     corsOrigins: String = "*",
     /** routes/yoga.ts reads YOGA_CLASS_LINK directly; it lives here so it is bound once. */
     val yogaClassLink: String = "https://timeshealthplus.invalid/live",
+    /**
+     * Kotlin-only. While routes are being ported, every /v1 route this server doesn't have yet is
+     * forwarded here (the Node server, e.g. http://localhost:4000). Empty: such routes are 404s.
+     * See web/NodeProxy.kt.
+     */
+    val nodeUpstreamUrl: String = "",
+    /** Kotlin-only. First dashboard owner, created at boot when no admin exists (admin/AdminBootstrap.kt). */
+    val adminBootstrapEmail: String = "",
+    val adminBootstrapPassword: String = "",
+    adminSessionSecret: String = "",
 ) {
     /**
      * FAIL CLOSED: anything that is not explicitly development or test is treated as production.
@@ -74,6 +84,9 @@ class ServerEnv(
 
     /** Signs the per-user WhatsApp class links (GET /yoga/wa-join). */
     val waJoinSigningSecret: String = waJoinSigningSecret.orFallback("dev-only-wa-join-secret-change-me")
+
+    /** Kotlin-only. Signs admin dashboard sessions (admin/AdminSessions.kt). */
+    val adminSessionSecret: String = adminSessionSecret.orFallback("dev-only-admin-session-secret-change-me")
 
     /**
      * Expo bib scanners: "counter1:key1,counter2:key2". Keys shorter than 24 characters are
@@ -135,6 +148,7 @@ class ServerEnv(
                 "BIB_SIGNING_SECRET" to bibSigningSecret,
                 "MEDIA_SIGNING_SECRET" to mediaSigningSecret,
                 "WA_JOIN_SIGNING_SECRET" to waJoinSigningSecret,
+                "ADMIN_SESSION_SECRET" to adminSessionSecret,
             )
             val weak = secrets.filterValues { it.startsWith("dev-only-") || it.length < 32 }.keys
             if (weak.isNotEmpty()) {

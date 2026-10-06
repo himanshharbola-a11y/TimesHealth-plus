@@ -110,24 +110,34 @@ model Instructor {
   rating     Float   @default(0)
   handle     String?
   reelCount  Int     @default(0)
+  // Admin CMS: order on "Explore our instructors" and pickers.
+  sortOrder  Int     @default(0)
 
-  batches  YogaBatch[]
-  sessions YogaSession[]
-  reels    Reel[]
+  batches     YogaBatch[]
+  sessions    YogaSession[]
+  reels       Reel[]
+  liveClasses LiveClass[]
 }
 
 model YogaBatch {
-  id        String @id @default(cuid())
-  title     String
+  id            String  @id @default(cuid())
+  title         String
   // "HH:mm" IST. Combined with the current date at request time.
-  time      String
-  period    String // MORNING | EVENING
-  sortOrder Int    @default(0)
+  time          String
+  period        String // MORNING | EVENING
+  sortOrder     Int     @default(0)
+  // Admin CMS: an inactive batch is off the timetable (kept for attendance history).
+  active        Boolean @default(true)
+  // The batch's usual stream when no LiveClass is scheduled for the day.
+  // Provider "url" (HLS/MP4) or "slike"; resolved by the app's video plug-in point.
+  videoProvider String?
+  videoRef      String?
 
   instructorId String
   instructor   Instructor @relation(fields: [instructorId], references: [id])
 
-  attendance Attendance[]
+  attendance  Attendance[]
+  liveClasses LiveClass[]
 
   @@index([period, sortOrder])
 }
@@ -143,6 +153,8 @@ model YogaCategory {
   sortOrder         Int     @default(0)
   // Maps a user's onboarding concern to this category for feed ordering (§6.3).
   concernTag        String?
+  // Admin CMS: hidden categories (and their sessions) leave the app.
+  visible           Boolean @default(true)
 
   sessions YogaSession[]
 }
@@ -175,7 +187,14 @@ model YogaSession {
   todayActiveCount    Int @default(0)
 
   // Storage key, not a public URL. Signed at request time for entitled users.
-  mediaKey String?
+  mediaKey      String?
+  // Admin CMS video source, preferred over mediaKey when set: provider "url"
+  // (HLS/MP4 address) or "slike" (Slike media id).
+  videoProvider String?
+  videoRef      String?
+  // Admin CMS: order inside its category, and hide without deleting.
+  sortOrder     Int     @default(0)
+  visible       Boolean @default(true)
 
   saved     SavedSession[]
   completed CompletedSession[]
@@ -642,4 +661,109 @@ model BibScan {
   scannedAt      DateTime             @default(now())
 
   @@index([registrationId, scannedAt])
+}
+
+// ── Admin CMS ───────────────────────────────────────────────────────────────
+// Managed from the admin dashboard (apps/server, /admin). Shared with the Node
+// server so `prisma db push` keeps these tables.
+
+/// A section of an app page (Home, Yoga). PMs add, rename, reorder, hide and
+/// schedule sections without a release; the server builds the page from these
+/// rows in sortOrder. `kind` decides what fills it (apps/server cms/SectionKind.kt).
+model FeedSection {
+  id          String    @id @default(cuid())
+  page        String // HOME | YOGA
+  kind        String
+  title       String
+  subtitle    String?
+  actionLabel String?
+  // Tiles and banners (RUN_TRACKER_TILE).
+  imageUrl    String?
+  // CATEGORY_RAIL: whose sessions it shows.
+  categoryId  String?
+  maxItems    Int       @default(10)
+  sortOrder   Int       @default(0)
+  visible     Boolean   @default(true)
+  // ALL | MEMBERS | NON_MEMBERS
+  audience    String    @default("ALL")
+  // Optional schedule: shown only inside [startsAt, endsAt).
+  startsAt    DateTime?
+  endsAt      DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  items FeedSectionItem[]
+
+  @@index([page, sortOrder])
+}
+
+/// Hand-picked content in a section, in order (CURATED_* sections).
+model FeedSectionItem {
+  id        String      @id @default(cuid())
+  sectionId String
+  section   FeedSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  // SESSION | ARTICLE | REEL | QUOTE | WORKSHOP | LIVE_CLASS
+  refType   String
+  refId     String
+  sortOrder Int         @default(0)
+
+  @@unique([sectionId, refType, refId])
+  @@index([sectionId, sortOrder])
+}
+
+/// A scheduled live class: a pre-recorded class streamed at a set time, like a
+/// YouTube premiere. Everyone who joins is at the same point of the stream.
+model LiveClass {
+  id              String      @id @default(cuid())
+  title           String
+  description     String      @default("")
+  imageUrl        String?
+  startsAt        DateTime
+  durationMinutes Int         @default(45)
+  // Free classes are open to everyone; the rest need the yoga membership.
+  isFree          Boolean     @default(false)
+  // "url" (HLS/MP4) | "slike"; resolved by the app's video plug-in point.
+  videoProvider   String      @default("url")
+  videoRef        String
+  // SCHEDULED | CANCELLED
+  status          String      @default("SCHEDULED")
+  instructorId    String?
+  instructor      Instructor? @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  batchId         String?
+  batch           YogaBatch?  @relation(fields: [batchId], references: [id], onDelete: SetNull)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([startsAt])
+}
+
+/// Dashboard users. Interim email + password (bcrypt) until admin sign-in
+/// moves to the company SSO (plug-in point: apps/server admin/AdminAuthenticator).
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  // OWNER (everything, incl. admins) | EDITOR (content) | VIEWER (read-only)
+  role         String
+  passwordHash String
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+/// Who changed what in the dashboard, and when.
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminId    String?
+  adminEmail String
+  // CREATE | UPDATE | DELETE | REORDER | LOGIN
+  action     String
+  resource   String
+  resourceId String?
+  summary    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([resource, resourceId])
 }

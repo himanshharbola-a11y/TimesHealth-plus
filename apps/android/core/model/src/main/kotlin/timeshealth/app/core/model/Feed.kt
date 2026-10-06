@@ -82,6 +82,11 @@ data class HeroYogaSession(
     val instructorName: String,
     val instructorAvatarUrl: String? = null,
     val durationMinutes: Int,
+    /**
+     * Set when an admin scheduled a live class (premiere) for this batch today: joining then
+     * plays it in the app (POST /yoga/live/{id}/join) instead of opening the class link.
+     */
+    val liveClassId: String? = null,
 ) : KnownHeroSlot {
     override val kind: HeroSlotKind get() = HeroSlotKind.YOGA_SESSION
 }
@@ -190,7 +195,8 @@ enum class CardFormat {
 
 /** The `type` discriminator of [FeedComponent] (TS `FeedComponentType`). */
 enum class FeedComponentType {
-    HERO_STACK, VIDEO_RAIL, REEL_RAIL, ARTICLE_RAIL, QUOTE_RAIL, WORKSHOP_RAIL, ENTRY_TILE, PROMO_STRIP, UNKNOWN,
+    HERO_STACK, VIDEO_RAIL, REEL_RAIL, ARTICLE_RAIL, QUOTE_RAIL, WORKSHOP_RAIL, ENTRY_TILE, PROMO_STRIP,
+    LIVE_CLASS_RAIL, UNKNOWN,
 }
 
 /** TS `FeedComponent`: a union discriminated by `"type"`. Render only [KnownFeedComponent]s. */
@@ -284,6 +290,18 @@ data class WorkshopRailComponent(
     override val type: FeedComponentType get() = FeedComponentType.WORKSHOP_RAIL
 }
 
+/** Upcoming live classes (premieres) scheduled in the admin dashboard. */
+@Serializable
+data class LiveClassRailComponent(
+    override val id: String,
+    val title: String,
+    val cardFormat: CardFormat = CardFormat.VIDEO_LANDSCAPE,
+    val items: List<LiveClassCard> = emptyList(),
+    val actionLabel: String? = null,
+) : KnownFeedComponent {
+    override val type: FeedComponentType get() = FeedComponentType.LIVE_CLASS_RAIL
+}
+
 /** §6.3 rail 3: not a scrolling rail. A single tile that opens the tracker directly. */
 @Serializable
 data class EntryTileComponent(
@@ -328,6 +346,7 @@ internal object FeedComponentSerializer : ForwardCompatibleUnionSerializer<FeedC
         variant(FeedComponentType.WORKSHOP_RAIL.name, WorkshopRailComponent.serializer()),
         variant(FeedComponentType.ENTRY_TILE.name, EntryTileComponent.serializer()),
         variant(FeedComponentType.PROMO_STRIP.name, PromoStripComponent.serializer()),
+        variant(FeedComponentType.LIVE_CLASS_RAIL.name, LiveClassRailComponent.serializer()),
     ),
 ) {
     override fun toUnknown(tag: String?): FeedComponent = FeedComponent.Unknown(tag)

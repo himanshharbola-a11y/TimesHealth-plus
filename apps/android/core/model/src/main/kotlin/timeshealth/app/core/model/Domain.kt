@@ -240,6 +240,11 @@ data class YogaSession(
     val todayActiveCount: Int,
     /** Null unless the caller is entitled. A short-TTL signed URL (see §E2). */
     val playbackUrl: String? = null,
+    /**
+     * The video as the admin dashboard set it (Slike id or stream URL), for the app's video
+     * plug-in point. Null unless the caller may play it (free, or entitled).
+     */
+    val video: VideoSource? = null,
 )
 
 @Serializable
