@@ -18,12 +18,16 @@
         android:allowBackup="false"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        android:theme="@style/Theme.TimesHealth">
 
-        <!-- Placeholder entry point until the UI toolkit (Compose / XML) is chosen. -->
+        <!-- The single activity: Jetpack Compose (+ AndroidView interop). Light
+             only; adjustResize so the IME insets reach Compose (login fields). -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.TimesHealth.Starting"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

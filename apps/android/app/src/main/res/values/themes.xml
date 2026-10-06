@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        The window behind Compose: the app canvas, so nothing flashes white
+        between the splash and the first frame. Light only (RN
+        userInterfaceStyle: light). Edge to edge is set up in MainActivity.
+    -->
+    <style name="Theme.TimesHealth" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/th_canvas_bg</item>
+    </style>
+
+    <!-- Launch theme (androidx core-splashscreen): canvas + the brand mark, then Theme.TimesHealth. -->
+    <style name="Theme.TimesHealth.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/th_canvas_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_mark</item>
+        <item name="postSplashScreenTheme">@style/Theme.TimesHealth</item>
+    </style>
+</resources>

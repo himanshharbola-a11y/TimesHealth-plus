@@ -2,16 +2,26 @@ package timeshealth.app
 
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
+import timeshealth.app.ui.session.ForegroundRefresh
 
 @HiltAndroidApp
 class TimesHealthApp : Application(), Configuration.Provider {
 
     @Inject lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject lateinit var foregroundRefresh: ForegroundRefresh
+
     // Workers (run uploads) get their dependencies from Hilt.
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
+
+    override fun onCreate() {
+        super.onCreate()
+        // Back after >= 60 s in the background: re-read anything entitlement-shaped.
+        ProcessLifecycleOwner.get().lifecycle.addObserver(foregroundRefresh)
+    }
 }

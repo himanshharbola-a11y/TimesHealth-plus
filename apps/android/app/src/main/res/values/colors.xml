@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Window-level colours, needed before Compose draws (the system splash and
+        the window background). They mirror ui/theme/Color.kt (CanvasBg,
+        CoralBrand, PaperWhite); screens use the Compose tokens, never these.
+    -->
+    <color name="th_canvas_bg">#FFFAF7F3</color>
+    <color name="th_coral_brand">#FFE8533A</color>
+    <color name="th_paper_white">#FFFFFFFF</color>
+</resources>
