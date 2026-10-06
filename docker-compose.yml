@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: timeshealth-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: timeshealth
+      POSTGRES_PASSWORD: timeshealth_dev
+      POSTGRES_DB: timeshealth
+    ports:
+      - '5433:5432'
+    volumes:
+      - timeshealth-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U timeshealth -d timeshealth']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  timeshealth-pgdata:

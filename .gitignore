@@ -1,0 +1,23 @@
+node_modules/
+dist/
+.env
+*.log
+.expo/
+android/
+ios/
+.secrets/*
+!.secrets/README.md
+google-services.json
+GoogleService-Info.plist
+*-firebase-adminsdk-*.json
+
+# Company-confidential design inputs (PRD, decompiled design APK) — never pushed
+assets/design-reference/
+*.apk
+*.aab
+# Signing material
+*.jks
+*.keystore
+keystore.properties
+# Editor settings
+.vscode/

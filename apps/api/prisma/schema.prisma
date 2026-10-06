@@ -1,0 +1,645 @@
+// TimesHealth+ API data model.
+//
+// Design notes that matter:
+//  - Entitlement is three independent relations, never a tier column (PRD §2).
+//  - Attendance has a UNIQUE(userId, date) constraint. That single line is what
+//    implements "two sessions same day → one attendance mark" (§7.1) and makes
+//    the ledger idempotent, so an app join and a WhatsApp join on the same day
+//    cannot double-count. Single-source attendance depends on it.
+//  - Money is integer paise everywhere.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Identity ────────────────────────────────────────────────────────────────
+
+model User {
+  id           String    @id @default(cuid())
+  // Firebase UID. The only link between an auth provider and our domain.
+  firebaseUid  String    @unique
+  // Identifiers ASSERTED BY THE LOGIN PROVIDER (or an import from our own
+  // systems). resolveUser matches only on these — so nobody can block or hijack
+  // an account merge by typing someone else's number into their profile.
+  email        String?
+  phone        String?
+  // What the user typed in onboarding/profile ("Email + mobile", §5 step 2).
+  // Lead and contact data only — never used to resolve identity.
+  contactEmail String?
+  contactPhone String?
+  name         String?
+  dob          DateTime?
+  gender       String?
+
+  healthGoal String?
+  concern    String?
+
+  units  String @default("METRIC")
+  locale String @default("en-IN")
+
+  onboardingCompleted Boolean @default(false)
+  profileCompletion   Int     @default(0)
+
+  // Refer & Win (PRD §8.3): the friend's code this person arrived with — from
+  // the shared link or typed at checkout. Credited only on their first PAID
+  // race registration, never on signup (docs/04 T2).
+  referredByCode String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  yogaSubscription      YogaSubscription?
+  marathonRegistrations MarathonRegistration[]
+  attendance            Attendance[]
+  runs                  RunRecord[]
+  dietLeads             DietLead[]
+  workshopRegistrations WorkshopRegistration[]
+  orders                Order[]
+  referral              Referral?
+  savedSessions         SavedSession[]
+  completedSessions     CompletedSession[]
+  deviceTokens          DeviceToken[]
+  notifications         NotificationLog[]
+  referralCreditsEarned ReferralCredit[]       @relation("ReferredUser")
+  identityConflicts     IdentityConflict[]
+
+  // PRD §5: a web user logging in with a different identifier must resolve to
+  // one account. Both are indexed, not unique — collisions are resolved by the
+  // identity service, which is allowed to see duplicates before merging them.
+  @@index([email])
+  @@index([phone])
+}
+
+// ── Yoga ────────────────────────────────────────────────────────────────────
+
+model YogaSubscription {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planId     String
+  planLabel  String
+  status     String // ACTIVE | EXPIRED | CANCELLED
+  startedAt  DateTime
+  expiresAt  DateTime
+  autoRenews Boolean  @default(true)
+
+  // The batch chosen for reminders. The user may still join any batch (§7.1).
+  reminderSlotId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, expiresAt])
+  @@index([reminderSlotId])
+}
+
+model Instructor {
+  id         String  @id @default(cuid())
+  name       String
+  title      String
+  specialty  String
+  bio        String
+  experience String
+  avatarUrl  String
+  rating     Float   @default(0)
+  handle     String?
+  reelCount  Int     @default(0)
+
+  batches  YogaBatch[]
+  sessions YogaSession[]
+  reels    Reel[]
+}
+
+model YogaBatch {
+  id        String @id @default(cuid())
+  title     String
+  // "HH:mm" IST. Combined with the current date at request time.
+  time      String
+  period    String // MORNING | EVENING
+  sortOrder Int    @default(0)
+
+  instructorId String
+  instructor   Instructor @relation(fields: [instructorId], references: [id])
+
+  attendance Attendance[]
+
+  @@index([period, sortOrder])
+}
+
+model YogaCategory {
+  id                String  @id @default(cuid())
+  name              String
+  tagline           String
+  bodyTargetSummary String
+  imageUrl          String
+  bannerTheme       String  @default("NEUTRAL")
+  totalYogisJoined  Int     @default(0)
+  sortOrder         Int     @default(0)
+  // Maps a user's onboarding concern to this category for feed ordering (§6.3).
+  concernTag        String?
+
+  sessions YogaSession[]
+}
+
+model YogaSession {
+  id         String       @id @default(cuid())
+  categoryId String
+  category   YogaCategory @relation(fields: [categoryId], references: [id])
+
+  title           String
+  description     String
+  imageUrl        String
+  durationMinutes Int
+  level           String
+  intensity       String
+  caloriesBurned  Int    @default(0)
+
+  // §6.3: selected full sessions opened up free. Everything else needs yoga.
+  isFree Boolean @default(false)
+
+  bodyFocusTitle  String
+  targetBodyParts String[]
+  keyPoses        String[]
+  lifestyleImpact String
+
+  instructorId String
+  instructor   Instructor @relation(fields: [instructorId], references: [id])
+
+  joinedCountTillDate Int @default(0)
+  todayActiveCount    Int @default(0)
+
+  // Storage key, not a public URL. Signed at request time for entitled users.
+  mediaKey String?
+
+  saved     SavedSession[]
+  completed CompletedSession[]
+
+  @@index([categoryId])
+  @@index([isFree])
+}
+
+// The single-source attendance ledger (PRD §7.1, do-not-cut).
+model Attendance {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Date only (midnight IST). The uniqueness guarantee lives on this column.
+  date    DateTime   @db.Date
+  batchId String?
+  batch   YogaBatch? @relation(fields: [batchId], references: [id])
+
+  // APP | WHATSAPP | WEB | MANUAL — recorded for reconciliation, never for gating.
+  source String
+
+  createdAt DateTime @default(now())
+
+  // One mark per user per day, whichever channel got there first.
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model SavedSession {
+  userId    String
+  sessionId String
+  createdAt DateTime    @default(now())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session   YogaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, sessionId])
+}
+
+model CompletedSession {
+  userId    String
+  sessionId String
+  createdAt DateTime    @default(now())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session   YogaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@id([userId, sessionId])
+}
+
+// ── Marathon ────────────────────────────────────────────────────────────────
+
+model MarathonEvent {
+  id          String   @id @default(cuid())
+  name        String
+  city        String
+  venue       String
+  imageUrl    String
+  startsAt    DateTime
+  flagOffTime String
+
+  // §8.3 edge cases, consumed by the box and the detail screen.
+  registrationOpen Boolean   @default(true)
+  rescheduledFrom  DateTime?
+
+  latitude  Float?
+  longitude Float?
+
+  expoVenue        String?
+  expoAddress      String?
+  expoStartsAt     DateTime?
+  expoEndsAt       DateTime?
+  expoPickupWindow String?
+  expoInstructions String?
+  expoDocuments    String[]
+
+  distanceOptions RaceDistanceOption[]
+  registrations   MarathonRegistration[]
+  faqs            RaceFaq[]
+
+  @@index([startsAt])
+}
+
+model RaceDistanceOption {
+  id      String        @id @default(cuid())
+  eventId String
+  event   MarathonEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  code  String // 3K | 5K | 10K | 21K
+  label String
+
+  priceClassicPaise    Int
+  pricePremiumPaise    Int
+  wasPriceClassicPaise Int?
+  wasPricePremiumPaise Int?
+
+  // §8.3: sold out suppresses the upgrade banner rather than failing it.
+  premiumSoldOut   Boolean @default(false)
+  registrationOpen Boolean @default(true)
+  sortOrder        Int     @default(0)
+
+  @@unique([eventId, code])
+}
+
+model MarathonRegistration {
+  id      String        @id @default(cuid())
+  userId  String
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId String
+  event   MarathonEvent @relation(fields: [eventId], references: [id])
+
+  registrationRef String   @unique
+  tier            String // CLASSIC | PREMIUM
+  category        String
+  bibNumber       String?
+  status          String   @default("UPCOMING")
+  registeredAt    DateTime @default(now())
+
+  tshirtSize            String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
+
+  result RaceResult?
+  kit    KitDelivery?
+  scans  BibScan[]
+
+  @@unique([userId, eventId])
+  @@index([eventId, status])
+}
+
+// §8.4. Rows exist only once the timing partner publishes.
+model RaceResult {
+  id             String               @id @default(cuid())
+  registrationId String               @unique
+  registration   MarathonRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  published      Boolean  @default(false)
+  finishTime     String?
+  chipTime       String?
+  avgPace        String?
+  overallRank    Int?
+  ageGroupRank   Int?
+  splits         Json?
+  certificateUrl String?
+  medalStatus    String?
+  photoUrls      String[]
+
+  updatedAt DateTime @updatedAt
+
+  @@index([published, updatedAt])
+}
+
+model KitDelivery {
+  id             String               @id @default(cuid())
+  registrationId String               @unique
+  registration   MarathonRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  status      String    @default("NOT_DISPATCHED")
+  courierName String?
+  trackingRef String?
+  expectedBy  DateTime?
+}
+
+model RaceFaq {
+  id        String        @id @default(cuid())
+  eventId   String
+  event     MarathonEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  question  String
+  answer    String
+  sortOrder Int           @default(0)
+}
+
+// §8.3. Counts only completed paid registrations — see docs/04 T2.
+model Referral {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  code                      String    @unique
+  confirmedReferrals        Int       @default(0)
+  luckyDrawEntries          Int       @default(0)
+  guaranteedUpgradeUnlocked Boolean   @default(false)
+  // Set when the earned free Premium upgrade is used — it can be claimed once.
+  upgradeClaimedAt          DateTime?
+
+  credits ReferralCredit[]
+
+  createdAt DateTime @default(now())
+}
+
+/// One friend's paid registration credited to one referrer. The unique pair is
+/// what stops the same friend being counted twice (two races, retried webhooks).
+model ReferralCredit {
+  id             String   @id @default(cuid())
+  referralId     String
+  referral       Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  referredUserId String
+  referredUser   User     @relation("ReferredUser", fields: [referredUserId], references: [id], onDelete: Cascade)
+  orderId        String   @unique
+  createdAt      DateTime @default(now())
+
+  @@unique([referralId, referredUserId])
+}
+
+/// PRD §5 one-account rule: when a login matches existing records but they
+/// cannot be merged safely (two unclaimed imports, or one already owned by a
+/// different login), a fresh account is created and the clash is recorded here
+/// for support to merge — never silently.
+model IdentityConflict {
+  id             String    @id @default(cuid())
+  newUserId      String
+  newUser        User      @relation(fields: [newUserId], references: [id], onDelete: Cascade)
+  matchedUserIds String[]
+  // MULTIPLE_UNCLAIMED | ALREADY_CLAIMED
+  reason         String
+  resolvedAt     DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@index([resolvedAt, createdAt])
+}
+
+// ── Live workshops (in the design, not the PRD — in scope by decision) ──────
+
+model LiveWorkshop {
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  category        String // YOGA | MARATHON | DIET
+  focusArea       String
+  imageUrl        String
+  startsAt        DateTime
+  durationMinutes Int
+  level           String
+  platform        String
+
+  instructorName      String
+  instructorTitle     String
+  instructorAvatarUrl String
+
+  // Null = free for entitled members ("Free for Members").
+  pricePaise    Int?
+  totalCapacity Int
+  joinUrl       String?
+
+  registrations WorkshopRegistration[]
+
+  @@index([startsAt])
+}
+
+model WorkshopRegistration {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workshopId String
+  workshop   LiveWorkshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  createdAt  DateTime     @default(now())
+
+  // Capacity is enforced by this constraint plus a transactional count.
+  @@unique([userId, workshopId])
+}
+
+// ── Run tracker ─────────────────────────────────────────────────────────────
+
+model RunRecord {
+  // Client-generated UUID so uploads are idempotent and a crash loses nothing.
+  id     String @id
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  startedAt       DateTime
+  endedAt         DateTime
+  distanceKm      Float
+  durationSeconds Int
+  avgPaceSecPerKm Int
+  caloriesBurned  Int
+
+  // Private by default. Never exposed to another user — see docs/04 T7.
+  routePolyline      String?
+  hasAccuracyWarning Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, startedAt])
+}
+
+// ── Diet (lead capture only, PRD §9) ────────────────────────────────────────
+
+model DietLead {
+  id     String  @id @default(cuid())
+  userId String?
+  // Cascade: deleting an account must erase the leads it submitted (DPDP).
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name              String
+  phone             String
+  condition         String?
+  cuisinePreference String?
+  bestTimeToCall    String?
+
+  // Set once the lead has been pushed to the existing diet pipeline.
+  forwardedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([createdAt])
+  @@index([forwardedAt, createdAt])
+}
+
+// ── Content ─────────────────────────────────────────────────────────────────
+
+model Article {
+  id              String   @id @default(cuid())
+  title           String
+  source          String // THE TIMES OF INDIA | ET DIGITAL
+  category        String
+  imageUrl        String
+  readTimeMinutes Int
+  url             String
+  concernTag      String?
+  sortOrder       Int      @default(0)
+  publishedAt     DateTime @default(now())
+
+  @@index([publishedAt])
+}
+
+model Reel {
+  id              String     @id @default(cuid())
+  instructorId    String
+  instructor      Instructor @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  thumbnailUrl    String
+  playbackUrl     String
+  durationSeconds Int
+  sortOrder       Int        @default(0)
+}
+
+model UserQuote {
+  id        String @id @default(cuid())
+  quote     String
+  author    String
+  role      String
+  sortOrder Int    @default(0)
+}
+
+// §6.2. Fully server-controlled; absence is a valid state and must not break
+// the layout. Scheduling lets merchandising switch it off without a release.
+model PromoCampaign {
+  id              String  @id @default(cuid())
+  campaignId      String  @unique
+  title           String
+  subtitle        String?
+  ctaLabel        String
+  imageUrl        String?
+  backgroundColor String?
+  action          Json
+
+  // Default logic: carry whatever the hero stack is not already selling.
+  sellsProduct String // YOGA | MARATHON | DIET | OTHER
+
+  active   Boolean   @default(true)
+  startsAt DateTime?
+  endsAt   DateTime?
+  priority Int       @default(0)
+
+  @@index([active, priority])
+}
+
+// ── Commerce ────────────────────────────────────────────────────────────────
+
+model Order {
+  id     String  @id @default(cuid())
+  // Null once the buyer deletes their account: the payment record itself is
+  // kept (tax/audit retention, and a pending refund must still be paid out to
+  // the original payment method), but nothing links it to a person any more.
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  productType String
+  productId   String
+  eventId     String?
+  category    String?
+  tier        String?
+
+  // Always computed server-side. The client never sends a price.
+  amountPaise Int
+  currency    String @default("INR")
+
+  gateway          String  @default("STUB")
+  gatewayOrderId   String?
+  gatewayPaymentId String?
+
+  status             String  @default("CREATED") // CREATED | PENDING | PAID | FAILED
+  // Entitlement is granted on the webhook, never on client confirmation.
+  entitlementGranted Boolean @default(false)
+  // Why a PAID order could not be fulfilled (status PAID_NOT_GRANTED): the
+  // seat sold out / registration closed while the user was paying. Ops refunds.
+  settlementNote     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status])
+  @@index([gatewayOrderId])
+}
+
+// ── Push notifications (PRD §11) ────────────────────────────────────────────
+
+// One row per device. A user on two phones gets both rows, and a token that
+// FCM reports as unregistered is deleted rather than retried forever.
+model DeviceToken {
+  token      String   @id
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platform   String // ANDROID | IOS
+  provider   String // EXPO | FCM | APNS
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// One row per notification actually attempted. The UNIQUE(userId, kind,
+// dedupeKey) constraint is what guarantees a user gets each reminder at most
+// once: the row is inserted BEFORE sending, so a retry, a restart or two
+// overlapping scheduler runs all hit the constraint instead of re-sending.
+model NotificationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // SESSION_REMINDER | SESSION_LIVE | RACE_COUNTDOWN | RACE_DAY_INFO | RESULT_PUBLISHED | TEST
+  kind      String
+  // Identifies the occurrence, e.g. "b2:2026-10-05" or "delhi_half:7d".
+  dedupeKey String
+  // What was shown — kept so the in-app inbox (TopHeader bell) can list it.
+  title     String?
+  body      String?
+  route     String?
+  delivered Int      @default(0)
+  sentAt    DateTime @default(now())
+
+  @@unique([userId, kind, dedupeKey])
+  @@index([sentAt])
+  // The result-published sweep looks up by occurrence across all users.
+  @@index([kind, dedupeKey])
+}
+
+// ── Platform config ─────────────────────────────────────────────────────────
+
+// Single row. The force-update gate and maintenance switch (docs/05 §1).
+model AppConfig {
+  id                     Int      @id @default(1)
+  minSupportedAppVersion String   @default("1.0.0")
+  maintenanceActive      Boolean  @default(false)
+  maintenanceMessage     String?
+  updatedAt              DateTime @updatedAt
+}
+
+/// Each expo-scanner verification of a digital bib (PRD §8.3). Lets the counter
+/// see that a pass was already used to collect a kit.
+model BibScan {
+  id             String               @id @default(cuid())
+  registrationId String
+  registration   MarathonRegistration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  scannerId      String
+  // ONLINE (60s token) | OFFLINE (7-day signed payload)
+  tokenKind      String
+  scannedAt      DateTime             @default(now())
+
+  @@index([registrationId, scannedAt])
+}

@@ -1,0 +1,104 @@
+{
+  "expo": {
+    "name": "TimesHealth+",
+    "slug": "timeshealth-plus",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "timeshealth",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAF7F3"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "timeshealth.app",
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "location",
+          "remote-notification"
+        ],
+        "NSLocationWhenInUseUsageDescription": "TimesHealth+ uses your location to track distance, pace and route while you run.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "TimesHealth+ keeps tracking your run when the screen is off so your distance stays accurate.",
+        "NSMotionUsageDescription": "Used to improve distance accuracy when GPS signal is weak."
+      }
+    },
+    "android": {
+      "package": "timeshealth.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "backgroundColor": "#E8533A"
+      },
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION",
+        "POST_NOTIFICATIONS",
+        "WAKE_LOCK",
+        "VIBRATE",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ],
+      "blockedPermissions": [
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
+      "allowBackup": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-video",
+      "expo-secure-store",
+      "expo-sqlite",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "TimesHealth+ uses your location to track distance, pace and route while you run.",
+          "locationWhenInUsePermission": "TimesHealth+ uses your location to track distance, pace and route while you run.",
+          "isAndroidForegroundServiceEnabled": true,
+          "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#E8533A"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36
+          },
+          "ios": {
+            "deploymentTarget": "16.4"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "apiBaseUrl": "http://10.0.2.2:4000/v1",
+      "firebaseEnabled": false,
+      "router": {},
+      "eas": {
+        "projectId": "dd38c807-585f-4b01-aa2e-1c4e534fe3f7"
+      }
+    },
+    "owner": "himansh08"
+  }
+}
