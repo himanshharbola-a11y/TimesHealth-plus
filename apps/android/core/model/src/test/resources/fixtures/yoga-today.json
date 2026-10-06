@@ -1,0 +1,95 @@
+{
+  "batches": [
+    {
+      "id": "b1",
+      "title": "Morning Asana Flow",
+      "time": "05:15",
+      "period": "MORNING",
+      "instructorName": "Shynee Narang",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-05T23:45:00.000Z",
+      "endsAt": "2026-10-06T00:45:00.000Z"
+    },
+    {
+      "id": "b2",
+      "title": "Hip Mobility & Spine Release",
+      "time": "06:30",
+      "period": "MORNING",
+      "instructorName": "Apurva Tilwani",
+      "isUserReminderSlot": true,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T01:00:00.000Z",
+      "endsAt": "2026-10-06T02:00:00.000Z"
+    },
+    {
+      "id": "b3",
+      "title": "Gentle Asana & Breathwork",
+      "time": "08:00",
+      "period": "MORNING",
+      "instructorName": "Sneha Rathi",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T02:30:00.000Z",
+      "endsAt": "2026-10-06T03:30:00.000Z"
+    },
+    {
+      "id": "b4",
+      "title": "Desk Posture Reset",
+      "time": "09:00",
+      "period": "MORNING",
+      "instructorName": "Shynee Narang",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T03:30:00.000Z",
+      "endsAt": "2026-10-06T04:30:00.000Z"
+    },
+    {
+      "id": "b5",
+      "title": "Joint Health Bootcamp",
+      "time": "16:45",
+      "period": "EVENING",
+      "instructorName": "Sneha Rathi",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T11:15:00.000Z",
+      "endsAt": "2026-10-06T12:15:00.000Z"
+    },
+    {
+      "id": "b6",
+      "title": "Pranayama & Yogic Calm",
+      "time": "18:00",
+      "period": "EVENING",
+      "instructorName": "Vinay Zende",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T12:30:00.000Z",
+      "endsAt": "2026-10-06T13:30:00.000Z"
+    },
+    {
+      "id": "b7",
+      "title": "Evening Unwind Flow",
+      "time": "19:30",
+      "period": "EVENING",
+      "instructorName": "Apurva Tilwani",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T14:00:00.000Z",
+      "endsAt": "2026-10-06T15:00:00.000Z"
+    },
+    {
+      "id": "b8",
+      "title": "Yoga Nidra & Deep Sleep",
+      "time": "20:30",
+      "period": "EVENING",
+      "instructorName": "Vinay Zende",
+      "isUserReminderSlot": false,
+      "isLiveNow": false,
+      "startsAt": "2026-10-06T15:00:00.000Z",
+      "endsAt": "2026-10-06T16:00:00.000Z"
+    }
+  ],
+  "liveBatchId": null,
+  "nextBatchId": "b5",
+  "nextSessionStartsAt": "2026-10-06T11:15:00.000Z"
+}

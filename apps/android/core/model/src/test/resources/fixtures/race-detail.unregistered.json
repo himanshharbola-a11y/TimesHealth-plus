@@ -1,0 +1,71 @@
+{
+  "event": {
+    "id": "hyd_half",
+    "name": "Hyderabad Half Marathon",
+    "city": "Hyderabad",
+    "venue": "Gachibowli Stadium",
+    "imageUrl": "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80",
+    "startsAt": "2026-11-20T18:30:00.000Z",
+    "flagOffTime": "5:45 AM",
+    "distanceOptions": [
+      {
+        "code": "5K",
+        "label": "5K",
+        "pricePaise": {
+          "CLASSIC": 175000,
+          "PREMIUM": 349900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      },
+      {
+        "code": "10K",
+        "label": "10K",
+        "pricePaise": {
+          "CLASSIC": 215000,
+          "PREMIUM": 389900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      },
+      {
+        "code": "21K",
+        "label": "21K",
+        "pricePaise": {
+          "CLASSIC": 255000,
+          "PREMIUM": 429900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": true,
+        "registrationOpen": true
+      }
+    ],
+    "registrationOpen": true,
+    "rescheduledFrom": null,
+    "expo": null,
+    "registration": null,
+    "distanceFromUserKm": null
+  },
+  "bib": null,
+  "result": null,
+  "kit": null,
+  "referral": null,
+  "upgradeOffer": null,
+  "faqs": [
+    {
+      "question": "Can I transfer my bib to a friend?",
+      "answer": "No. Bibs are legally tied to mandatory timing chip registration and event insurance, and cannot be transferred."
+    },
+    {
+      "question": "What happens if the race is rescheduled?",
+      "answer": "Your registration automatically transfers to the revised date with no penalty. You will receive immediate WhatsApp & push alerts."
+    },
+    {
+      "question": "What is included in the runner kit?",
+      "answer": "Official event technical dry-fit t-shirt, timing chip bib, baggage tags, energy gels, and sponsor vouchers."
+    }
+  ],
+  "participant": null
+}

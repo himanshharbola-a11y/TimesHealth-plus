@@ -1,0 +1,111 @@
+{
+  "event": {
+    "id": "pune_run",
+    "name": "Pune Monsoon Run",
+    "city": "Pune",
+    "venue": "Shree Shiv Chhatrapati Sports Complex",
+    "imageUrl": "https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=800&q=80",
+    "startsAt": "2026-09-14T18:30:00.000Z",
+    "flagOffTime": "6:00 AM",
+    "distanceOptions": [
+      {
+        "code": "5K",
+        "label": "5K",
+        "pricePaise": {
+          "CLASSIC": 149900,
+          "PREMIUM": 299900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": false
+      },
+      {
+        "code": "10K",
+        "label": "10K",
+        "pricePaise": {
+          "CLASSIC": 189900,
+          "PREMIUM": 339900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": false
+      },
+      {
+        "code": "21K",
+        "label": "21K",
+        "pricePaise": {
+          "CLASSIC": 229900,
+          "PREMIUM": 379900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": false
+      }
+    ],
+    "registrationOpen": false,
+    "rescheduledFrom": null,
+    "expo": null,
+    "registration": {
+      "eventId": "pune_run",
+      "eventName": "Pune Monsoon Run",
+      "registrationRef": "TH-QA_FINISHER",
+      "tier": "CLASSIC",
+      "category": "10K",
+      "bibNumber": "PUN-7731C",
+      "status": "COMPLETED",
+      "registeredAt": "2026-10-06T06:26:56.868Z"
+    },
+    "distanceFromUserKm": null
+  },
+  "bib": {
+    "bibNumber": "PUN-7731C",
+    "participantName": "Farah Finisher",
+    "category": "10K",
+    "tier": "CLASSIC",
+    "eventName": "Pune Monsoon Run",
+    "qrToken": "LIVE.TH-QA_FINISHER.1791275299.0741d9c8c10fe153f6a4010bfe8c0da89202f0b60a4a4c717b69b509075e8fc6",
+    "qrExpiresAt": "2026-10-06T08:28:19.000Z",
+    "offlinePayload": "PASS.TH-QA_FINISHER.1791880039.70d1fc0c954860764a03f495b56b01d762d2e5b2090a89b1b0cd003367cd8f9a"
+  },
+  "result": {
+    "published": false,
+    "finishTime": null,
+    "chipTime": null,
+    "avgPace": null,
+    "overallRank": null,
+    "ageGroupRank": null,
+    "category": "10K",
+    "splits": [],
+    "certificateUrl": null,
+    "medalStatus": null,
+    "photoUrls": []
+  },
+  "kit": {
+    "status": "IN_TRANSIT",
+    "courierName": "BlueDart",
+    "trackingRef": "DEL-9921",
+    "tshirtSize": "M",
+    "expectedBy": "2026-10-11T06:26:56.959Z"
+  },
+  "referral": null,
+  "upgradeOffer": null,
+  "faqs": [
+    {
+      "question": "Can I transfer my bib to a friend?",
+      "answer": "No. Bibs are legally tied to mandatory timing chip registration and event insurance, and cannot be transferred."
+    },
+    {
+      "question": "What happens if the race is rescheduled?",
+      "answer": "Your registration automatically transfers to the revised date with no penalty. You will receive immediate WhatsApp & push alerts."
+    },
+    {
+      "question": "What is included in the runner kit?",
+      "answer": "Official event technical dry-fit t-shirt, timing chip bib, baggage tags, energy gels, and sponsor vouchers."
+    }
+  ],
+  "participant": {
+    "tshirtSize": "M",
+    "emergencyContactName": null,
+    "emergencyContactPhone": null
+  }
+}

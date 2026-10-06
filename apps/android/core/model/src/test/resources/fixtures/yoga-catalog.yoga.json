@@ -1,0 +1,580 @@
+{
+  "categories": [
+    {
+      "id": "cat_spine",
+      "name": "Spine & Posture",
+      "tagline": "Reverse desk slouch & decompress lumbar discs",
+      "bodyTargetSummary": "Lumbar Spine, Thoracic Cage & Cervical Neck",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "PLUM",
+      "sessionCount": 3,
+      "totalYogisJoined": 42300
+    },
+    {
+      "id": "cat_flex",
+      "name": "Hips & Flexibility",
+      "tagline": "Release stored pelvic tension and tight hamstrings",
+      "bodyTargetSummary": "Pelvis, Hamstrings, Glutes & Iliopsoas",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "CORAL",
+      "sessionCount": 3,
+      "totalYogisJoined": 38150
+    },
+    {
+      "id": "cat_core",
+      "name": "Core & Metabolism",
+      "tagline": "Ignite abdominal strength, stimulate Agni & protect lower back",
+      "bodyTargetSummary": "Transverse Abdominis, Diaphragm & Internal Viscera",
+      "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "AMBER",
+      "sessionCount": 1,
+      "totalYogisJoined": 31600
+    },
+    {
+      "id": "cat_sleep",
+      "name": "Stress & Deep Sleep",
+      "tagline": "Down-regulate nervous system & cultivate restorative REM",
+      "bodyTargetSummary": "Vagus Nerve, Adrenals & Autonomic Nervous System",
+      "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "OCEAN",
+      "sessionCount": 2,
+      "totalYogisJoined": 49800
+    },
+    {
+      "id": "cat_morning",
+      "name": "Morning Vitality",
+      "tagline": "Boost metabolism, awaken joint synovial fluid & sharpen focus",
+      "bodyTargetSummary": "Cardiovascular Flow, Shoulders & Full Kinetic Chain",
+      "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "EMERALD",
+      "sessionCount": 1,
+      "totalYogisJoined": 36400
+    },
+    {
+      "id": "cat_desk",
+      "name": "Desk & Screen Relief",
+      "tagline": "Instant 15-min workday micro-stretches for computer users",
+      "bodyTargetSummary": "Wrists, Carpal Tunnel, Trapezius & Optical Nerves",
+      "imageUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+      "bannerTheme": "SAGE",
+      "sessionCount": 2,
+      "totalYogisJoined": 27900
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ys_spine_1",
+      "categoryId": "cat_spine",
+      "title": "Lumbar Spine Decompression & Sacrum Release",
+      "description": "Therapeutic slow-traction postures designed to relieve disc pressure, hydrate vertebral spaces, and release chronic lower back tightness.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 45,
+      "level": "All Levels",
+      "intensity": "Gentle to Moderate",
+      "caloriesBurned": 160,
+      "isFree": true,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Lower Back, Sacrum & Lumbar Decompression",
+      "targetBodyParts": [
+        "L4-L5 Lumbar Spine",
+        "Sacroiliac Joint",
+        "Thoracic Spine",
+        "Hamstrings"
+      ],
+      "keyPoses": [
+        "Supta Matsyendrasana (Supine Twist)",
+        "Bhujangasana (Gentle Cobra)",
+        "Marjaryasana (Cat-Cow Flow)",
+        "Balasana with Lat Traction"
+      ],
+      "lifestyleImpact": "Counteracts 8+ hours of desk sitting by restoring disc hydration, relieving sciatic nerve compression, and preventing recurrent lower back spasm.",
+      "instructor": {
+        "id": "ins_apurva",
+        "name": "Apurva Tilwani",
+        "title": "Lead Yoga Biomechanist & Hatha Acharya",
+        "specialty": "Daily Asana & Spine Health",
+        "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+        "experience": "14+ yrs exp · 520k+ students taught",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.95,
+        "handle": "@apurvatilwani",
+        "reelCount": 1450
+      },
+      "joinedCountTillDate": 28450,
+      "todayActiveCount": 1840,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_spine_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=d88dfbbcac60a1c021dce1d07dd971e7217523823b63ef0275a03cc02bf5cbd2"
+    },
+    {
+      "id": "ys_spine_2",
+      "categoryId": "cat_spine",
+      "title": "Cervical Neck Reset & Thoracic Spine Opening",
+      "description": "Targeted myofascial release for the upper trapezius, levator scapulae, and forward head posture caused by smartphone and laptop use.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 30,
+      "level": "Beginner",
+      "intensity": "Gentle",
+      "caloriesBurned": 95,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Upper Back, Neck & Trapezius Relief",
+      "targetBodyParts": [
+        "Cervical Spine (C1-C7)",
+        "Upper Trapezius",
+        "Rhomboids",
+        "Suboccipital Muscles"
+      ],
+      "keyPoses": [
+        "Gomukhasana Arms",
+        "Garudasana Shoulder Wrap",
+        "Thread the Needle",
+        "Sphinx Pose with Neck Circles"
+      ],
+      "lifestyleImpact": "Relieves tension headaches, eliminates shoulder knotting, improves jaw clenching, and realigns forward head posture back into neutral balance.",
+      "instructor": {
+        "id": "ins_shynee",
+        "name": "Shynee Narang",
+        "title": "Ergonomic Yoga Specialist & Certified Physio-Yogi",
+        "specialty": "Desk Posture & Mobility",
+        "bio": "Shynee has coached thousands of corporate executives and athletes in eliminating tension headaches and postural kyphosis.",
+        "experience": "9+ yrs exp · 310k+ community",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.88,
+        "handle": "@shyneenarang",
+        "reelCount": 980
+      },
+      "joinedCountTillDate": 19200,
+      "todayActiveCount": 1120,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_spine_2/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=6e1f43f3e5da78c6b205c3c57ec6eee035f3d37166b5bf0f30cf26c3821a561f"
+    },
+    {
+      "id": "ys_spine_3",
+      "categoryId": "cat_spine",
+      "title": "Deep Spinal Waves & Sciatic Nerve Flossing",
+      "description": "Neural flossing and gentle rotational mobility to soothe pinched sciatic sensations while reinforcing lateral spinal stabilization.",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 40,
+      "level": "Intermediate",
+      "intensity": "Moderate",
+      "caloriesBurned": 150,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Sciatic Nerve Pathway & Core Stabilizers",
+      "targetBodyParts": [
+        "Sciatic Pathway",
+        "Quadratus Lumborum",
+        "Hip Rotators",
+        "Lumbar Erector Spinae"
+      ],
+      "keyPoses": [
+        "Reclined Figure 4 Nerve Glide",
+        "Supta Padangusthasana",
+        "Ardha Matsyendrasana",
+        "Setu Bandhasana"
+      ],
+      "lifestyleImpact": "Calms shooting nerve pain down legs, unlocks tight glutes after driving or commuting, and restores effortless walking agility.",
+      "instructor": {
+        "id": "ins_apurva",
+        "name": "Apurva Tilwani",
+        "title": "Lead Yoga Biomechanist & Hatha Acharya",
+        "specialty": "Daily Asana & Spine Health",
+        "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+        "experience": "14+ yrs exp · 520k+ students taught",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.95,
+        "handle": "@apurvatilwani",
+        "reelCount": 1450
+      },
+      "joinedCountTillDate": 15600,
+      "todayActiveCount": 740,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_spine_3/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=b4b7fda5d568240d2cd70bf351f0827d4f3e7f7c225c701c82c4fafcb9956f6c"
+    },
+    {
+      "id": "ys_flex_1",
+      "categoryId": "cat_flex",
+      "title": "Deep Hip Capsule Opening & Psoas Release",
+      "description": "Long passive holds that unlock restricted external rotation and create space in tight hip sockets.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 50,
+      "level": "All Levels",
+      "intensity": "Moderate",
+      "caloriesBurned": 180,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Hip Joint, Psoas & Pelvic Basin",
+      "targetBodyParts": [
+        "Hip Joint Capsule",
+        "Hip Flexors",
+        "Pelvic Floor",
+        "Biceps Femoris"
+      ],
+      "keyPoses": [
+        "Baddha Konasana",
+        "Supta Baddha Konasana",
+        "Janu Sirsasana",
+        "Parivrtta Trikonasana"
+      ],
+      "lifestyleImpact": "Unlock restricted external rotation, release emotional tension stored in the iliopsoas, and create space in tight hip sockets.",
+      "instructor": {
+        "id": "ins_sneha",
+        "name": "Sneha Rathi",
+        "title": "Joint Health & Rehabilitation Specialist",
+        "specialty": "Joint Health & Mobility",
+        "bio": "Sneha focuses on sports injury prevention and neuromuscular flexibility.",
+        "experience": "8+ yrs exp · 180k+ students",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.86,
+        "handle": "@the_yoga_institute",
+        "reelCount": 840
+      },
+      "joinedCountTillDate": 22100,
+      "todayActiveCount": 960,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_flex_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=d106d00c15e5dc10dec3e9f88aa0935036cded858c9f06f782ee2e029ac25d0c"
+    },
+    {
+      "id": "ys_flex_2",
+      "categoryId": "cat_flex",
+      "title": "Runner's Pelvic Alignment & Piriformis Rehabilitation",
+      "description": "Targeted myofascial release for runners experiencing tight lower backs, piriformis pinch, or hip asymmetries after long miles.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 35,
+      "level": "Intermediate",
+      "intensity": "Moderate",
+      "caloriesBurned": 140,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Sacroiliac decompression, IT band relief, glute balance",
+      "targetBodyParts": [
+        "Sacroiliac Joint",
+        "Hip Rotators",
+        "Achilles Tendon",
+        "Hamstrings"
+      ],
+      "keyPoses": [
+        "Reclined Figure 4 Nerve Glide",
+        "Uttanasana with Micro-bend",
+        "Chair Spinal Twist",
+        "Supta Padangusthasana"
+      ],
+      "lifestyleImpact": "Release lactic acid and tight hip flexors after long runs and restore symmetric stride mechanics.",
+      "instructor": {
+        "id": "ins_sneha",
+        "name": "Sneha Rathi",
+        "title": "Joint Health & Rehabilitation Specialist",
+        "specialty": "Joint Health & Mobility",
+        "bio": "Sneha focuses on sports injury prevention and neuromuscular flexibility.",
+        "experience": "8+ yrs exp · 180k+ students",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.86,
+        "handle": "@the_yoga_institute",
+        "reelCount": 840
+      },
+      "joinedCountTillDate": 11800,
+      "todayActiveCount": 520,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_flex_2/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=4fe7a3274e0864e10bf79e325b1ce6f976b245c871c25558f581a99b028bb92f"
+    },
+    {
+      "id": "ys_flex_3",
+      "categoryId": "cat_flex",
+      "title": "Hamstring Elongation & Pelvic Tilt Alignment",
+      "description": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 30,
+      "level": "Beginner",
+      "intensity": "Gentle",
+      "caloriesBurned": 110,
+      "isFree": true,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Hamstrings, Calves & Posterior Kinetic Chain",
+      "targetBodyParts": [
+        "Hamstrings",
+        "Biceps Femoris",
+        "Achilles Tendon",
+        "Lumbar Erector Spinae"
+      ],
+      "keyPoses": [
+        "Uttanasana with Micro-bend",
+        "Janu Sirsasana",
+        "Supta Padangusthasana",
+        "Adho Mukha Svanasana"
+      ],
+      "lifestyleImpact": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+      "instructor": {
+        "id": "ins_apurva",
+        "name": "Apurva Tilwani",
+        "title": "Lead Yoga Biomechanist & Hatha Acharya",
+        "specialty": "Daily Asana & Spine Health",
+        "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+        "experience": "14+ yrs exp · 520k+ students taught",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.95,
+        "handle": "@apurvatilwani",
+        "reelCount": 1450
+      },
+      "joinedCountTillDate": 17400,
+      "todayActiveCount": 810,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_flex_3/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=4daf4674dd8aadfbf1d6e94830565c7f61384bcf89d0ec2580b60b7c16bf205f"
+    },
+    {
+      "id": "ys_core_1",
+      "categoryId": "cat_core",
+      "title": "Agni Deep Core & Visceral Digestion Flow",
+      "description": "Dynamic twists combined with uddiyana bandha cues to massage internal organs, improve digestive transit, and build a protective corset around the spine.",
+      "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 40,
+      "level": "Intermediate to Advanced",
+      "intensity": "Strong",
+      "caloriesBurned": 220,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Transverse Abdominis, Diaphragm & Gut Health",
+      "targetBodyParts": [
+        "Transverse Abdominis",
+        "Internal Obliques",
+        "Pelvic Floor",
+        "Cardiorespiratory System"
+      ],
+      "keyPoses": [
+        "Uddiyana Kriya",
+        "Ardha Matsyendrasana",
+        "Parivrtta Trikonasana",
+        "Setu Bandhasana"
+      ],
+      "lifestyleImpact": "Relieves bloating, improves bowel regularity, stimulates metabolic fire, and creates abdominal support so your lower back never takes the strain.",
+      "instructor": {
+        "id": "ins_vinay",
+        "name": "Vinay Zende",
+        "title": "Senior Yoga Acharya",
+        "specialty": "Pranayama & Meditation",
+        "bio": "Vinay brings over 20 years of authentic classical yoga training from The Yoga Institute Mumbai, blending ancient kriyas with biomechanics.",
+        "experience": "20+ yrs exp · Master Acharya",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.92,
+        "handle": "@the_yoga_institute",
+        "reelCount": 2100
+      },
+      "joinedCountTillDate": 20300,
+      "todayActiveCount": 1010,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_core_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=866580b135e870f273aa4b41e64a55cc04e265524c0ddefbaac2b2dd8ffd395a"
+    },
+    {
+      "id": "ys_sleep_1",
+      "categoryId": "cat_sleep",
+      "title": "Yoga Nidra & Vagus Nerve Parasympathetic Reset",
+      "description": "The ultimate yogic conscious sleep technique that systematically relaxes brain wave frequencies from Beta down into Alpha and Theta.",
+      "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 45,
+      "level": "All Levels",
+      "intensity": "Ultra Restorative",
+      "caloriesBurned": 60,
+      "isFree": true,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Nervous System, Vagus Nerve & Sleep Cycles",
+      "targetBodyParts": [
+        "Vagus Nerve",
+        "Central Nervous System",
+        "Adrenal Cortex",
+        "Pineal Gland"
+      ],
+      "keyPoses": [
+        "Supported Savasana",
+        "Nadi Shodhana Pranayama",
+        "Sankalpa Meditation",
+        "Supported Bridge Pose"
+      ],
+      "lifestyleImpact": "Significantly increases restorative deep REM sleep, reduces evening cortisol spikes, and helps overcome racing thoughts and insomnia.",
+      "instructor": {
+        "id": "ins_vinay",
+        "name": "Vinay Zende",
+        "title": "Senior Yoga Acharya",
+        "specialty": "Pranayama & Meditation",
+        "bio": "Vinay brings over 20 years of authentic classical yoga training from The Yoga Institute Mumbai, blending ancient kriyas with biomechanics.",
+        "experience": "20+ yrs exp · Master Acharya",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.92,
+        "handle": "@the_yoga_institute",
+        "reelCount": 2100
+      },
+      "joinedCountTillDate": 41200,
+      "todayActiveCount": 2240,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_sleep_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=9f5b402109f7a24b1cf58c6fbcc7d461a9a03a8182a00b61b89dcd3ed1ea1b99"
+    },
+    {
+      "id": "ys_sleep_2",
+      "categoryId": "cat_sleep",
+      "title": "Evening Yin Asanas for Melatonin Release",
+      "description": "Long passive holds using pillows or yoga blocks that calm the sympathetic nervous system and prepare the mind for unmedicated deep sleep.",
+      "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 35,
+      "level": "Beginner",
+      "intensity": "Gentle Restorative",
+      "caloriesBurned": 70,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Pineal Gland, Shoulders & Restorative Joints",
+      "targetBodyParts": [
+        "Pineal Gland",
+        "Shoulder Girdle",
+        "Hip Joint Capsule",
+        "Vagus Nerve"
+      ],
+      "keyPoses": [
+        "Child's Pose with Bolster",
+        "Supta Baddha Konasana",
+        "Supported Savasana",
+        "Palming Eye Relaxation"
+      ],
+      "lifestyleImpact": "Natural melatonin stimulator that halts late-night overthinking, relaxes jaw clenching, and prepares you to wake up revitalized.",
+      "instructor": {
+        "id": "ins_vinay",
+        "name": "Vinay Zende",
+        "title": "Senior Yoga Acharya",
+        "specialty": "Pranayama & Meditation",
+        "bio": "Vinay brings over 20 years of authentic classical yoga training from The Yoga Institute Mumbai, blending ancient kriyas with biomechanics.",
+        "experience": "20+ yrs exp · Master Acharya",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.92,
+        "handle": "@the_yoga_institute",
+        "reelCount": 2100
+      },
+      "joinedCountTillDate": 26700,
+      "todayActiveCount": 1390,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_sleep_2/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=67dd3b05007d57ab0d492834b97fa5402392c826d5e6eb3f501a3d562ce57055"
+    },
+    {
+      "id": "ys_morning_1",
+      "categoryId": "cat_morning",
+      "title": "Surya Namaskar Dynamic Breath Wave",
+      "description": "A fluid progression of 12 traditional sun salutation variations synchronizing vigorous breath with multi-planar spinal flexion and extension.",
+      "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 30,
+      "level": "All Levels",
+      "intensity": "Moderate to Strong",
+      "caloriesBurned": 240,
+      "isFree": true,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Cardiovascular Endurance & Full Kinetic Chain",
+      "targetBodyParts": [
+        "Cardiorespiratory System",
+        "Shoulder Girdle",
+        "Hamstrings",
+        "Transverse Abdominis"
+      ],
+      "keyPoses": [
+        "Surya Namaskar A",
+        "Virabhadrasana I & II",
+        "Adho Mukha Svanasana",
+        "Uttanasana with Micro-bend"
+      ],
+      "lifestyleImpact": "Replaces morning caffeine dependence with natural endorphins, stimulates lymphatic circulation, and elevates sustained mental clarity.",
+      "instructor": {
+        "id": "ins_apurva",
+        "name": "Apurva Tilwani",
+        "title": "Lead Yoga Biomechanist & Hatha Acharya",
+        "specialty": "Daily Asana & Spine Health",
+        "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+        "experience": "14+ yrs exp · 520k+ students taught",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.95,
+        "handle": "@apurvatilwani",
+        "reelCount": 1450
+      },
+      "joinedCountTillDate": 52100,
+      "todayActiveCount": 3180,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_morning_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=8252d9ee229ad99897d028b78033d5a99073db30be1b840ad005945a0d36f56f"
+    },
+    {
+      "id": "ys_desk_1",
+      "categoryId": "cat_desk",
+      "title": "Micro-Break Desk Stretch & Carpal Tunnel Relief",
+      "description": "Quick chair-friendly stretches for tired wrists, tight forearms, slouching shoulders, and eye strain from computer monitors.",
+      "imageUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 15,
+      "level": "All Levels",
+      "intensity": "Express Workday",
+      "caloriesBurned": 45,
+      "isFree": true,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Wrists, Forearms, Eyes & Chest Opening",
+      "targetBodyParts": [
+        "Carpal Tunnel & Wrists",
+        "Upper Trapezius",
+        "Pectoralis Major",
+        "Cervical Flexors"
+      ],
+      "keyPoses": [
+        "Wrist Flexor Glides",
+        "Seated Eagle Arms",
+        "Chair Spinal Twist",
+        "Palming Eye Relaxation"
+      ],
+      "lifestyleImpact": "Prevents mouse-hand strain and carpal tunnel syndrome, restores open breathing capacity, and prevents 3 PM workday fatigue slumps.",
+      "instructor": {
+        "id": "ins_shynee",
+        "name": "Shynee Narang",
+        "title": "Ergonomic Yoga Specialist & Certified Physio-Yogi",
+        "specialty": "Desk Posture & Mobility",
+        "bio": "Shynee has coached thousands of corporate executives and athletes in eliminating tension headaches and postural kyphosis.",
+        "experience": "9+ yrs exp · 310k+ community",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.88,
+        "handle": "@shyneenarang",
+        "reelCount": 980
+      },
+      "joinedCountTillDate": 33900,
+      "todayActiveCount": 2050,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_desk_1/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=b270ebded96722ff6bcb2220245d468e829854bce3661c6eff40f441618ca01e"
+    },
+    {
+      "id": "ys_desk_2",
+      "categoryId": "cat_desk",
+      "title": "Gentle Shoulder & Neck Release",
+      "description": "Instant relief for screen fatigue, built for a 15-minute gap between meetings.",
+      "imageUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+      "durationMinutes": 15,
+      "level": "Beginner",
+      "intensity": "Gentle",
+      "caloriesBurned": 40,
+      "isFree": false,
+      "isLive": false,
+      "startsAt": null,
+      "bodyFocusTitle": "Neck & Trapezius",
+      "targetBodyParts": [
+        "Neck & Trapezius",
+        "Shoulder Girdle",
+        "Suboccipital Muscles"
+      ],
+      "keyPoses": [
+        "Thread the Needle",
+        "Gomukhasana Arms",
+        "Sphinx Pose with Neck Circles"
+      ],
+      "lifestyleImpact": "Instant relief for screen fatigue and forward head posture.",
+      "instructor": {
+        "id": "ins_shynee",
+        "name": "Shynee Narang",
+        "title": "Ergonomic Yoga Specialist & Certified Physio-Yogi",
+        "specialty": "Desk Posture & Mobility",
+        "bio": "Shynee has coached thousands of corporate executives and athletes in eliminating tension headaches and postural kyphosis.",
+        "experience": "9+ yrs exp · 310k+ community",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+        "rating": 4.88,
+        "handle": "@shyneenarang",
+        "reelCount": 980
+      },
+      "joinedCountTillDate": 14100,
+      "todayActiveCount": 620,
+      "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_desk_2/master.m3u8?u=cmuwapzfi0003kze8lo8ovbnk&e=1791275537&s=3f42ebe952cf832419fccb101b53bc34db6e2adb0a124ba7bd2f9778f65ff048"
+    }
+  ]
+}

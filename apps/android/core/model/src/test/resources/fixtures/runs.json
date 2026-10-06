@@ -1,0 +1,59 @@
+{
+  "runs": [
+    {
+      "id": "96aa8ea5-679d-4683-b7e3-d89ce947de76",
+      "startedAt": "2026-10-06T08:21:32.359Z",
+      "endedAt": "2026-10-06T08:26:48.460Z",
+      "distanceKm": 0.29,
+      "durationSeconds": 309,
+      "avgPaceSecPerKm": 1066,
+      "caloriesBurned": 18,
+      "routePolyline": null,
+      "hasAccuracyWarning": false,
+      "synced": true
+    },
+    {
+      "id": "dfd22dd7-b1af-4aae-b660-e5186f9d02c2",
+      "startedAt": "2026-10-05T06:26:50.444Z",
+      "endedAt": "2026-10-05T06:58:30.444Z",
+      "distanceKm": 5.24,
+      "durationSeconds": 1900,
+      "avgPaceSecPerKm": 362,
+      "caloriesBurned": 318,
+      "routePolyline": null,
+      "hasAccuracyWarning": false,
+      "synced": true
+    },
+    {
+      "id": "dfcfffab-6610-47fa-9589-4d9b376083bb",
+      "startedAt": "2026-10-03T06:26:50.444Z",
+      "endedAt": "2026-10-03T07:15:12.444Z",
+      "distanceKm": 8.1,
+      "durationSeconds": 2902,
+      "avgPaceSecPerKm": 358,
+      "caloriesBurned": 492,
+      "routePolyline": null,
+      "hasAccuracyWarning": false,
+      "synced": true
+    },
+    {
+      "id": "72e920d8-2ed4-42ed-beea-3fbcc9ad34a1",
+      "startedAt": "2026-10-01T06:26:50.444Z",
+      "endedAt": "2026-10-01T06:45:54.444Z",
+      "distanceKm": 3.06,
+      "durationSeconds": 1144,
+      "avgPaceSecPerKm": 374,
+      "caloriesBurned": 186,
+      "routePolyline": null,
+      "hasAccuracyWarning": true,
+      "synced": true
+    }
+  ],
+  "totals": {
+    "runs": 4,
+    "distanceKm": 16.69,
+    "durationSeconds": 6255,
+    "longestKm": 8.1,
+    "monthDistanceKm": 16.69
+  }
+}

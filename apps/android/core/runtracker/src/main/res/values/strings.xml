@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Run tracker notification copy. The app can override any of these by
+     defining a string with the same name. -->
+<resources>
+    <string name="runtracker_channel_name">Run tracking</string>
+    <string name="runtracker_channel_description">Shows while a run is being recorded, with its distance and time.</string>
+    <string name="runtracker_notification_title">TimesHealth+ is tracking your run</string>
+    <string name="runtracker_notification_starting">Finding your GPS position…</string>
+    <string name="runtracker_action_pause">Pause</string>
+</resources>

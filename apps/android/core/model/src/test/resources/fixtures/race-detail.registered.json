@@ -1,0 +1,137 @@
+{
+  "event": {
+    "id": "delhi_half",
+    "name": "Delhi Half Marathon",
+    "city": "Delhi NCR",
+    "venue": "Jawaharlal Nehru Stadium, Gate 3",
+    "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+    "startsAt": "2026-10-29T18:30:00.000Z",
+    "flagOffTime": "5:30 AM · Wave 2",
+    "distanceOptions": [
+      {
+        "code": "3K",
+        "label": "3K",
+        "pricePaise": {
+          "CLASSIC": 197700,
+          "PREMIUM": 399900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      },
+      {
+        "code": "5K",
+        "label": "5K",
+        "pricePaise": {
+          "CLASSIC": 237700,
+          "PREMIUM": 439900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      },
+      {
+        "code": "10K",
+        "label": "10K",
+        "pricePaise": {
+          "CLASSIC": 277700,
+          "PREMIUM": 479900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      },
+      {
+        "code": "21K",
+        "label": "21K",
+        "pricePaise": {
+          "CLASSIC": 317700,
+          "PREMIUM": 519900
+        },
+        "wasPricePaise": null,
+        "premiumSoldOut": false,
+        "registrationOpen": true
+      }
+    ],
+    "registrationOpen": true,
+    "rescheduledFrom": null,
+    "expo": {
+      "venue": "Hall B, JLN Stadium",
+      "address": "Jawaharlal Nehru Stadium, New Delhi",
+      "startsAt": "2026-10-28T04:30:00.000Z",
+      "endsAt": "2026-10-29T12:30:00.000Z",
+      "pickupWindow": "28–29 Oct · 10 AM to 6 PM",
+      "instructions": "Show this QR code at Expo Counter B to collect your race timing chip, bib, and t-shirt.",
+      "requiredDocuments": [
+        "Valid Government Photo ID"
+      ]
+    },
+    "registration": {
+      "eventId": "delhi_half",
+      "eventName": "Delhi Half Marathon",
+      "registrationRef": "TH-QA_MARATHON",
+      "tier": "CLASSIC",
+      "category": "21K",
+      "bibNumber": "DEL-8892A",
+      "status": "UPCOMING",
+      "registeredAt": "2026-10-06T06:26:49.425Z"
+    },
+    "distanceFromUserKm": null
+  },
+  "bib": {
+    "bibNumber": "DEL-8892A",
+    "participantName": "Meera Runner",
+    "category": "21K",
+    "tier": "CLASSIC",
+    "eventName": "Delhi Half Marathon",
+    "qrToken": "LIVE.TH-QA_MARATHON.1791275298.16f4893904c1f4ffb4165e624de9f38e42ccf6cf45b1050d8e6c6dd3f981116a",
+    "qrExpiresAt": "2026-10-06T08:28:18.000Z",
+    "offlinePayload": "PASS.TH-QA_MARATHON.1791880038.2de3422198f5b243d09bdafaec05fa4bb1c15fa2f009a8e05a595666716397d1"
+  },
+  "result": null,
+  "kit": {
+    "status": "IN_TRANSIT",
+    "courierName": "BlueDart",
+    "trackingRef": "DEL-9921",
+    "tshirtSize": "M",
+    "expectedBy": "2026-10-11T06:26:49.635Z"
+  },
+  "referral": {
+    "code": "THATHON",
+    "shareUrl": "https://timeshealthplus.invalid/r/THATHON",
+    "confirmedReferrals": 1,
+    "luckyDrawEntries": 1,
+    "guaranteedUpgradeUnlocked": false,
+    "upgradeClaimed": false
+  },
+  "upgradeOffer": {
+    "available": true,
+    "netDifferencePaise": 202200,
+    "benefits": [
+      "Reserved parking",
+      "Kit delivery to your door",
+      "Separate start wave",
+      "On-site physio support"
+    ],
+    "freeClaim": false
+  },
+  "faqs": [
+    {
+      "question": "Can I transfer my bib to a friend?",
+      "answer": "No. Bibs are legally tied to mandatory timing chip registration and event insurance, and cannot be transferred."
+    },
+    {
+      "question": "What happens if the race is rescheduled?",
+      "answer": "Your registration automatically transfers to the revised date with no penalty. You will receive immediate WhatsApp & push alerts."
+    },
+    {
+      "question": "What is included in the runner kit?",
+      "answer": "Official event technical dry-fit t-shirt, timing chip bib, baggage tags, energy gels, and sponsor vouchers."
+    }
+  ],
+  "participant": {
+    "tshirtSize": "M",
+    "emergencyContactName": null,
+    "emergencyContactPhone": null
+  }
+}

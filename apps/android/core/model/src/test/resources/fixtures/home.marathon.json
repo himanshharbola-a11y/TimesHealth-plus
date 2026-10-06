@@ -1,0 +1,630 @@
+{
+  "greeting": "Good afternoon · Tuesday",
+  "userName": "Meera Runner",
+  "components": [
+    {
+      "type": "HERO_STACK",
+      "id": "hero",
+      "slots": [
+        {
+          "kind": "MY_RACE",
+          "title": "Delhi Half Marathon",
+          "subtitle": "24 days to go",
+          "ctaLabel": "Open Race Dashboard",
+          "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+          "eventId": "delhi_half",
+          "startsAt": "2026-10-29T18:30:00.000Z",
+          "daysRemaining": 24,
+          "bibNumber": "DEL-8892A",
+          "category": "21K",
+          "flagOffTime": "5:30 AM · Wave 2",
+          "isRaceDay": false
+        },
+        {
+          "kind": "SELL_YOGA",
+          "title": "Eight live yoga classes\nevery single day",
+          "subtitle": "Taught by certified masters from The Yoga Institute. Join morning or evening.",
+          "ctaLabel": "Explore Yoga Membership",
+          "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=900&q=75",
+          "planId": "yoga_annual",
+          "pricePaise": 0
+        }
+      ]
+    },
+    {
+      "type": "VIDEO_RAIL",
+      "id": "rail-cat_flex",
+      "title": "Sessions for knee & joint stability",
+      "cardFormat": "VIDEO_LANDSCAPE",
+      "items": [
+        {
+          "id": "ys_flex_1",
+          "categoryId": "cat_flex",
+          "title": "Deep Hip Capsule Opening & Psoas Release",
+          "description": "Long passive holds that unlock restricted external rotation and create space in tight hip sockets.",
+          "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 50,
+          "level": "All Levels",
+          "intensity": "Moderate",
+          "caloriesBurned": 180,
+          "isFree": false,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Hip Joint, Psoas & Pelvic Basin",
+          "targetBodyParts": [
+            "Hip Joint Capsule",
+            "Hip Flexors",
+            "Pelvic Floor",
+            "Biceps Femoris"
+          ],
+          "keyPoses": [
+            "Baddha Konasana",
+            "Supta Baddha Konasana",
+            "Janu Sirsasana",
+            "Parivrtta Trikonasana"
+          ],
+          "lifestyleImpact": "Unlock restricted external rotation, release emotional tension stored in the iliopsoas, and create space in tight hip sockets.",
+          "instructor": {
+            "id": "ins_sneha",
+            "name": "Sneha Rathi",
+            "title": "Joint Health & Rehabilitation Specialist",
+            "specialty": "Joint Health & Mobility",
+            "bio": "Sneha focuses on sports injury prevention and neuromuscular flexibility.",
+            "experience": "8+ yrs exp · 180k+ students",
+            "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.86,
+            "handle": "@the_yoga_institute",
+            "reelCount": 840
+          },
+          "joinedCountTillDate": 22100,
+          "todayActiveCount": 960,
+          "playbackUrl": null
+        },
+        {
+          "id": "ys_flex_2",
+          "categoryId": "cat_flex",
+          "title": "Runner's Pelvic Alignment & Piriformis Rehabilitation",
+          "description": "Targeted myofascial release for runners experiencing tight lower backs, piriformis pinch, or hip asymmetries after long miles.",
+          "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 35,
+          "level": "Intermediate",
+          "intensity": "Moderate",
+          "caloriesBurned": 140,
+          "isFree": false,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Sacroiliac decompression, IT band relief, glute balance",
+          "targetBodyParts": [
+            "Sacroiliac Joint",
+            "Hip Rotators",
+            "Achilles Tendon",
+            "Hamstrings"
+          ],
+          "keyPoses": [
+            "Reclined Figure 4 Nerve Glide",
+            "Uttanasana with Micro-bend",
+            "Chair Spinal Twist",
+            "Supta Padangusthasana"
+          ],
+          "lifestyleImpact": "Release lactic acid and tight hip flexors after long runs and restore symmetric stride mechanics.",
+          "instructor": {
+            "id": "ins_sneha",
+            "name": "Sneha Rathi",
+            "title": "Joint Health & Rehabilitation Specialist",
+            "specialty": "Joint Health & Mobility",
+            "bio": "Sneha focuses on sports injury prevention and neuromuscular flexibility.",
+            "experience": "8+ yrs exp · 180k+ students",
+            "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.86,
+            "handle": "@the_yoga_institute",
+            "reelCount": 840
+          },
+          "joinedCountTillDate": 11800,
+          "todayActiveCount": 520,
+          "playbackUrl": null
+        },
+        {
+          "id": "ys_flex_3",
+          "categoryId": "cat_flex",
+          "title": "Hamstring Elongation & Pelvic Tilt Alignment",
+          "description": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+          "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 30,
+          "level": "Beginner",
+          "intensity": "Gentle",
+          "caloriesBurned": 110,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Hamstrings, Calves & Posterior Kinetic Chain",
+          "targetBodyParts": [
+            "Hamstrings",
+            "Biceps Femoris",
+            "Achilles Tendon",
+            "Lumbar Erector Spinae"
+          ],
+          "keyPoses": [
+            "Uttanasana with Micro-bend",
+            "Janu Sirsasana",
+            "Supta Padangusthasana",
+            "Adho Mukha Svanasana"
+          ],
+          "lifestyleImpact": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+          "instructor": {
+            "id": "ins_apurva",
+            "name": "Apurva Tilwani",
+            "title": "Lead Yoga Biomechanist & Hatha Acharya",
+            "specialty": "Daily Asana & Spine Health",
+            "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+            "experience": "14+ yrs exp · 520k+ students taught",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.95,
+            "handle": "@apurvatilwani",
+            "reelCount": 1450
+          },
+          "joinedCountTillDate": 17400,
+          "todayActiveCount": 810,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_flex_3/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=b5db78019202db2cfab399e9bd5987d3e0fd68f9f32f80b9c21a670be8665075"
+        }
+      ],
+      "seeAllCategoryId": "cat_flex",
+      "actionLabel": "See all"
+    },
+    {
+      "type": "PROMO_STRIP",
+      "id": "promo-diet-consult",
+      "campaignId": "diet-consult",
+      "title": "A dietitian who knows your food.",
+      "subtitle": "First 15-min consultation is free. No crash diets.",
+      "ctaLabel": "Book a Free Consult",
+      "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+      "backgroundColor": "#1B4931",
+      "action": {
+        "type": "OPEN_DIET_LEAD_FORM"
+      }
+    },
+    {
+      "type": "VIDEO_RAIL",
+      "id": "rail-free",
+      "title": "Free yoga sessions",
+      "cardFormat": "VIDEO_LANDSCAPE",
+      "items": [
+        {
+          "id": "ys_desk_1",
+          "categoryId": "cat_desk",
+          "title": "Micro-Break Desk Stretch & Carpal Tunnel Relief",
+          "description": "Quick chair-friendly stretches for tired wrists, tight forearms, slouching shoulders, and eye strain from computer monitors.",
+          "imageUrl": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 15,
+          "level": "All Levels",
+          "intensity": "Express Workday",
+          "caloriesBurned": 45,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Wrists, Forearms, Eyes & Chest Opening",
+          "targetBodyParts": [
+            "Carpal Tunnel & Wrists",
+            "Upper Trapezius",
+            "Pectoralis Major",
+            "Cervical Flexors"
+          ],
+          "keyPoses": [
+            "Wrist Flexor Glides",
+            "Seated Eagle Arms",
+            "Chair Spinal Twist",
+            "Palming Eye Relaxation"
+          ],
+          "lifestyleImpact": "Prevents mouse-hand strain and carpal tunnel syndrome, restores open breathing capacity, and prevents 3 PM workday fatigue slumps.",
+          "instructor": {
+            "id": "ins_shynee",
+            "name": "Shynee Narang",
+            "title": "Ergonomic Yoga Specialist & Certified Physio-Yogi",
+            "specialty": "Desk Posture & Mobility",
+            "bio": "Shynee has coached thousands of corporate executives and athletes in eliminating tension headaches and postural kyphosis.",
+            "experience": "9+ yrs exp · 310k+ community",
+            "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.88,
+            "handle": "@shyneenarang",
+            "reelCount": 980
+          },
+          "joinedCountTillDate": 33900,
+          "todayActiveCount": 2050,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_desk_1/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=6b7e0b5aae89f01d771654e229ed4884bcb949d2ee3fb132181162fc8b239022"
+        },
+        {
+          "id": "ys_flex_3",
+          "categoryId": "cat_flex",
+          "title": "Hamstring Elongation & Pelvic Tilt Alignment",
+          "description": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+          "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 30,
+          "level": "Beginner",
+          "intensity": "Gentle",
+          "caloriesBurned": 110,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Hamstrings, Calves & Posterior Kinetic Chain",
+          "targetBodyParts": [
+            "Hamstrings",
+            "Biceps Femoris",
+            "Achilles Tendon",
+            "Lumbar Erector Spinae"
+          ],
+          "keyPoses": [
+            "Uttanasana with Micro-bend",
+            "Janu Sirsasana",
+            "Supta Padangusthasana",
+            "Adho Mukha Svanasana"
+          ],
+          "lifestyleImpact": "Safe eccentric hamstring lengthening that prevents pelvic tucking and protects the knee joints during daily activities.",
+          "instructor": {
+            "id": "ins_apurva",
+            "name": "Apurva Tilwani",
+            "title": "Lead Yoga Biomechanist & Hatha Acharya",
+            "specialty": "Daily Asana & Spine Health",
+            "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+            "experience": "14+ yrs exp · 520k+ students taught",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.95,
+            "handle": "@apurvatilwani",
+            "reelCount": 1450
+          },
+          "joinedCountTillDate": 17400,
+          "todayActiveCount": 810,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_flex_3/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=b5db78019202db2cfab399e9bd5987d3e0fd68f9f32f80b9c21a670be8665075"
+        },
+        {
+          "id": "ys_morning_1",
+          "categoryId": "cat_morning",
+          "title": "Surya Namaskar Dynamic Breath Wave",
+          "description": "A fluid progression of 12 traditional sun salutation variations synchronizing vigorous breath with multi-planar spinal flexion and extension.",
+          "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 30,
+          "level": "All Levels",
+          "intensity": "Moderate to Strong",
+          "caloriesBurned": 240,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Cardiovascular Endurance & Full Kinetic Chain",
+          "targetBodyParts": [
+            "Cardiorespiratory System",
+            "Shoulder Girdle",
+            "Hamstrings",
+            "Transverse Abdominis"
+          ],
+          "keyPoses": [
+            "Surya Namaskar A",
+            "Virabhadrasana I & II",
+            "Adho Mukha Svanasana",
+            "Uttanasana with Micro-bend"
+          ],
+          "lifestyleImpact": "Replaces morning caffeine dependence with natural endorphins, stimulates lymphatic circulation, and elevates sustained mental clarity.",
+          "instructor": {
+            "id": "ins_apurva",
+            "name": "Apurva Tilwani",
+            "title": "Lead Yoga Biomechanist & Hatha Acharya",
+            "specialty": "Daily Asana & Spine Health",
+            "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+            "experience": "14+ yrs exp · 520k+ students taught",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.95,
+            "handle": "@apurvatilwani",
+            "reelCount": 1450
+          },
+          "joinedCountTillDate": 52100,
+          "todayActiveCount": 3180,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_morning_1/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=ffde05f65d363d99867b8308b9a786021b70ead6263febe59afe35863b878517"
+        },
+        {
+          "id": "ys_sleep_1",
+          "categoryId": "cat_sleep",
+          "title": "Yoga Nidra & Vagus Nerve Parasympathetic Reset",
+          "description": "The ultimate yogic conscious sleep technique that systematically relaxes brain wave frequencies from Beta down into Alpha and Theta.",
+          "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 45,
+          "level": "All Levels",
+          "intensity": "Ultra Restorative",
+          "caloriesBurned": 60,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Nervous System, Vagus Nerve & Sleep Cycles",
+          "targetBodyParts": [
+            "Vagus Nerve",
+            "Central Nervous System",
+            "Adrenal Cortex",
+            "Pineal Gland"
+          ],
+          "keyPoses": [
+            "Supported Savasana",
+            "Nadi Shodhana Pranayama",
+            "Sankalpa Meditation",
+            "Supported Bridge Pose"
+          ],
+          "lifestyleImpact": "Significantly increases restorative deep REM sleep, reduces evening cortisol spikes, and helps overcome racing thoughts and insomnia.",
+          "instructor": {
+            "id": "ins_vinay",
+            "name": "Vinay Zende",
+            "title": "Senior Yoga Acharya",
+            "specialty": "Pranayama & Meditation",
+            "bio": "Vinay brings over 20 years of authentic classical yoga training from The Yoga Institute Mumbai, blending ancient kriyas with biomechanics.",
+            "experience": "20+ yrs exp · Master Acharya",
+            "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.92,
+            "handle": "@the_yoga_institute",
+            "reelCount": 2100
+          },
+          "joinedCountTillDate": 41200,
+          "todayActiveCount": 2240,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_sleep_1/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=fdfee190dddfbc9531602a498eefc314475dc25237d9e2155530931dec2c45c5"
+        },
+        {
+          "id": "ys_spine_1",
+          "categoryId": "cat_spine",
+          "title": "Lumbar Spine Decompression & Sacrum Release",
+          "description": "Therapeutic slow-traction postures designed to relieve disc pressure, hydrate vertebral spaces, and release chronic lower back tightness.",
+          "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+          "durationMinutes": 45,
+          "level": "All Levels",
+          "intensity": "Gentle to Moderate",
+          "caloriesBurned": 160,
+          "isFree": true,
+          "isLive": false,
+          "startsAt": null,
+          "bodyFocusTitle": "Lower Back, Sacrum & Lumbar Decompression",
+          "targetBodyParts": [
+            "L4-L5 Lumbar Spine",
+            "Sacroiliac Joint",
+            "Thoracic Spine",
+            "Hamstrings"
+          ],
+          "keyPoses": [
+            "Supta Matsyendrasana (Supine Twist)",
+            "Bhujangasana (Gentle Cobra)",
+            "Marjaryasana (Cat-Cow Flow)",
+            "Balasana with Lat Traction"
+          ],
+          "lifestyleImpact": "Counteracts 8+ hours of desk sitting by restoring disc hydration, relieving sciatic nerve compression, and preventing recurrent lower back spasm.",
+          "instructor": {
+            "id": "ins_apurva",
+            "name": "Apurva Tilwani",
+            "title": "Lead Yoga Biomechanist & Hatha Acharya",
+            "specialty": "Daily Asana & Spine Health",
+            "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+            "experience": "14+ yrs exp · 520k+ students taught",
+            "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+            "rating": 4.95,
+            "handle": "@apurvatilwani",
+            "reelCount": 1450
+          },
+          "joinedCountTillDate": 28450,
+          "todayActiveCount": 1840,
+          "playbackUrl": "https://media.timeshealthplus.invalid/sessions/ys_spine_1/master.m3u8?u=cmuwaq11t000fkze8d9fczjk6&e=1791275534&s=b17a5c1a33957be23255774af4b28dc3d17b978bc5fafebef9f238ec5b8a8ac6"
+        }
+      ],
+      "seeAllCategoryId": null,
+      "actionLabel": "Explore"
+    },
+    {
+      "type": "ENTRY_TILE",
+      "id": "tile-run-tracker",
+      "title": "GPS Outdoor Run",
+      "subtitle": "Track live distance, pace & route — even with the screen off",
+      "imageUrl": "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?auto=format&fit=crop&w=900&q=70",
+      "action": {
+        "type": "OPEN_RUN_TRACKER"
+      }
+    },
+    {
+      "type": "WORKSHOP_RAIL",
+      "id": "rail-workshops",
+      "title": "Upcoming Live Workshops",
+      "cardFormat": "WORKSHOP_CARD",
+      "items": [
+        {
+          "id": "cmuwapu410019kzpwvnvedxh2",
+          "title": "Kundalini Breathwork & Vagus Nerve Deep Sleep Clinic",
+          "description": "A therapeutic masterclass unlocking deep diaphragmatic breathing and nervous system downregulation for chronic stress recovery.",
+          "category": "YOGA",
+          "focusArea": "Pranic breathing, Vagus nerve activation, insomnia relief",
+          "imageUrl": "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80",
+          "startsAt": "2026-10-09T13:30:00.000Z",
+          "durationMinutes": 60,
+          "level": "All Levels",
+          "platform": "Zoom Interactive Live",
+          "instructorName": "Surakshit Goswami",
+          "instructorTitle": "Master Teacher at The Yoga Institute",
+          "instructorAvatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+          "pricePaise": 29900,
+          "spotsRemaining": 150,
+          "totalCapacity": 150,
+          "isRegistered": false,
+          "paidSeat": false,
+          "joinUrl": null
+        },
+        {
+          "id": "cmuwapu410017kzpwid5cs2cx",
+          "title": "Sub-2 Hour Half Marathon Pacing & Fueling Masterclass",
+          "description": "Master race-day execution for 10K & 21K runners. Learn how to conserve glycogen, handle hill surges, and avoid hitting the 16K wall.",
+          "category": "MARATHON",
+          "focusArea": "Negative split pacing, lactate threshold, carb loading",
+          "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+          "startsAt": "2026-10-12T13:30:00.000Z",
+          "durationMinutes": 90,
+          "level": "Intermediate to Advanced",
+          "platform": "Zoom Interactive Live",
+          "instructorName": "Coach Tarun Walecha",
+          "instructorTitle": "Elite Ultra-Marathoner & Master Running Coach",
+          "instructorAvatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+          "pricePaise": 49900,
+          "spotsRemaining": 119,
+          "totalCapacity": 120,
+          "isRegistered": false,
+          "paidSeat": false,
+          "joinUrl": null
+        },
+        {
+          "id": "cmuwapu41001akzpwr6fu6t4s",
+          "title": "Mindful Eating & Digestion Masterclass",
+          "description": "Ancient principles for gut harmony, translated into what you actually cook at home.",
+          "category": "DIET",
+          "focusArea": "Agni, portion awareness, meal timing",
+          "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+          "startsAt": "2026-10-15T13:30:00.000Z",
+          "durationMinutes": 60,
+          "level": "All Levels",
+          "platform": "Zoom Interactive Live",
+          "instructorName": "Sonia Goyal",
+          "instructorTitle": "Qualified Clinical Dietitian",
+          "instructorAvatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+          "pricePaise": 24900,
+          "spotsRemaining": 100,
+          "totalCapacity": 100,
+          "isRegistered": false,
+          "paidSeat": false,
+          "joinUrl": null
+        },
+        {
+          "id": "cmuwapu410018kzpweenigdsx",
+          "title": "Cadence & VO2 Max Biomechanics Live Clinic",
+          "description": "Live form analysis correcting foot strike braking forces and improving running economy so every step expends less energy.",
+          "category": "MARATHON",
+          "focusArea": "Optimal 180 spm cadence, knee flexion, ground contact",
+          "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+          "startsAt": "2026-10-19T13:30:00.000Z",
+          "durationMinutes": 75,
+          "level": "All Levels",
+          "platform": "Zoom Interactive Live",
+          "instructorName": "Sneha Rathi",
+          "instructorTitle": "Ergonomic Sports Specialist & Physio-Yogi",
+          "instructorAvatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+          "pricePaise": 39900,
+          "spotsRemaining": 80,
+          "totalCapacity": 80,
+          "isRegistered": false,
+          "paidSeat": false,
+          "joinUrl": null
+        }
+      ]
+    },
+    {
+      "type": "REEL_RAIL",
+      "id": "rail-instructors",
+      "title": "Explore our instructors",
+      "cardFormat": "REEL_PORTRAIT",
+      "items": [
+        {
+          "id": "cmuwapqa60000kzpwac1r98bx",
+          "instructorId": "ins_apurva",
+          "instructorName": "Apurva Tilwani",
+          "instructorHandle": "@apurvatilwani",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+          "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_apurva.m3u8",
+          "durationSeconds": 45
+        },
+        {
+          "id": "cmuwapqa70001kzpw3sgebcax",
+          "instructorId": "ins_shynee",
+          "instructorName": "Shynee Narang",
+          "instructorHandle": "@shyneenarang",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+          "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_shynee.m3u8",
+          "durationSeconds": 55
+        },
+        {
+          "id": "cmuwapqa70002kzpwsnc7rrtm",
+          "instructorId": "ins_vinay",
+          "instructorName": "Vinay Zende",
+          "instructorHandle": "@the_yoga_institute",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+          "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_vinay.m3u8",
+          "durationSeconds": 65
+        },
+        {
+          "id": "cmuwapqa70003kzpwh2w4295c",
+          "instructorId": "ins_sneha",
+          "instructorName": "Sneha Rathi",
+          "instructorHandle": "@the_yoga_institute",
+          "thumbnailUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+          "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_sneha.m3u8",
+          "durationSeconds": 75
+        }
+      ]
+    },
+    {
+      "type": "ARTICLE_RAIL",
+      "id": "rail-articles",
+      "title": "TOI & ET coverage",
+      "cardFormat": "ARTICLE_WIDE",
+      "items": [
+        {
+          "id": "cmuwapth90010kzpw7gq5i8pq",
+          "title": "Why running is becoming India’s favorite community ritual",
+          "source": "THE TIMES OF INDIA",
+          "category": "Marathon",
+          "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+          "readTimeMinutes": 4,
+          "url": "https://timesofindia.indiatimes.com/"
+        },
+        {
+          "id": "cmuwapth90011kzpw5e6oea65",
+          "title": "The 10-minute morning spine routine that actually protects runners",
+          "source": "ET DIGITAL",
+          "category": "Wellness",
+          "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+          "readTimeMinutes": 3,
+          "url": "https://economictimes.indiatimes.com/"
+        },
+        {
+          "id": "cmuwapth90012kzpw4hr2y2lx",
+          "title": "12 weeks to go: Your marathon doesn’t start at the start line",
+          "source": "THE TIMES OF INDIA",
+          "category": "Training",
+          "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+          "readTimeMinutes": 5,
+          "url": "https://timesofindia.indiatimes.com/"
+        },
+        {
+          "id": "cmuwapth90013kzpw38jalciq",
+          "title": "Fueling for your 21.1K race?",
+          "source": "ET DIGITAL",
+          "category": "Nutrition",
+          "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+          "readTimeMinutes": 4,
+          "url": "https://economictimes.indiatimes.com/"
+        }
+      ]
+    },
+    {
+      "type": "QUOTE_RAIL",
+      "id": "rail-quotes",
+      "title": "What our members say",
+      "cardFormat": "QUOTE_SQUARE",
+      "items": [
+        {
+          "id": "cmuwaptt80014kzpwbg4w6xki",
+          "quote": "The teachers explain the why behind each posture, not just the steps.",
+          "author": "Dr. Promila Batara",
+          "role": "General Surgeon · 8 mo subscriber"
+        },
+        {
+          "id": "cmuwaptt80015kzpwiyxye1hq",
+          "quote": "Iss price pe daily live classes milna honestly best deal hai. Attendance streak keeps me going.",
+          "author": "Sumit J.",
+          "role": "Subscriber · Pune"
+        },
+        {
+          "id": "cmuwaptt80016kzpw47f7a2sp",
+          "quote": "Six months in and my chronic morning back stiffness is simply gone.",
+          "author": "Dr. Ritu Sehgal",
+          "role": "Delhi"
+        }
+      ]
+    }
+  ],
+  "serverTime": "2026-10-06T08:27:14.959Z",
+  "ttlSeconds": 60
+}

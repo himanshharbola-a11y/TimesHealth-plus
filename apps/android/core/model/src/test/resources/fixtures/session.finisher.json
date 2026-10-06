@@ -1,0 +1,47 @@
+{
+  "profile": {
+    "id": "cmuwaq6k8001ukze8j3fd9cty",
+    "name": "Farah Finisher",
+    "email": "finisher@th.test",
+    "phone": "+919000000006",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": null,
+    "profileCompletion": 67,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": null,
+    "marathon": [
+      {
+        "eventId": "pune_run",
+        "eventName": "Pune Monsoon Run",
+        "registrationRef": "TH-QA_FINISHER",
+        "tier": "CLASSIC",
+        "category": "10K",
+        "bibNumber": "PUN-7731C",
+        "status": "COMPLETED",
+        "registeredAt": "2026-10-06T06:26:56.868Z"
+      }
+    ],
+    "diet": null
+  },
+  "persona": {
+    "persona": "MARATHON_REGISTRANT",
+    "hasYoga": false,
+    "hasMarathon": true,
+    "label": "Marathon Registered"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:16.509Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}

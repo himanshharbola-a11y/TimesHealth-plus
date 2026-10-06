@@ -1,0 +1,48 @@
+{
+  "attendedDates": [
+    "2026-10-05",
+    "2026-10-04",
+    "2026-10-03",
+    "2026-10-02",
+    "2026-10-01",
+    "2026-09-30",
+    "2026-09-29"
+  ],
+  "classesAttended": 7,
+  "currentStreak": 7,
+  "bestStreak": 7,
+  "attendanceRate": 3,
+  "upcomingSessions": [
+    {
+      "date": "2026-10-06",
+      "batchId": "b5",
+      "title": "Joint Health Bootcamp",
+      "startsAt": "2026-10-06T11:15:00.000Z"
+    },
+    {
+      "date": "2026-10-06",
+      "batchId": "b6",
+      "title": "Pranayama & Yogic Calm",
+      "startsAt": "2026-10-06T12:30:00.000Z"
+    },
+    {
+      "date": "2026-10-06",
+      "batchId": "b7",
+      "title": "Evening Unwind Flow",
+      "startsAt": "2026-10-06T14:00:00.000Z"
+    },
+    {
+      "date": "2026-10-06",
+      "batchId": "b8",
+      "title": "Yoga Nidra & Deep Sleep",
+      "startsAt": "2026-10-06T15:00:00.000Z"
+    },
+    {
+      "date": "2026-10-07",
+      "batchId": "b1",
+      "title": "Morning Asana Flow",
+      "startsAt": "2026-10-06T23:45:00.000Z"
+    }
+  ],
+  "trackingSince": "2026-03-20"
+}

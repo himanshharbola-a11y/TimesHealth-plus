@@ -1,0 +1,45 @@
+{
+  "profile": {
+    "id": "cmuwapzfi0003kze8lo8ovbnk",
+    "name": "Yash Yogi",
+    "email": "yoga@th.test",
+    "phone": "+919000000002",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": "LOWER_BACK",
+    "profileCompletion": 83,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": {
+      "active": true,
+      "status": "ACTIVE",
+      "planId": "yoga_annual",
+      "planLabel": "Annual Membership",
+      "startedAt": "2026-03-20T06:26:47.229Z",
+      "expiresAt": "2027-03-20T06:26:47.229Z",
+      "autoRenews": false,
+      "reminderSlotId": "b2"
+    },
+    "marathon": [],
+    "diet": null
+  },
+  "persona": {
+    "persona": "YOGA_SUBSCRIBER",
+    "hasYoga": true,
+    "hasMarathon": false,
+    "label": "Yoga Subscriber"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:14.277Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}

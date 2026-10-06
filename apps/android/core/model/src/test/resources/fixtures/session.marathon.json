@@ -1,0 +1,47 @@
+{
+  "profile": {
+    "id": "cmuwaq11t000fkze8d9fczjk6",
+    "name": "Meera Runner",
+    "email": "marathon@th.test",
+    "phone": "+919000000003",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": "KNEES_JOINTS",
+    "profileCompletion": 83,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": null,
+    "marathon": [
+      {
+        "eventId": "delhi_half",
+        "eventName": "Delhi Half Marathon",
+        "registrationRef": "TH-QA_MARATHON",
+        "tier": "CLASSIC",
+        "category": "21K",
+        "bibNumber": "DEL-8892A",
+        "status": "UPCOMING",
+        "registeredAt": "2026-10-06T06:26:49.425Z"
+      }
+    ],
+    "diet": null
+  },
+  "persona": {
+    "persona": "MARATHON_REGISTRANT",
+    "hasYoga": false,
+    "hasMarathon": true,
+    "label": "Marathon Registered"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:14.706Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}

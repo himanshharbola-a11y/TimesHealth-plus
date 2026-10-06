@@ -1,0 +1,36 @@
+{
+  "profile": {
+    "id": "cmuwapx9t0000kze8ntpkb7mg",
+    "name": "Freya Free",
+    "email": "free@th.test",
+    "phone": "+919000000001",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": null,
+    "profileCompletion": 67,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": null,
+    "marathon": [],
+    "diet": null
+  },
+  "persona": {
+    "persona": "FREE",
+    "hasYoga": false,
+    "hasMarathon": false,
+    "label": "Free Member"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:13.479Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}

@@ -1,0 +1,291 @@
+{
+  "events": [
+    {
+      "id": "pune_run",
+      "name": "Pune Monsoon Run",
+      "city": "Pune",
+      "venue": "Shree Shiv Chhatrapati Sports Complex",
+      "imageUrl": "https://images.unsplash.com/photo-1594882645126-14020914d58d?auto=format&fit=crop&w=800&q=80",
+      "startsAt": "2026-09-14T18:30:00.000Z",
+      "flagOffTime": "6:00 AM",
+      "distanceOptions": [
+        {
+          "code": "5K",
+          "label": "5K",
+          "pricePaise": {
+            "CLASSIC": 149900,
+            "PREMIUM": 299900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": false
+        },
+        {
+          "code": "10K",
+          "label": "10K",
+          "pricePaise": {
+            "CLASSIC": 189900,
+            "PREMIUM": 339900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": false
+        },
+        {
+          "code": "21K",
+          "label": "21K",
+          "pricePaise": {
+            "CLASSIC": 229900,
+            "PREMIUM": 379900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": false
+        }
+      ],
+      "registrationOpen": false,
+      "rescheduledFrom": null,
+      "expo": null,
+      "registration": {
+        "eventId": "pune_run",
+        "eventName": "Pune Monsoon Run",
+        "registrationRef": "TH-QA_FINISHER",
+        "tier": "CLASSIC",
+        "category": "10K",
+        "bibNumber": "PUN-7731C",
+        "status": "COMPLETED",
+        "registeredAt": "2026-10-06T06:26:56.868Z"
+      },
+      "distanceFromUserKm": null
+    },
+    {
+      "id": "delhi_half",
+      "name": "Delhi Half Marathon",
+      "city": "Delhi NCR",
+      "venue": "Jawaharlal Nehru Stadium, Gate 3",
+      "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+      "startsAt": "2026-10-29T18:30:00.000Z",
+      "flagOffTime": "5:30 AM · Wave 2",
+      "distanceOptions": [
+        {
+          "code": "3K",
+          "label": "3K",
+          "pricePaise": {
+            "CLASSIC": 197700,
+            "PREMIUM": 399900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "5K",
+          "label": "5K",
+          "pricePaise": {
+            "CLASSIC": 237700,
+            "PREMIUM": 439900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "10K",
+          "label": "10K",
+          "pricePaise": {
+            "CLASSIC": 277700,
+            "PREMIUM": 479900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "21K",
+          "label": "21K",
+          "pricePaise": {
+            "CLASSIC": 317700,
+            "PREMIUM": 519900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        }
+      ],
+      "registrationOpen": true,
+      "rescheduledFrom": null,
+      "expo": {
+        "venue": "Hall B, JLN Stadium",
+        "address": "Jawaharlal Nehru Stadium, New Delhi",
+        "startsAt": "2026-10-28T04:30:00.000Z",
+        "endsAt": "2026-10-29T12:30:00.000Z",
+        "pickupWindow": "28–29 Oct · 10 AM to 6 PM",
+        "instructions": "Show this QR code at Expo Counter B to collect your race timing chip, bib, and t-shirt.",
+        "requiredDocuments": [
+          "Valid Government Photo ID"
+        ]
+      },
+      "registration": null,
+      "distanceFromUserKm": null
+    },
+    {
+      "id": "hyd_half",
+      "name": "Hyderabad Half Marathon",
+      "city": "Hyderabad",
+      "venue": "Gachibowli Stadium",
+      "imageUrl": "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80",
+      "startsAt": "2026-11-20T18:30:00.000Z",
+      "flagOffTime": "5:45 AM",
+      "distanceOptions": [
+        {
+          "code": "5K",
+          "label": "5K",
+          "pricePaise": {
+            "CLASSIC": 175000,
+            "PREMIUM": 349900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "10K",
+          "label": "10K",
+          "pricePaise": {
+            "CLASSIC": 215000,
+            "PREMIUM": 389900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "21K",
+          "label": "21K",
+          "pricePaise": {
+            "CLASSIC": 255000,
+            "PREMIUM": 429900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": true,
+          "registrationOpen": true
+        }
+      ],
+      "registrationOpen": true,
+      "rescheduledFrom": null,
+      "expo": null,
+      "registration": null,
+      "distanceFromUserKm": null
+    },
+    {
+      "id": "blr_run",
+      "name": "Bengaluru Distance Run",
+      "city": "Bengaluru",
+      "venue": "Sree Kanteerava Stadium",
+      "imageUrl": "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?auto=format&fit=crop&w=800&q=80",
+      "startsAt": "2026-12-26T18:30:00.000Z",
+      "flagOffTime": "6:00 AM",
+      "distanceOptions": [
+        {
+          "code": "3K",
+          "label": "3K",
+          "pricePaise": {
+            "CLASSIC": 185000,
+            "PREMIUM": 369900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": false
+        },
+        {
+          "code": "5K",
+          "label": "5K",
+          "pricePaise": {
+            "CLASSIC": 225000,
+            "PREMIUM": 409900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "10K",
+          "label": "10K",
+          "pricePaise": {
+            "CLASSIC": 265000,
+            "PREMIUM": 449900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "21K",
+          "label": "21K",
+          "pricePaise": {
+            "CLASSIC": 305000,
+            "PREMIUM": 489900
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        }
+      ],
+      "registrationOpen": true,
+      "rescheduledFrom": null,
+      "expo": null,
+      "registration": null,
+      "distanceFromUserKm": null
+    },
+    {
+      "id": "mum_half",
+      "name": "Mumbai Coastal Half Marathon",
+      "city": "Mumbai",
+      "venue": "Marine Drive Promenade",
+      "imageUrl": "https://images.unsplash.com/photo-1513593771513-7b58b6c4af38?auto=format&fit=crop&w=800&q=80",
+      "startsAt": "2027-02-20T18:30:00.000Z",
+      "flagOffTime": "5:30 AM",
+      "distanceOptions": [
+        {
+          "code": "5K",
+          "label": "5K",
+          "pricePaise": {
+            "CLASSIC": 195000,
+            "PREMIUM": 385000
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "10K",
+          "label": "10K",
+          "pricePaise": {
+            "CLASSIC": 235000,
+            "PREMIUM": 425000
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        },
+        {
+          "code": "21K",
+          "label": "21K",
+          "pricePaise": {
+            "CLASSIC": 275000,
+            "PREMIUM": 465000
+          },
+          "wasPricePaise": null,
+          "premiumSoldOut": false,
+          "registrationOpen": true
+        }
+      ],
+      "registrationOpen": true,
+      "rescheduledFrom": null,
+      "expo": null,
+      "registration": null,
+      "distanceFromUserKm": null
+    }
+  ],
+  "orderedBy": "REGISTRATION"
+}

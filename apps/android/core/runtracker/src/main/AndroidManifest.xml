@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Run tracker (PRD §8.6). Merged into the app's manifest.
+
+  Location is read only by a foreground service started while the app is on
+  screen ("while in use"). That is enough to keep recording with the screen
+  off, so ACCESS_BACKGROUND_LOCATION is deliberately NOT requested: it needs a
+  Play declaration and a demo video, and the RN app blocks it outright
+  (app.json blockedPermissions; docs/03 §6). Do not add it.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Precise fixes: the 25 m accuracy gate drops every "approximate" fix. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- Android 12+ only grants FINE when COARSE is requested alongside it. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <!-- Android 14+: a foreground service of type "location" needs this too. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <!-- Android 13+: without it the service still records, but its ongoing
+         notification (live distance and the Pause action) is hidden. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Held only while a batch of fixes is written, so a screen-off phone
+         can't sleep halfway through a transaction. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application>
+        <!-- Not exported: only this app starts or pauses a run. -->
+        <service
+            android:name=".service.RunTrackerService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+    </application>
+</manifest>

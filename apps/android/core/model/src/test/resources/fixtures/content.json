@@ -1,0 +1,168 @@
+{
+  "articles": [
+    {
+      "id": "cmuwapth90010kzpw7gq5i8pq",
+      "title": "Why running is becoming India’s favorite community ritual",
+      "source": "THE TIMES OF INDIA",
+      "category": "Marathon",
+      "imageUrl": "https://images.unsplash.com/photo-1452626038306-9aae5e071dd3?auto=format&fit=crop&w=800&q=80",
+      "readTimeMinutes": 4,
+      "url": "https://timesofindia.indiatimes.com/"
+    },
+    {
+      "id": "cmuwapth90011kzpw5e6oea65",
+      "title": "The 10-minute morning spine routine that actually protects runners",
+      "source": "ET DIGITAL",
+      "category": "Wellness",
+      "imageUrl": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80",
+      "readTimeMinutes": 3,
+      "url": "https://economictimes.indiatimes.com/"
+    },
+    {
+      "id": "cmuwapth90012kzpw4hr2y2lx",
+      "title": "12 weeks to go: Your marathon doesn’t start at the start line",
+      "source": "THE TIMES OF INDIA",
+      "category": "Training",
+      "imageUrl": "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+      "readTimeMinutes": 5,
+      "url": "https://timesofindia.indiatimes.com/"
+    },
+    {
+      "id": "cmuwapth90013kzpw38jalciq",
+      "title": "Fueling for your 21.1K race?",
+      "source": "ET DIGITAL",
+      "category": "Nutrition",
+      "imageUrl": "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80",
+      "readTimeMinutes": 4,
+      "url": "https://economictimes.indiatimes.com/"
+    }
+  ],
+  "quotes": [
+    {
+      "id": "cmuwaptt80014kzpwbg4w6xki",
+      "quote": "The teachers explain the why behind each posture, not just the steps.",
+      "author": "Dr. Promila Batara",
+      "role": "General Surgeon · 8 mo subscriber"
+    },
+    {
+      "id": "cmuwaptt80015kzpwiyxye1hq",
+      "quote": "Iss price pe daily live classes milna honestly best deal hai. Attendance streak keeps me going.",
+      "author": "Sumit J.",
+      "role": "Subscriber · Pune"
+    },
+    {
+      "id": "cmuwaptt80016kzpw47f7a2sp",
+      "quote": "Six months in and my chronic morning back stiffness is simply gone.",
+      "author": "Dr. Ritu Sehgal",
+      "role": "Delhi"
+    }
+  ],
+  "instructors": [
+    {
+      "id": "ins_shynee",
+      "name": "Shynee Narang",
+      "title": "Ergonomic Yoga Specialist & Certified Physio-Yogi",
+      "specialty": "Desk Posture & Mobility",
+      "bio": "Shynee has coached thousands of corporate executives and athletes in eliminating tension headaches and postural kyphosis.",
+      "experience": "9+ yrs exp · 310k+ community",
+      "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+      "rating": 4.88,
+      "handle": "@shyneenarang",
+      "reelCount": 980
+    },
+    {
+      "id": "ins_apurva",
+      "name": "Apurva Tilwani",
+      "title": "Lead Yoga Biomechanist & Hatha Acharya",
+      "specialty": "Daily Asana & Spine Health",
+      "bio": "Apurva specializes in spinal alignment, rehabilitation yoga, and posture correction with 14+ years of practical clinical teaching.",
+      "experience": "14+ yrs exp · 520k+ students taught",
+      "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+      "rating": 4.95,
+      "handle": "@apurvatilwani",
+      "reelCount": 1450
+    },
+    {
+      "id": "ins_vinay",
+      "name": "Vinay Zende",
+      "title": "Senior Yoga Acharya",
+      "specialty": "Pranayama & Meditation",
+      "bio": "Vinay brings over 20 years of authentic classical yoga training from The Yoga Institute Mumbai, blending ancient kriyas with biomechanics.",
+      "experience": "20+ yrs exp · Master Acharya",
+      "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+      "rating": 4.92,
+      "handle": "@the_yoga_institute",
+      "reelCount": 2100
+    },
+    {
+      "id": "ins_sneha",
+      "name": "Sneha Rathi",
+      "title": "Joint Health & Rehabilitation Specialist",
+      "specialty": "Joint Health & Mobility",
+      "bio": "Sneha focuses on sports injury prevention and neuromuscular flexibility.",
+      "experience": "8+ yrs exp · 180k+ students",
+      "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+      "rating": 4.86,
+      "handle": "@the_yoga_institute",
+      "reelCount": 840
+    }
+  ],
+  "yogaFaqs": [
+    {
+      "question": "Can I attend a batch other than my chosen slot?",
+      "answer": "Yes! Your chosen slot sets your calendar notification, but you can attend any of the 8 batches morning or evening using the same single pass."
+    },
+    {
+      "question": "Does watching a recording count toward my streak?",
+      "answer": "No. Per the single-source rule, live session participation counts toward streaks to foster genuine daily practice consistency."
+    },
+    {
+      "question": "Can I join from WhatsApp or only the app?",
+      "answer": "Both fire to the exact same attendance ledger! Tapping the WhatsApp class link updates your app streak automatically."
+    }
+  ],
+  "mentor": {
+    "name": "Surakshit Goswami",
+    "title": "Chief Mentor · Master Teacher at The Yoga Institute",
+    "bio": "Leads 12 monthly deep-dive intensives and guides the curriculum every TimesHealth+ batch is taught from.",
+    "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
+  },
+  "reels": [
+    {
+      "id": "cmuwapqa60000kzpwac1r98bx",
+      "instructorId": "ins_apurva",
+      "instructorName": "Apurva Tilwani",
+      "instructorHandle": "@apurvatilwani",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+      "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_apurva.m3u8",
+      "durationSeconds": 45
+    },
+    {
+      "id": "cmuwapqa70001kzpw3sgebcax",
+      "instructorId": "ins_shynee",
+      "instructorName": "Shynee Narang",
+      "instructorHandle": "@shyneenarang",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+      "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_shynee.m3u8",
+      "durationSeconds": 55
+    },
+    {
+      "id": "cmuwapqa70002kzpwsnc7rrtm",
+      "instructorId": "ins_vinay",
+      "instructorName": "Vinay Zende",
+      "instructorHandle": "@the_yoga_institute",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+      "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_vinay.m3u8",
+      "durationSeconds": 65
+    },
+    {
+      "id": "cmuwapqa70003kzpwh2w4295c",
+      "instructorId": "ins_sneha",
+      "instructorName": "Sneha Rathi",
+      "instructorHandle": "@the_yoga_institute",
+      "thumbnailUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80",
+      "playbackUrl": "https://media.timeshealthplus.invalid/reels/ins_sneha.m3u8",
+      "durationSeconds": 75
+    }
+  ]
+}

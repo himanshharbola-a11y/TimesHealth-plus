@@ -1,0 +1,56 @@
+{
+  "profile": {
+    "id": "cmuwaq2ya000mkze8x2gx3ntk",
+    "name": "Bhavna Both",
+    "email": "both@th.test",
+    "phone": "+919000000004",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": "SLEEP_ENERGY",
+    "profileCompletion": 83,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": {
+      "active": true,
+      "status": "ACTIVE",
+      "planId": "yoga_annual",
+      "planLabel": "Annual Membership",
+      "startedAt": "2026-03-20T06:26:52.098Z",
+      "expiresAt": "2027-03-20T06:26:52.098Z",
+      "autoRenews": false,
+      "reminderSlotId": "b5"
+    },
+    "marathon": [
+      {
+        "eventId": "delhi_half",
+        "eventName": "Delhi Half Marathon",
+        "registrationRef": "TH-QA_BOTH",
+        "tier": "PREMIUM",
+        "category": "10K",
+        "bibNumber": "DEL-4410B",
+        "status": "UPCOMING",
+        "registeredAt": "2026-10-06T06:26:52.809Z"
+      }
+    ],
+    "diet": null
+  },
+  "persona": {
+    "persona": "BOTH",
+    "hasYoga": true,
+    "hasMarathon": true,
+    "label": "Yoga + Marathon"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:15.205Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "profile": {
+    "id": "cmuwaq52q001ikze8kb9oxxug",
+    "name": "Evan Expired",
+    "email": "expired@th.test",
+    "phone": "+919000000005",
+    "emailIsLogin": true,
+    "phoneIsLogin": true,
+    "dob": null,
+    "gender": null,
+    "healthGoal": "CONSISTENCY",
+    "concern": "NECK_SHOULDERS",
+    "profileCompletion": 83,
+    "onboardingCompleted": true,
+    "units": "METRIC",
+    "locale": "en-IN"
+  },
+  "entitlements": {
+    "yoga": {
+      "active": false,
+      "status": "EXPIRED",
+      "planId": "yoga_annual",
+      "planLabel": "Annual Membership",
+      "startedAt": "2026-03-20T06:26:54.575Z",
+      "expiresAt": "2026-08-05T06:26:54.575Z",
+      "autoRenews": false,
+      "reminderSlotId": "b2"
+    },
+    "marathon": [],
+    "diet": null
+  },
+  "persona": {
+    "persona": "YOGA_EXPIRED",
+    "hasYoga": false,
+    "hasMarathon": false,
+    "label": "Previous Member"
+  },
+  "needsOnboarding": false,
+  "serverTime": "2026-10-06T08:27:16.041Z",
+  "minSupportedAppVersion": "1.0.0",
+  "maintenance": {
+    "active": false,
+    "message": null
+  }
+}
