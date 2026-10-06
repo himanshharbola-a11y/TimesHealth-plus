@@ -124,6 +124,12 @@ module.exports = ({ config }) => {
     ],
     extra: {
       ...config.extra,
+      // The server this build talks to. Set here (native config, regenerated
+      // on every build) rather than relying only on EXPO_PUBLIC_API_URL being
+      // inlined into the JS bundle: Metro's transform cache can keep an old
+      // inlined value, which once shipped a phone build pointed at the
+      // emulator-only 10.0.2.2.
+      apiBaseUrl: process.env.EXPO_PUBLIC_API_URL || config.extra?.apiBaseUrl,
       // Read at runtime so the app never calls into an unconfigured Firebase.
       firebaseEnabled,
       googleWebClientId,

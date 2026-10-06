@@ -10,9 +10,12 @@ import { getIdToken, identitySignOut } from '@/lib/identity';
  * host machine's localhost. On a physical device set EXPO_PUBLIC_API_URL to
  * your machine's LAN address.
  */
+// The native app config first: app.config.js writes the build's API address
+// there on every build, so a stale bundler cache can't point a release at the
+// wrong server. The inlined env var is the fallback for unusual dev setups.
 export const API_BASE_URL: string =
-  process.env.EXPO_PUBLIC_API_URL ??
   (Constants.expoConfig?.extra as { apiBaseUrl?: string } | undefined)?.apiBaseUrl ??
+  process.env.EXPO_PUBLIC_API_URL ??
   'http://10.0.2.2:4000/v1';
 
 /**

@@ -15,8 +15,8 @@
  */
 
 import { execSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -154,6 +154,11 @@ if (fast) {
   }
 }
 
+// Metro keeps its transform cache in the temp folder across builds, and the
+// cache doesn't track EXPO_PUBLIC_* values: a phone build once reused the
+// emulator build's inlined API address. Every build bundles from scratch.
+rmSync(path.join(tmpdir(), 'metro-cache'), { recursive: true, force: true });
+
 console.log('\n[2/3] Compiling and signing (first run downloads Gradle — 15-25 min)…');
 const androidDir = path.join(MOBILE, 'android');
 // Full, quoted path: cmd.exe is unreliable about finding scripts in the
@@ -186,6 +191,24 @@ try {
 console.log('\n[3/3] Collecting APK…');
 const built = path.join(MOBILE, 'android', 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
 if (!existsSync(built)) fail('Gradle finished but no APK was produced.');
+
+// Refuse to hand out an APK that talks to the wrong server. The app reads the
+// address from the embedded app config (expo-constants' "app.config" asset),
+// so that file must carry exactly this build's API URL.
+function findFiles(dir, name, found = []) {
+  for (const entry of readdirSync(dir)) {
+    const p = path.join(dir, entry);
+    if (statSync(p).isDirectory()) findFiles(p, name, found);
+    else if (entry === name) found.push(p);
+  }
+  return found;
+}
+const embeddedConfigs = findFiles(path.join(MOBILE, 'android', 'app', 'build'), 'app.config');
+const pointsRight = embeddedConfigs.some((f) => readFileSync(f, 'utf8').includes(`"apiBaseUrl":"${apiUrl}"`));
+if (!pointsRight) {
+  fail(`The built app is not configured for ${apiUrl} — refusing to ship it. Rebuild without --fast.`);
+}
+console.log(`  API address verified in the app: ${apiUrl}`);
 mkdirSync(path.join(ROOT, 'dist'), { recursive: true });
 const out = path.join(ROOT, 'dist', `TimesHealth-${version}-${apiLabel}.apk`);
 copyFileSync(built, out);
