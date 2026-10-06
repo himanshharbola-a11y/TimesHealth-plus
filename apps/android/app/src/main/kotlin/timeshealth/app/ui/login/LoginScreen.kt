@@ -300,7 +300,7 @@ private fun PreLoginSplash(continueLabel: String, onContinue: (slide: Int) -> Un
                         onClick = { onContinue(pager.currentPage) },
                         modifier = Modifier.fillMaxWidth().height(48.dp),
                         shape = ThShapes.Md,
-                        colors = ButtonDefaults.buttonColors(containerColor = CoralBrand),
+                        colors = ButtonDefaults.buttonColors(containerColor = CoralBrand, contentColor = PaperWhite),
                     ) {
                         Text(continueLabel, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
                     }

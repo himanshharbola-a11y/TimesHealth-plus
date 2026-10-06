@@ -2,8 +2,11 @@ package timeshealth.app.ui.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 
 /**
  * The design's light colour scheme, slot for slot from
@@ -53,6 +56,18 @@ fun TimesHealthTheme(content: @Composable () -> Unit) {
         colorScheme = LightColors,
         typography = TimesHealthTypography,
         shapes = TimesHealthShapes,
-        content = content,
-    )
+    ) {
+        // MaterialTheme makes typography.bodyLarge the INHERITED text style, and
+        // our bodyLarge carries a colour (TextSecondary). Inherited, that colour
+        // beats LocalContentColor — so a Button's white label rendered grey on
+        // coral. The default style keeps bodyLarge's metrics but no colour, so
+        // text takes its container's content colour; a Text that asks for
+        // bodyLarge explicitly still gets TextSecondary.
+        // Replaced, not merged: ProvideTextStyle MERGES, and a merge with an
+        // unspecified colour keeps the inherited TextSecondary.
+        CompositionLocalProvider(
+            LocalTextStyle provides TimesHealthTypography.bodyLarge.copy(color = Color.Unspecified),
+            content = content,
+        )
+    }
 }

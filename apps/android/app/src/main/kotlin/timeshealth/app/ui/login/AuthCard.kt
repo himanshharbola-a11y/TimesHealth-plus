@@ -302,9 +302,9 @@ private fun DarkButton(label: String, busy: Boolean, enabled: Boolean, onClick: 
         modifier = Modifier.fillMaxWidth().height(50.dp),
         shape = ThShapes.Md,
         colors = if (busy) {
-            ButtonDefaults.buttonColors(containerColor = Carbon950, disabledContainerColor = Carbon950)
+            ButtonDefaults.buttonColors(containerColor = Carbon950, contentColor = PaperWhite, disabledContainerColor = Carbon950)
         } else {
-            ButtonDefaults.buttonColors(containerColor = Carbon950)
+            ButtonDefaults.buttonColors(containerColor = Carbon950, contentColor = PaperWhite)
         },
     ) {
         if (busy) {
