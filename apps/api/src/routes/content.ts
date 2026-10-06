@@ -1,4 +1,5 @@
 import type { FastifyPluginAsync } from 'fastify';
+import { z } from 'zod';
 import type { ContentResponse, WorkshopListResponse } from '@th/types';
 import { prisma } from '../db.js';
 import { resolveEntitlements } from '../services/entitlements.js';
@@ -99,13 +100,24 @@ const routes: FastifyPluginAsync = async (app) => {
     return { workshops: await loadWorkshopsFor(req.user.id, persona.hasYoga) };
   });
 
+  // Takes the state the user WANTS ({ registered: true | false }), so a double
+  // tap or a network retry can't cancel the seat it just booked. With no body
+  // it toggles, as older app builds expect.
   app.post('/workshops/:id/register', { preHandler: app.requireAuth }, async (req, reply) => {
     const { id } = req.params as { id: string };
+    const want = z.object({ registered: z.boolean().optional() }).safeParse(req.body ?? {});
+    if (!want.success) {
+      return reply.code(400).send({ code: 'INVALID_BODY', message: 'registered must be a boolean' });
+    }
 
     const existing = await prisma.workshopRegistration.findUnique({
       where: { userId_workshopId: { userId: req.user.id, workshopId: id } },
     });
-    if (existing) {
+    const register = want.data.registered ?? !existing;
+    // Already in the state asked for: nothing to do (idempotent).
+    if (register && existing) return { registered: true };
+    if (!register && !existing) return { registered: false };
+    if (!register && existing) {
       // Cancelling a paid seat here would simply forfeit the money. Refunds
       // are an operations decision, so paid seats are cancelled via support.
       const paid = await prisma.order.findFirst({

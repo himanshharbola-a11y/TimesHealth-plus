@@ -540,6 +540,8 @@ describe('Profile & identity — PRD §5, §10', () => {
     const bad = await patch(u, { phone: '1234567890' });
     assert.equal(bad.status, 400);
     assert.equal(bad.body.code, 'INVALID_PHONE');
+    // "+91" with a non-mobile prefix is a typo, not an international number.
+    assert.equal((await patch(u, { phone: '+91 58765 43210' })).body.code, 'INVALID_PHONE');
   });
 
   test('the sign-in email is not editable from the profile', async () => {
@@ -655,6 +657,28 @@ describe('Run totals — §8.6', () => {
     assert.equal(totals.runs, 2);
     assert.equal(totals.longestKm, 12);
     assert.equal(totals.monthDistanceKm, 4);
+  });
+});
+
+describe('Workshops & error shapes', () => {
+  test('booking a free seat is idempotent — a double tap or retry never cancels it', async () => {
+    const u = freshUser();
+    await buyYoga(u); // yoga workshops are free for members
+    const ws = (await get('/v1/workshops', u)).body.workshops.find((w: any) => w.category === 'YOGA');
+    for (let i = 0; i < 2; i += 1) {
+      assert.equal((await post(`/v1/workshops/${ws.id}/register`, u, { registered: true })).body.registered, true);
+    }
+    assert.equal((await get('/v1/workshops', u)).body.workshops.find((w: any) => w.id === ws.id).isRegistered, true);
+    for (let i = 0; i < 2; i += 1) {
+      assert.equal((await post(`/v1/workshops/${ws.id}/register`, u, { registered: false })).body.registered, false);
+    }
+    assert.equal((await get('/v1/workshops', u)).body.workshops.find((w: any) => w.id === ws.id).isRegistered, false);
+  });
+
+  test('an unknown route answers in the standard error shape', async () => {
+    const r = await get('/v1/no-such-route', freshUser());
+    assert.equal(r.status, 404);
+    assert.equal(r.body.code, 'NOT_FOUND');
   });
 });
 

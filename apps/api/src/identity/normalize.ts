@@ -31,6 +31,10 @@ export function normalizePhone(raw: string | null | undefined): string | null {
   if (digits.length === 12 && digits.startsWith('91') && indianMobile(digits.slice(2))) {
     return `+${digits}`;
   }
-  if (trimmed.startsWith('+') && digits.length >= 8 && digits.length <= 15) return `+${digits}`;
+  // Other countries keep their +country digits. A "+91…" number that wasn't
+  // a valid Indian mobile above is a typo, not an international number.
+  if (trimmed.startsWith('+') && !digits.startsWith('91') && digits.length >= 8 && digits.length <= 15) {
+    return `+${digits}`;
+  }
   return null;
 }

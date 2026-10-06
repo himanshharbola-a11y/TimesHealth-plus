@@ -88,14 +88,29 @@ export async function buildApp(opts: { logger?: boolean } = {}): Promise<Fastify
       code:
         status === 401
           ? 'UNAUTHORIZED'
-          : status === 503
-            ? 'UNAVAILABLE'
-            : status >= 500
-              ? 'INTERNAL'
-              : 'BAD_REQUEST',
+          : status === 404
+            ? 'NOT_FOUND'
+            : status === 429
+              ? 'TOO_MANY_REQUESTS' // the global limiter — apps branch on this code
+              : status === 503
+                ? 'UNAVAILABLE'
+                : status >= 500
+                  ? 'INTERNAL'
+                  : 'BAD_REQUEST',
       // Never leak internals to the client in production.
-      message: status >= 500 && isProd ? 'Something went wrong' : error.message,
+      message:
+        status === 429
+          ? 'Too many requests. Please wait a moment and try again.'
+          : status >= 500 && isProd
+            ? 'Something went wrong'
+            : error.message,
     });
+  });
+
+  // Unknown routes answer in the same { code, message } shape as everything
+  // else, so a client never has to special-case Fastify's default 404 body.
+  app.setNotFoundHandler((_req, reply) => {
+    reply.code(404).send({ code: 'NOT_FOUND', message: 'Not found' });
   });
 
   // Health reports the database too, so a load balancer stops routing traffic

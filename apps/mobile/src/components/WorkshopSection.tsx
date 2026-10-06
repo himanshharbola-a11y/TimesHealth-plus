@@ -80,7 +80,7 @@ export function WorkshopSection({
   const detail = detailId ? (workshops.find((w) => w.id === detailId) ?? null) : null;
 
   const update = (w: LiveWorkshop) =>
-    toggle.mutate(w.id, {
+    toggle.mutate({ id: w.id, register: !w.isRegistered }, {
       onError: (e) =>
         Alert.alert(
           'Couldn’t update your seat',
@@ -197,7 +197,7 @@ export function WorkshopSection({
             <WorkshopCard
               key={w.id}
               workshop={w}
-              pending={toggle.isPending && toggle.variables === w.id}
+              pending={toggle.isPending && toggle.variables?.id === w.id}
               onOpen={() => setDetailId(w.id)}
               onToggle={() => handlePress(w)}
             />
@@ -207,7 +207,7 @@ export function WorkshopSection({
 
       <WorkshopDialog
         workshop={detail}
-        pending={!!detail && toggle.isPending && toggle.variables === detail.id}
+        pending={!!detail && toggle.isPending && toggle.variables?.id === detail.id}
         onClose={() => setDetailId(null)}
         onConfirm={(w) => handlePress(w, true)}
         onDismiss={() => {

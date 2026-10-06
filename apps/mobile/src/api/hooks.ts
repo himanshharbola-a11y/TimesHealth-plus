@@ -308,7 +308,9 @@ export function useWorkshops() {
 export function useToggleWorkshop() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => api.post<{ registered: boolean }>(`/workshops/${id}/register`),
+    // Sends the state wanted, so a double tap or retry can't undo a booking.
+    mutationFn: ({ id, register }: { id: string; register: boolean }) =>
+      api.post<{ registered: boolean }>(`/workshops/${id}/register`, { registered: register }),
     onSuccess: () => {
       // The same workshops render on Home (via the feed) and in the tabs.
       void qc.invalidateQueries({ queryKey: qk.workshops });

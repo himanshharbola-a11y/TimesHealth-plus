@@ -152,7 +152,14 @@ export interface PhoneSession {
 /** India-only, matching the SMS region policy recommended in docs/04. */
 export function toIndianE164(input: string): string | null {
   const digits = input.replace(/\D/g, '');
-  const local = digits.length === 12 && digits.startsWith('91') ? digits.slice(2) : digits;
+  // "+91 98765 43210", "919876543210" and "09876543210" are all the same
+  // mobile — the server accepts each, so the app must too.
+  const local =
+    digits.length === 12 && digits.startsWith('91')
+      ? digits.slice(2)
+      : digits.length === 11 && digits.startsWith('0')
+        ? digits.slice(1)
+        : digits;
   return /^[6-9]\d{9}$/.test(local) ? `+91${local}` : null;
 }
 

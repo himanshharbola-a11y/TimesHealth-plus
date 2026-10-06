@@ -3,8 +3,10 @@ dist/
 .env
 *.log
 .expo/
-android/
-ios/
+# React Native's generated native folders (Expo prebuild) — not apps/android,
+# which is the hand-written native Kotlin app.
+apps/mobile/android/
+apps/mobile/ios/
 .secrets/*
 !.secrets/README.md
 google-services.json
@@ -21,3 +23,9 @@ assets/design-reference/
 keystore.properties
 # Editor settings
 .vscode/
+
+# Native Android project build output and machine-local settings
+apps/android/.gradle/
+apps/android/**/build/
+apps/android/local.properties
+apps/android/.kotlin/

@@ -39,7 +39,7 @@ export interface ApiError {
   code: string;
   message: string;
   /** Present on 4xx validation failures. */
-  fields?: Record<string, string>;
+  fields?: Record<string, string[]>;
 }
 
 /** Thin wrapper so clients can branch without inspecting HTTP status codes. */

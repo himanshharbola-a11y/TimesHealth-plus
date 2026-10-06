@@ -34,7 +34,7 @@ const routes: FastifyPluginAsync = async (app) => {
       return reply.code(400).send({
         code: 'INVALID_BODY',
         message: 'Invalid run payload',
-        fields: parsed.error.flatten().fieldErrors as Record<string, string>,
+        fields: parsed.error.flatten().fieldErrors as Record<string, string[]>,
       });
     }
     const d = parsed.data;
