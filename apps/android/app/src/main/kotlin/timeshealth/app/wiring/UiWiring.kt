@@ -12,6 +12,8 @@ import timeshealth.app.ui.home.RepositoryHomeGateway
 import timeshealth.app.ui.live.LiveClassGateway
 import timeshealth.app.ui.live.RepositoryLiveClassGateway
 import timeshealth.app.ui.login.InteractiveSignIn
+import timeshealth.app.ui.marathon.MarathonGateway
+import timeshealth.app.ui.marathon.RepositoryMarathonGateway
 import timeshealth.app.ui.run.RunGateway
 import timeshealth.app.ui.run.TrackerRunGateway
 import timeshealth.app.ui.login.UnavailableSignIn
@@ -42,6 +44,8 @@ abstract class UiWiring {
     @Binds abstract fun liveClassGateway(impl: RepositoryLiveClassGateway): LiveClassGateway
 
     @Binds abstract fun runGateway(impl: TrackerRunGateway): RunGateway
+
+    @Binds abstract fun marathonGateway(impl: RepositoryMarathonGateway): MarathonGateway
 
     /**
      * Google / phone OTP / email on the login card. Unavailable until the

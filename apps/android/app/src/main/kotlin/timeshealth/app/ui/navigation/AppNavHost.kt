@@ -28,6 +28,9 @@ import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.SheetDestination
 import timeshealth.app.ui.home.YOGA_PLAN_ID
 import timeshealth.app.ui.live.LiveClassRoute
+import timeshealth.app.ui.marathon.BibRoute
+import timeshealth.app.ui.marathon.RaceDetailRoute
+import timeshealth.app.ui.marathon.RaceResultsRoute
 import timeshealth.app.ui.run.RunTrackerRoute
 import timeshealth.app.ui.components.TagPill
 import timeshealth.app.ui.gate.GateDestination
@@ -188,22 +191,19 @@ fun AppNavHost(
             ComingSoonScreen("Reel", detail = listOfNotNull(route.title, route.handle).joinToString(" · "), onBack = navController::back)
         }
 
-        composable<Route.RaceDetail> { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.RaceDetail>()
-            ComingSoonScreen("Race", detail = "Event ${route.eventId}", onBack = navController::back)
+        composable<Route.RaceDetail> {
+            RaceDetailRoute(viewModel = hiltViewModel(), onBack = navController::back, openRoute = { navController.navigate(it) })
         }
 
-        composable<Route.RaceResults> { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.RaceResults>()
-            ComingSoonScreen("Race results", detail = "Event ${route.eventId}", onBack = navController::back)
+        composable<Route.RaceResults> {
+            RaceResultsRoute(viewModel = hiltViewModel(), onBack = navController::back)
         }
 
         composable<Route.Bib>(
             enterTransition = Transitions.slideUpEnter,
             popExitTransition = Transitions.slideDownExit,
-        ) { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.Bib>()
-            ComingSoonScreen("Digital bib", detail = "Event ${route.eventId}", onBack = navController::back)
+        ) {
+            BibRoute(viewModel = hiltViewModel(), onBack = navController::back)
         }
 
         composable<Route.RunTracker>(

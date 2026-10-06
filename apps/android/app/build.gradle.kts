@@ -123,6 +123,8 @@ dependencies {
     implementation(libs.media3.ui)
     // Run map: see ui/run/map/RouteMapRenderer.kt (MapLibre now; Google Maps plugs in there).
     implementation(libs.maplibre.android)
+    // The race pass QR (ui/marathon/QrCode.kt draws ZXing's matrix in Compose).
+    implementation(libs.zxing.core)
     debugImplementation(libs.androidx.compose.ui.tooling)
     // Hosts composables in Robolectric tests (an empty activity in the manifest).
     debugImplementation(libs.androidx.compose.ui.test.manifest)

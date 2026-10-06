@@ -40,6 +40,7 @@ import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.TopHeader
 import timeshealth.app.ui.home.FeedTarget
 import timeshealth.app.ui.home.HomeRoute
+import timeshealth.app.ui.marathon.MarathonRoute
 import timeshealth.app.ui.navigation.AppTab
 import timeshealth.app.ui.navigation.Route
 import timeshealth.app.ui.navigation.TabRoute
@@ -141,7 +142,7 @@ fun TabsScreen(
                 )
             }
             composable<TabRoute.Yoga> { ComingSoonScreen("Yoga") }
-            composable<TabRoute.Marathon> { ComingSoonScreen("Marathon") }
+            composable<TabRoute.Marathon> { MarathonRoute(viewModel = hiltViewModel(), openRoute = openRoute) }
             composable<TabRoute.Diet> { ComingSoonScreen("Diet") }
         }
     }
