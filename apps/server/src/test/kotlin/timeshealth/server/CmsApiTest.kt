@@ -350,6 +350,35 @@ class CmsApiTest {
         assertThat(s1["video"]!!.jsonObject["ref"]!!.jsonPrimitive.content).isEqualTo("sl_123")
     }
 
+    @Test
+    fun `playback hands the dashboard video or a signed URL, members only for paid sessions`() {
+        fun playback(id: String, token: String) = mvc.get("/v1/yoga/sessions/$id/playback") { header("Authorization", "Bearer $token") }
+
+        // Paid ses_3 with a Slike video: refused to a free user, the Slike ref to a member.
+        adminPatch("/r/sessions/ses_3", """{"videoProvider":"slike","videoRef":"sl_999"}""").andExpect { status { isOk() } }
+        playback("ses_3", freshUserToken()).andExpect {
+            status { isForbidden() }
+            jsonPath("$.code") { value("NOT_ENTITLED") }
+        }
+        playback("ses_3", memberToken()).andExpect {
+            status { isOk() }
+            jsonPath("$.video.provider") { value("slike") }
+            jsonPath("$.video.ref") { value("sl_999") }
+            jsonPath("$.playbackUrl") { value("") }
+        }
+
+        // Free ses_2: no video at all is a 404, uploaded media is a fresh signed URL for anyone.
+        jdbc.sql("""UPDATE "YogaSession" SET "mediaKey" = NULL, "videoProvider" = NULL, "videoRef" = NULL WHERE "id" = 'ses_2'""").update()
+        playback("ses_2", freshUserToken()).andExpect { status { isNotFound() } }
+        jdbc.sql("""UPDATE "YogaSession" SET "mediaKey" = 'sessions/ses_2/master.m3u8' WHERE "id" = 'ses_2'""").update()
+        playback("ses_2", freshUserToken()).andExpect {
+            status { isOk() }
+            jsonPath("$.playbackUrl") { value(org.hamcrest.Matchers.containsString("/sessions/ses_2/master.m3u8?u=")) }
+            jsonPath("$.video") { doesNotExist() }
+        }
+        playback("nope", freshUserToken()).andExpect { status { isNotFound() } }
+    }
+
     // ── Live classes ──────────────────────────────────────────────────────────
 
     private fun createLiveClass(minutesFromNow: Long, free: Boolean): String = json(

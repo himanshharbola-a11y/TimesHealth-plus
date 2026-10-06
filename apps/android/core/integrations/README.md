@@ -28,7 +28,9 @@ Each interface's KDoc has a numbered **HOW TO PLUG IN** section.
   server's class reminders and race-day messages must still reach the default
   notification.
 - **Video:** a resolver returns something playable or throws. Premieres carry
-  `premiereStartEpochMs`, so the player can join at "now".
+  `premiereStartEpochMs`, so the player can join at "now". Live classes and
+  recorded sessions both go through it: a session whose dashboard video uses a
+  provider with no resolver plugged in falls back to the server's signed URL.
 
 ## Tests
 

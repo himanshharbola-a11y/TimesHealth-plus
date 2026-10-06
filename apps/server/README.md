@@ -115,7 +115,7 @@ Each script sends identical requests to both servers and diffs the JSON. Timesta
 | `services/feed.ts` (Home) | `feed/` (now built from CMS sections) | ✅ same content for all 6 personas |
 | — (new) admin CMS + dashboard | `cms/`, `admin/`, `static/admin` | ✅ 18 tests + browser walkthrough |
 | — (new) live classes `GET /yoga/live`, `POST /yoga/live/{id}/join` | `yoga/LiveClassService.kt` | ✅ |
-| `routes/yoga.ts` + `services/attendance.ts` | `yoga/AttendanceService.kt` (record, best streak) | Partly |
+| `routes/yoga.ts` + `services/attendance.ts` | `yoga/AttendanceService.kt` (record, best streak); `GET /yoga/sessions/{id}/playback` in `yoga/SessionPlaybackService.kt` (adds the dashboard's video for the app's video plug-in) | Partly |
 | `routes/marathon.ts` + `services/media.ts` (bib/playback signing) | — | To do |
 | `routes/orders.ts` (pricing, settlement, referrals) | — | To do |
 | `routes/runs.ts`, `routes/diet.ts` + `services/dietLeads.ts` | — | To do |

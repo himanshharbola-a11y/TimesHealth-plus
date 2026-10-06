@@ -47,6 +47,7 @@ import timeshealth.app.core.domain.formatDayAndTime
 import timeshealth.app.core.domain.secondsUntil
 import timeshealth.app.core.model.LiveClassCard
 import timeshealth.app.ui.components.ErrorState
+import timeshealth.app.ui.components.LightSystemBarIcons
 import timeshealth.app.ui.components.TagPill
 import timeshealth.app.ui.components.ThSpinner
 import timeshealth.app.ui.feed.FeedImage
@@ -94,6 +95,8 @@ fun LiveClassScreen(
     onOpenPaywall: () -> Unit,
     nowMs: () -> Long,
 ) {
+    // A dark screen edge to edge: light system bar icons while it is up.
+    LightSystemBarIcons(statusBar = true, navigationBar = true)
     Column(Modifier.fillMaxSize().background(PlayerCanvas).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().padding(4.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {

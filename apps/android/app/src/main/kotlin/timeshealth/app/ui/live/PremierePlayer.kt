@@ -38,20 +38,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.datasource.DefaultDataSource
-import androidx.media3.datasource.DefaultHttpDataSource
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import kotlinx.coroutines.delay
 import timeshealth.app.core.integrations.video.PlayableStream
 import timeshealth.app.ui.components.TagPill
+import timeshealth.app.ui.player.buildExoPlayer
 import timeshealth.app.ui.theme.CoralBrand
 import timeshealth.app.ui.theme.PaperWhite
 import timeshealth.app.ui.theme.TagTone
@@ -88,22 +83,7 @@ fun PremierePlayer(stream: PlayableStream, startsAtMs: Long, nowMs: () -> Long, 
     // Only a deliberate pause may leave the viewer behind; buffering never should.
     var userPaused by remember(stream) { mutableStateOf(false) }
 
-    val player = remember(stream) {
-        val http = DefaultHttpDataSource.Factory()
-            .setAllowCrossProtocolRedirects(true)
-            .setDefaultRequestProperties(stream.headers)
-        ExoPlayer.Builder(context)
-            .setMediaSourceFactory(DefaultMediaSourceFactory(context).setDataSourceFactory(DefaultDataSource.Factory(context, http)))
-            .build()
-            .apply {
-                val item = MediaItem.Builder().setUri(stream.url).apply {
-                    stream.mimeType?.let { setMimeType(if (it.contains("mpegurl", ignoreCase = true)) MimeTypes.APPLICATION_M3U8 else it) }
-                }.build()
-                setMediaItem(item, livePositionMs(startsAtMs, nowMs()))
-                playWhenReady = true
-                prepare()
-            }
-    }
+    val player = remember(stream) { buildExoPlayer(context, stream, livePositionMs(startsAtMs, nowMs())) }
 
     DisposableEffect(player) {
         val listener = object : Player.Listener {

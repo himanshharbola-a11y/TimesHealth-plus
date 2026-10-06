@@ -191,13 +191,22 @@ data class YogaCatalogResponse(
 data class SetReminderSlotRequest(val batchId: String)
 
 /**
- * GET /yoga/sessions/{id}/playback. 403 NOT_ENTITLED for a locked session.
+ * GET /yoga/sessions/{id}/playback. 403 NOT_ENTITLED for a locked session,
+ * 404 NOT_FOUND when the session has no video.
  * Not in packages/types. Typed inline in apps/mobile/src/api/hooks.ts.
  */
 @Serializable
 data class PlaybackResponse(
-    /** Short-TTL signed URL. */
+    /**
+     * Short-TTL signed URL, or the dashboard's plain stream URL. Empty when only
+     * a provider the app resolves itself (Slike) has the video: see [video].
+     */
     val playbackUrl: String,
+    /**
+     * The video as the admin dashboard set it, for the app's video plug-in
+     * point (Slike id or stream URL). The app prefers it when present.
+     */
+    val video: VideoSource? = null,
 )
 
 /**

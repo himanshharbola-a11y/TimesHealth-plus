@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.RestController
 import timeshealth.app.core.model.HomeFeedResponse
 import timeshealth.app.core.model.LiveClassJoinResponse
 import timeshealth.app.core.model.LiveClassListResponse
+import timeshealth.app.core.model.PlaybackResponse
 import timeshealth.server.db.entity.UserEntity
 import timeshealth.server.security.CurrentUser
 import timeshealth.server.yoga.LiveClassService
+import timeshealth.server.yoga.SessionPlaybackService
 
-/** Home (built from the admin CMS) and live classes. */
+/** Home (built from the admin CMS), live classes and recorded sessions' playback. */
 @RestController
 @RequestMapping("/v1")
-class FeedController(private val home: HomeFeedService, private val liveClasses: LiveClassService) {
+class FeedController(
+    private val home: HomeFeedService,
+    private val liveClasses: LiveClassService,
+    private val playback: SessionPlaybackService,
+) {
 
     /** The entire Home layout, decided server-side from the admin's sections. */
     @GetMapping("/home")
@@ -29,4 +35,9 @@ class FeedController(private val home: HomeFeedService, private val liveClasses:
     @PostMapping("/yoga/live/{id}/join")
     fun join(@PathVariable("id") id: String, @CurrentUser user: UserEntity): LiveClassJoinResponse =
         liveClasses.join(user, id)
+
+    /** A recorded session's video: the dashboard's video and/or a fresh signed URL. */
+    @GetMapping("/yoga/sessions/{id}/playback")
+    fun playback(@PathVariable("id") id: String, @CurrentUser user: UserEntity): PlaybackResponse =
+        playback.playback(user, id)
 }

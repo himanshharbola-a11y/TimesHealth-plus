@@ -1,16 +1,9 @@
 package timeshealth.app.ui.navigation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,14 +25,14 @@ import timeshealth.app.ui.marathon.BibRoute
 import timeshealth.app.ui.marathon.RaceDetailRoute
 import timeshealth.app.ui.marathon.RaceResultsRoute
 import timeshealth.app.ui.run.RunTrackerRoute
-import timeshealth.app.ui.components.TagPill
 import timeshealth.app.ui.gate.GateDestination
 import timeshealth.app.ui.gate.GateRoute
 import timeshealth.app.ui.login.LoginRoute
+import timeshealth.app.ui.paywall.PaywallSheetContent
 import timeshealth.app.ui.tabs.TabsScreen
-import timeshealth.app.ui.theme.Spacing
-import timeshealth.app.ui.theme.TagTone
-import timeshealth.app.ui.theme.ThLayout
+import timeshealth.app.ui.yoga.SessionDetailRoute
+import timeshealth.app.ui.yoga.VideoPlayerRoute
+import timeshealth.app.ui.yoga.YogaExplorerRoute
 
 /** savedStateHandle key on the Tabs entry: a tab a deep link asked for. */
 internal const val REQUESTED_TAB = "requestedTab"
@@ -149,26 +142,47 @@ fun AppNavHost(
         ) { backStackEntry ->
             val route = backStackEntry.toRoute<Route.Paywall>()
             SheetDestination(onDismiss = { navController.popBackStack() }) {
-                PaywallPlaceholder(productId = route.productId)
+                PaywallSheetContent(
+                    productId = route.productId,
+                    viewModel = hiltViewModel(),
+                    onClose = { navController.popBackStack() },
+                    // Land on the tab that just changed: the member view is the first thing they see.
+                    onPurchased = { navController.open(Route.Tabs(AppTab.YOGA)) },
+                )
             }
         }
 
-        composable<Route.YogaExplorer> { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.YogaExplorer>()
-            ComingSoonScreen("Yoga explorer", detail = route.categoryId?.let { "Category $it" }, onBack = navController::back)
+        composable<Route.YogaExplorer> {
+            YogaExplorerRoute(
+                viewModel = hiltViewModel(),
+                onBack = navController::back,
+                onOpen = { navController.navigate(Route.SessionDetail(it)) },
+                onPlay = { navController.navigate(Route.VideoPlayer(it)) },
+                onPaywall = { navController.navigate(Route.Paywall(YOGA_PLAN_ID)) },
+            )
         }
 
-        composable<Route.SessionDetail> { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.SessionDetail>()
-            ComingSoonScreen("Session", detail = "Session ${route.id}", onBack = navController::back)
+        composable<Route.SessionDetail> {
+            SessionDetailRoute(
+                viewModel = hiltViewModel(),
+                onBack = navController::back,
+                onPlay = { navController.navigate(Route.VideoPlayer(it)) },
+                onPaywall = { navController.navigate(Route.Paywall(YOGA_PLAN_ID)) },
+            )
         }
 
         composable<Route.VideoPlayer>(
             enterTransition = Transitions.fadeEnter,
             popExitTransition = Transitions.fadeExit,
-        ) { backStackEntry ->
-            val route = backStackEntry.toRoute<Route.VideoPlayer>()
-            ComingSoonScreen("Video player", detail = "Session ${route.id}", onBack = navController::back)
+        ) {
+            VideoPlayerRoute(
+                viewModel = hiltViewModel(),
+                onBack = navController::back,
+                // Never a dead tap: the paywall takes the player's place.
+                onPaywall = {
+                    navController.navigate(Route.Paywall(YOGA_PLAN_ID)) { popUpTo<Route.VideoPlayer> { inclusive = true } }
+                },
+            )
         }
 
         composable<Route.LiveClass>(
@@ -250,25 +264,5 @@ fun NavHostController.open(route: Route) {
         getBackStackEntry<Route.Tabs>().savedStateHandle[REQUESTED_TAB] = route.tab
     } else {
         navigate(route)
-    }
-}
-
-/** Placeholder content for the paywall sheet (PaywallSheetKt is the design to build). */
-@Composable
-private fun PaywallPlaceholder(productId: String?) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = ThLayout.Gutter)
-            .padding(bottom = Spacing.X6l)
-            .navigationBarsPadding(),
-    ) {
-        TagPill(text = "Coming soon", tone = TagTone.NEUTRAL)
-        Text("Plans", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.padding(top = Spacing.Md))
-        Text(
-            productId?.let { "Selected: $it" } ?: "Choose a plan.",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = Spacing.Xs),
-        )
     }
 }
