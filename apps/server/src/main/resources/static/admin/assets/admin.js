@@ -377,7 +377,7 @@ async function refOptions(refKey) {
 /** Builds one input for [f]; returns {el, read(): value|undefined(invalid)}. */
 async function input(f, value) {
   const id = 'f_' + f.name;
-  const common = { id, name: f.name, disabled: !state.me.canEdit };
+  const common = { id, name: f.name, disabled: !state.me.canEdit || f.readOnly };
   switch (f.type) {
     case 'LONGTEXT': {
       const el = h('textarea', { ...common, maxlength: String(f.maxLength), value: value ?? '' });
@@ -492,6 +492,7 @@ async function formView(key, id, query) {
     const body = {};
     let invalid = false;
     for (const f of res.fields) {
+      if (f.readOnly) continue;
       fieldEls[f.name].el.classList.remove('invalid');
       fieldEls[f.name].err.textContent = '';
       const v = inputs[f.name].read();
@@ -547,6 +548,7 @@ async function formView(key, id, query) {
 
   const backHref = key === 'sections' ? '#/home' : '#/r/' + key;
   const title = creating ? 'New: ' + res.label : (item[res.titleField] || res.label);
+  const ops = !creating && key === 'marathons' && state.me.canEdit ? marathonOps(id, item) : null;
   const extra = !creating && key === 'sections' && state.kinds[item.kind] && state.kinds[item.kind].itemType
     ? h('a', { class: 'btn', href: '#/sections/' + encodeURIComponent(id) + '/items', text: 'Pick videos' }) : null;
   mount(shell(key === 'sections' ? '#/home' : '#/r/' + key,
@@ -554,7 +556,60 @@ async function formView(key, id, query) {
     h('h1', { text: String(title).slice(0, 120) }),
     h('p', { class: 'lede', text: res.description }),
     h('div', { class: 'card' }, form,
-      state.me.canEdit ? h('div', { class: 'actions' }, save, extra, h('div', { class: 'grow' }), del) : null)));
+      state.me.canEdit ? h('div', { class: 'actions' }, save, extra, h('div', { class: 'grow' }), del) : null),
+    ops));
+}
+
+// ── Race operations on an edition's page ──────────────────────────────────────
+
+function marathonOps(eventId, event) {
+  const out = h('div', { class: 'help' });
+  const say = (text) => { out.textContent = text; };
+
+  const prefix = h('input', { type: 'text', placeholder: 'Prefix, e.g. DEL', maxlength: '6' });
+  const allocate = h('button', { class: 'btn', text: 'Allocate bib numbers', onclick: async () => {
+    try {
+      const r = await api('POST', '/marathons/' + encodeURIComponent(eventId) + '/allocate-bibs', { prefix: prefix.value || undefined });
+      toast(r.allocated ? `Allocated ${r.allocated} bibs — their passes are live in the app` : 'Everyone already has a bib');
+    } catch (e) { fail(e); }
+  } });
+
+  const contact = h('input', { type: 'text', placeholder: 'Their sign-in email or mobile' });
+  const distance = h('input', { type: 'text', placeholder: 'Distance code, e.g. 21K' });
+  const tier = h('select', {}, h('option', { value: 'CLASSIC', text: 'Classic' }), h('option', { value: 'PREMIUM', text: 'Premium VIP' }));
+  const issue = h('button', { class: 'btn', text: 'Issue complimentary pass', onclick: async () => {
+    try {
+      const r = await api('POST', '/marathons/' + encodeURIComponent(eventId) + '/passes', { contact: contact.value, category: distance.value.trim().toUpperCase(), tier: tier.value });
+      toast(`Registered ${r.runner} (${r.registrationRef}). Allocate bibs to issue their QR pass.`);
+      contact.value = '';
+    } catch (e) {
+      fail(e);
+      if (e.fields) say(Object.values(e.fields).flat().join(' · '));
+    }
+  } });
+
+  const csv = h('textarea', { class: 'code', placeholder: 'bib,chipTime,finishTime,avgPace,overallRank,ageGroupRank,medalStatus,certificateUrl\nDEL-21K-0001,01:52:10,01:53:02,5:19,412,38,Finisher,https://…' });
+  const publish = h('input', { type: 'checkbox', checked: true });
+  const upload = h('button', { class: 'btn primary', text: 'Upload results', onclick: async () => {
+    try {
+      const r = await api('POST', '/marathons/' + encodeURIComponent(eventId) + '/results', { csv: csv.value, publish: publish.checked });
+      toast(`Saved ${r.updated} results` + (publish.checked ? ' — runners are notified' : ' (not published yet)'));
+      say([r.unknownBibs.length ? 'Bibs not found: ' + r.unknownBibs.join(', ') : '', ...r.problems].filter(Boolean).join(' · '));
+    } catch (e) { fail(e); }
+  } });
+
+  const block = (title, help, ...body) => h('div', { class: 'field wide' }, h('label', { text: title }), h('div', { class: 'help', text: help }), ...body);
+  return h('div', {},
+    h('h1', { text: 'Race operations' }),
+    h('p', { class: 'lede', text: `For ${event.name}. See everyone registered under Registrations & bibs.` }),
+    h('div', { class: 'card' }, h('div', { class: 'form' },
+      block('Bib numbers', 'Gives everyone without a bib the next number (PREFIX-DISTANCE-0001). Their digital pass and QR appear in the app at once. Existing bibs never change.',
+        h('div', { class: 'toolbar' }, prefix, allocate)),
+      block('Complimentary pass', 'Registers an existing app user without payment (sponsors, pacers, staff). They must have signed in to the app once.',
+        h('div', { class: 'toolbar' }, contact, distance, tier, issue)),
+      block('Results', 'Paste the timing partner’s CSV (header row required; matched by bib). Published results show in the app and runners get a notification.',
+        csv, h('label', { class: 'switch' }, publish, h('span', { class: 'track' }), h('span', { text: 'Publish now' })), h('div', { class: 'toolbar' }, upload)),
+      out)));
 }
 
 // ── Hand-picked videos for a section ──────────────────────────────────────────

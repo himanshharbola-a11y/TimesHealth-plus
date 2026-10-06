@@ -54,6 +54,7 @@ class AdminController(
     private val audit: AdminAudit,
     private val jdbc: JdbcClient,
     private val cache: ContentCache,
+    private val marathonOps: MarathonOps,
 ) {
 
     // ── Session ───────────────────────────────────────────────────────────────
@@ -127,6 +128,7 @@ class AdminController(
                                             put("required", f.required)
                                             put("list", f.list)
                                             put("filter", f.filter)
+                                            put("readOnly", f.readOnly)
                                             f.help?.let { put("help", it) }
                                             f.ref?.let { put("ref", it) }
                                             f.min?.let { put("min", it) }
@@ -333,6 +335,42 @@ class AdminController(
         return buildJsonObject {
             put("created", created)
             put("skipped", days!! - created)
+        }
+    }
+
+    // ── Marathon operations ───────────────────────────────────────────────────
+
+    /** `{prefix?}`: bib numbers for everyone registered without one. */
+    @PostMapping("/marathons/{id}/allocate-bibs")
+    fun allocateBibs(@PathVariable("id") id: String, body: RawBody, request: HttpServletRequest): JsonObject {
+        val result = marathonOps.allocateBibs(id, (body.value as? JsonObject)?.str("prefix"), AdminApiInterceptor.principal(request))
+        return buildJsonObject { put("allocated", result.allocated) }
+    }
+
+    /** `{contact, category, tier}`: a complimentary registration for an existing app user. */
+    @PostMapping("/marathons/{id}/passes")
+    fun issuePass(@PathVariable("id") id: String, body: RawBody, request: HttpServletRequest): JsonObject {
+        val o = body.obj()
+        val result = marathonOps.issuePass(
+            id, o.str("contact").orEmpty(), o.str("category").orEmpty(), o.str("tier") ?: "CLASSIC", AdminApiInterceptor.principal(request),
+        )
+        return buildJsonObject {
+            put("registrationRef", result.registrationRef)
+            put("runner", result.runner)
+        }
+    }
+
+    /** `{csv, publish}`: the timing partner's results, matched by bib. */
+    @PostMapping("/marathons/{id}/results")
+    fun uploadResults(@PathVariable("id") id: String, body: RawBody, request: HttpServletRequest): JsonObject {
+        val o = body.obj()
+        val csv = (o["csv"] as? JsonPrimitive)?.takeIf { it.isString }?.content.orEmpty()
+        val publish = (o["publish"] as? JsonPrimitive)?.booleanOrNull ?: false
+        val result = marathonOps.uploadResults(id, csv, publish, AdminApiInterceptor.principal(request))
+        return buildJsonObject {
+            put("updated", result.updated)
+            putJsonArray("unknownBibs") { result.unknownBibs.forEach { add(JsonPrimitive(it)) } }
+            putJsonArray("problems") { result.problems.forEach { add(JsonPrimitive(it)) } }
         }
     }
 

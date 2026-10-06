@@ -56,6 +56,8 @@ data class AdminField(
     val filter: Boolean = false,
     /** Value used by the "New" form. */
     val default: Any? = null,
+    /** Shown but never written (system-set columns, or values from a joined [AdminResource.source]). */
+    val readOnly: Boolean = false,
 )
 
 data class AdminResource(
@@ -81,6 +83,12 @@ data class AdminResource(
     val canDelete: Boolean = true,
     /** Only OWNERs may read or write it. */
     val ownerOnly: Boolean = false,
+    /**
+     * Trusted SQL the reads come from instead of the bare table, to show joined values (a
+     * registration's runner name). Must select every column of [table]; writes still go to
+     * [table], and joined columns are declared [AdminField.readOnly].
+     */
+    val source: String? = null,
 ) {
     fun field(name: String): AdminField? = fields.firstOrNull { it.name == name }
 }
@@ -449,6 +457,31 @@ object AdminResources {
         ),
     )
 
+    val REGISTRATIONS = AdminResource(
+        key = "registrations",
+        label = "Registrations & bibs",
+        group = "Marathon",
+        description = "Everyone registered for each edition. Set or correct bib numbers here (unique per edition); use the edition page " +
+            "to allocate bibs in bulk, issue complimentary passes and publish results.",
+        table = "MarathonRegistration",
+        source = """SELECT r.*, u."name" AS "runnerName", COALESCE(u."email", u."contactEmail", u."phone") AS "runnerContact"
+                    FROM "MarathonRegistration" r LEFT JOIN "User" u ON u."id" = r."userId"""",
+        titleField = "registrationRef",
+        orderBy = """"registeredAt" DESC, "id"""",
+        canCreate = false,
+        canDelete = false,
+        fields = listOf(
+            AdminField("eventId", "Edition", FieldType.REF, ref = "marathons", list = true, filter = true, readOnly = true),
+            AdminField("runnerName", "Runner", FieldType.TEXT, list = true, readOnly = true),
+            AdminField("runnerContact", "Contact", FieldType.TEXT, list = true, readOnly = true),
+            AdminField("registrationRef", "Registration ref", FieldType.TEXT, list = true, readOnly = true),
+            AdminField("category", "Distance", FieldType.TEXT, list = true, readOnly = true),
+            AdminField("tier", "Tier", FieldType.SELECT, options = opts("CLASSIC" to "Classic", "PREMIUM" to "Premium VIP"), list = true, readOnly = true),
+            AdminField("bibNumber", "Bib number", FieldType.TEXT, list = true, maxLength = 24, help = "Unique within the edition. The digital pass appears once it is set."),
+            AdminField("registeredAt", "Registered", FieldType.DATETIME, readOnly = true),
+        ),
+    )
+
     val APP_CONFIG = AdminResource(
         key = "app-config",
         label = "App switches",
@@ -471,7 +504,7 @@ object AdminResources {
 
     val ALL: List<AdminResource> = listOf(
         SECTIONS, CATEGORIES, SESSIONS, INSTRUCTORS, BATCHES, LIVE_CLASSES, WORKSHOPS,
-        ARTICLES, REELS, TESTIMONIALS, PROMOS, MARATHONS, RACE_DISTANCES, RACE_FAQS, APP_CONFIG,
+        ARTICLES, REELS, TESTIMONIALS, PROMOS, MARATHONS, RACE_DISTANCES, RACE_FAQS, REGISTRATIONS, APP_CONFIG,
     )
 
     private val byKey = ALL.associateBy { it.key }

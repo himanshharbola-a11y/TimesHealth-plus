@@ -57,7 +57,7 @@ class AdminCrud(
             params["f_${field.name}"] = value
         }
         val whereSql = if (where.isEmpty()) "" else "WHERE " + where.joinToString(" AND ")
-        val table = quote(res.table)
+        val table = from(res)
         val total = jdbc.sql("SELECT count(*) FROM $table $whereSql").params(params).query(Long::class.java).single()
         val rows = jdbc.sql("SELECT * FROM $table $whereSql ORDER BY ${res.orderBy} LIMIT :limit OFFSET :offset")
             .params(params).param("limit", limit.coerceIn(1, 500)).param("offset", offset.coerceAtLeast(0))
@@ -127,6 +127,7 @@ class AdminCrud(
         if (findRow(res, id) == null) throw ApiException(404, "NOT_FOUND", "${res.label}: not found")
         val values = validate(res, body, creating = false)
         if (values.isEmpty()) return get(res, id)
+        if (res == AdminResources.REGISTRATIONS) (values["bibNumber"] as? String)?.let { requireUniqueBib(id, it) }
         val columns = LinkedHashMap(values)
         if (res.hasUpdatedAt) columns["updatedAt"] = nowMillis().toDbTime()
         guarded {
@@ -183,6 +184,7 @@ class AdminCrud(
         }
 
         for (field in res.fields) {
+            if (field.readOnly) continue
             val present = body.containsKey(field.name)
             val raw: JsonElement? = when {
                 present -> body[field.name]
@@ -304,6 +306,16 @@ class AdminCrud(
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
+    /** A bib number belongs to one runner per edition. */
+    private fun requireUniqueBib(registrationId: String, bib: String) {
+        val taken = jdbc.sql(
+            """SELECT count(*) FROM "MarathonRegistration" o
+               WHERE o."bibNumber" = :bib AND o."id" <> :id
+                 AND o."eventId" = (SELECT r."eventId" FROM "MarathonRegistration" r WHERE r."id" = :id)""",
+        ).param("bib", bib).param("id", registrationId).query(Long::class.java).single() > 0
+        if (taken) throw ApiException(409, "DUPLICATE", "That bib number is already given to another runner in this edition.")
+    }
+
     /** A JSON number, or a string holding one (form inputs send text). */
     private fun numberOf(prim: JsonPrimitive?): Double? = when {
         prim == null -> null
@@ -319,8 +331,11 @@ class AdminCrud(
         if (res.singleton) id.toIntOrNull() ?: throw ApiException(404, "NOT_FOUND", "${res.label}: not found") else id
 
     private fun findRow(res: AdminResource, id: String): Map<String, Any?>? =
-        jdbc.sql("SELECT * FROM ${quote(res.table)} WHERE \"id\" = :id").param("id", idParam(res, id))
+        jdbc.sql("SELECT * FROM ${from(res)} WHERE \"id\" = :id").param("id", idParam(res, id))
             .query().listOfRows().firstOrNull()
+
+    /** The table, or the resource's joined [AdminResource.source] as a subquery. */
+    private fun from(res: AdminResource): String = res.source?.let { "($it) AS \"src\"" } ?: quote(res.table)
 
     /** Only declared columns (plus id and timestamps) ever leave the server. */
     private fun rowJson(res: AdminResource, row: Map<String, Any?>): JsonObject = buildJsonObject {
