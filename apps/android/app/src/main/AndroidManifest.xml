@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Android 13+: class reminders and race-day pushes. Asked only after the
+         app's own priming screen (see PushRegistration). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Runs are tracked by a foreground service only (PRD §8.6). Background
          location is never requested — and a library can't be relied on to
          remove it, so the app strips it here explicitly. -->
@@ -33,6 +36,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Push (Firebase Cloud Messaging): see push/TimesHealthMessagingService. -->
+        <service
+            android:name=".push.TimesHealthMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- How Android shows a push while the app is in the background. The
+             channel id matches the server (apps/api/src/services/push.ts). -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="reminders" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/th_coral_brand" />
 
         <!-- WorkManager is initialised by the app (Hilt worker factory). -->
         <provider

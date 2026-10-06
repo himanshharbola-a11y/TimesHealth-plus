@@ -23,4 +23,5 @@ include(
     ":core:network",
     ":core:data",
     ":core:runtracker",
+    ":core:integrations",
 )

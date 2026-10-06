@@ -81,9 +81,19 @@ android {
 
 kotlin { jvmToolchain(17) }
 
+// The JVM UI tests host composables in the empty test activity that only debug
+// builds carry (ui-test-manifest is debugImplementation), so they run against
+// debug. Release code is the same code; a release unit-test run would only
+// fail for want of that activity.
+androidComponents {
+    beforeVariants(selector().withBuildType("release")) { it.enableUnitTest = false }
+}
+
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:runtracker"))
+    // Plug-in points for outside systems; chosen in wiring/IntegrationsModule.kt.
+    implementation(project(":core:integrations"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.process)
@@ -119,6 +129,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.messaging)
 
     testImplementation(libs.junit)
     testImplementation(libs.truth)
