@@ -52,10 +52,10 @@ function run(cmd, databaseUrl) {
 }
 
 function eventCount() {
-  const out = execSync(
-    `npx tsx -e "import { PrismaClient } from '@prisma/client'; const p = new PrismaClient(); p.marathonEvent.count().then((n) => { console.log('COUNT=' + n); return p.$disconnect(); });"`,
-    { cwd: API_DIR, env: { ...process.env, DATABASE_URL: direct } },
-  ).toString();
+  const out = execSync('npx tsx prisma/staging-count.ts', {
+    cwd: API_DIR,
+    env: { ...process.env, DATABASE_URL: direct },
+  }).toString();
   const m = /COUNT=(\d+)/.exec(out);
   return m ? Number(m[1]) : 0;
 }
