@@ -8,10 +8,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import timeshealth.app.FakeAccountGateway
+import timeshealth.app.FakeHomeGateway
 import timeshealth.app.FakeInboxGateway
 import timeshealth.app.FakeSessionGateway
 import timeshealth.app.MainDispatcherRule
 import timeshealth.app.core.data.session.SessionStatus
+import timeshealth.app.homeResponse
 import timeshealth.app.networkError
 import timeshealth.app.sessionResponse
 import timeshealth.app.ui.components.avatarInitial
@@ -52,29 +54,43 @@ class HelpersTest {
     }
 
     @Test
-    fun `home greets the signed-in user from the session`() = runTest {
+    fun `home greets by first name from the feed and knows the user's membership`() = runTest {
         val account = FakeAccountGateway().apply { sessionAnswers += sessionResponse(name = "Priya Sharma") }
-        val home = HomeViewModel(account)
+        val feed = FakeHomeGateway().apply { answers += homeResponse(userName = "Priya Sharma") }
+        val home = HomeViewModel(feed, account)
         advanceUntilIdle()
 
         val ready = home.state.value as UiState.Ready
-        assertThat(ready.data.firstName).isEqualTo("Priya")
-        assertThat(ready.data.dayLine).matches("Good (morning|afternoon|evening) · \\w+day")
+        assertThat(ready.data.greeting.firstName).isEqualTo("Priya")
+        assertThat(ready.data.greeting.dayLine).isEqualTo("Good morning · Thursday")
+        assertThat(ready.data.entitledToYoga).isFalse()
     }
 
     @Test
-    fun `home without the session shows an error with a retry that recovers`() = runTest {
-        val account = FakeAccountGateway().apply {
-            sessionAnswers += networkError()
-            sessionAnswers += sessionResponse(name = null)
+    fun `home without the feed shows an error with a retry that recovers`() = runTest {
+        val account = FakeAccountGateway().apply { sessionAnswers += sessionResponse(name = null) }
+        val feed = FakeHomeGateway().apply {
+            answers += networkError()
+            answers += homeResponse(userName = null)
         }
-        val home = HomeViewModel(account)
+        val home = HomeViewModel(feed, account)
         advanceUntilIdle()
         assertThat(home.state.value).isInstanceOf(UiState.Failed::class.java)
 
         home.retry()
         advanceUntilIdle()
-        assertThat((home.state.value as UiState.Ready).data.firstName).isEqualTo("there")
+        assertThat((home.state.value as UiState.Ready).data.greeting.firstName).isEqualTo("there")
+    }
+
+    @Test
+    fun `pull to refresh asks the server again`() = runTest {
+        val account = FakeAccountGateway().apply { sessionAnswers += sessionResponse() }
+        val feed = FakeHomeGateway().apply { answers += homeResponse() }
+        val home = HomeViewModel(feed, account)
+        advanceUntilIdle()
+        home.refresh()
+        advanceUntilIdle()
+        assertThat(feed.calls).containsExactly(false, true).inOrder()
     }
 
     @Test

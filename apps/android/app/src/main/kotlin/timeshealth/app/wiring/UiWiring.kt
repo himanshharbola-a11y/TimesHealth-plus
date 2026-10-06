@@ -7,6 +7,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import timeshealth.app.AppBuildInfo
 import timeshealth.app.BuildConfig
+import timeshealth.app.ui.home.HomeGateway
+import timeshealth.app.ui.home.RepositoryHomeGateway
 import timeshealth.app.ui.login.InteractiveSignIn
 import timeshealth.app.ui.login.UnavailableSignIn
 import timeshealth.app.ui.session.AccountGateway
@@ -30,6 +32,8 @@ abstract class UiWiring {
     @Binds abstract fun accountGateway(impl: RepositoryAccountGateway): AccountGateway
 
     @Binds abstract fun inboxGateway(impl: RepositoryInboxGateway): InboxGateway
+
+    @Binds abstract fun homeGateway(impl: RepositoryHomeGateway): HomeGateway
 
     /**
      * Google / phone OTP / email on the login card. Unavailable until the

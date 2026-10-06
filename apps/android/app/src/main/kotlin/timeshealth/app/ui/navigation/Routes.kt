@@ -58,6 +58,13 @@ sealed interface Route {
     @Serializable
     data class VideoPlayer(val id: String) : Route
 
+    /**
+     * A live class ("premiere", scheduled in the admin dashboard): wait room, then the stream at
+     * the same point for everyone. Joining records attendance for members.
+     */
+    @Serializable
+    data class LiveClass(val id: String) : Route
+
     /** reel.tsx: an instructor reel, full screen ([url] is the media, the rest is the caption). */
     @Serializable
     data class Reel(val url: String, val title: String? = null, val handle: String? = null) : Route

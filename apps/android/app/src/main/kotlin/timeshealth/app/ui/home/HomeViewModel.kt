@@ -4,13 +4,13 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.Instant
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import timeshealth.app.core.domain.greetingFor
+import timeshealth.app.core.model.HomeFeedResponse
+import timeshealth.app.core.model.KnownFeedComponent
 import timeshealth.app.core.model.SessionResponse
 import timeshealth.app.ui.session.AccountGateway
 import timeshealth.app.ui.state.Loadable
@@ -19,20 +19,39 @@ import timeshealth.app.ui.state.UiState
 /** HomeScreenKt's greeting item: the day line and the first name. */
 @Immutable
 data class HomeGreeting(
-    /** "Good morning · Thursday", in IST (core:domain greetingFor). */
+    /** "Good morning · Thursday", in IST (from the server). */
     val dayLine: String,
     val firstName: String,
 )
 
+/** Everything Home draws. */
+@Immutable
+data class HomeUi(
+    val greeting: HomeGreeting,
+    /** In the admin's order; types this build doesn't know are already dropped. */
+    val components: List<KnownFeedComponent>,
+    /** A yoga member: paid sessions play, nothing shows a lock. */
+    val entitledToYoga: Boolean,
+    /** Holds a yoga membership AND a race: the design's gold promo variant. */
+    val holdsBoth: Boolean,
+)
+
 /**
- * PLACEHOLDER Home: proves the signed-in path end to end (Gate → session →
- * tabs) by greeting the user from GET /session. The real Home (hero, rails,
- * promo strip; GET /home) replaces this; keep the greeting's derivation.
+ * Home: the server-built feed (GET /home), laid out by the admin CMS. This
+ * screen knows no rules about what goes where; it renders the components in
+ * order and turns taps into destinations ([targetFor]).
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val home: HomeGateway,
     account: AccountGateway,
 ) : ViewModel() {
+
+    private val feed = Loadable(
+        scope = viewModelScope,
+        fetch = { refresh -> home.home(refresh) },
+        refetchWhen = home.homeChanges,
+    )
 
     private val session = Loadable(
         scope = viewModelScope,
@@ -40,20 +59,40 @@ class HomeViewModel @Inject constructor(
         refetchWhen = account.sessionChanges,
     )
 
-    val state: StateFlow<UiState<HomeGreeting>> = session.state
-        .map { it.toGreeting() }
+    val state: StateFlow<UiState<HomeUi>> = combine(feed.state, session.state, ::merge)
         .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
 
-    fun retry() = session.retry()
+    /** Server time for countdowns. */
+    fun nowMs(): Long = home.nowMs()
 
-    private fun UiState<SessionResponse>.toGreeting(): UiState<HomeGreeting> = when (this) {
-        UiState.Loading -> UiState.Loading
-        is UiState.Failed -> this
-        is UiState.Ready -> UiState.Ready(
-            HomeGreeting(dayLine = greetingFor(Instant.now()), firstName = firstNameOf(data.profile.name)),
-            refreshing = refreshing,
-            refreshError = refreshError,
-        )
+    fun retry() {
+        feed.retry()
+        session.retry()
+    }
+
+    /** Pull to refresh. */
+    fun refresh() {
+        feed.refresh()
+        session.refresh()
+    }
+
+    private fun merge(feed: UiState<HomeFeedResponse>, session: UiState<SessionResponse>): UiState<HomeUi> = when {
+        feed is UiState.Failed -> feed
+        // The feed renders without the session (it only tunes locks and the promo colour).
+        feed is UiState.Ready -> {
+            val persona = (session as? UiState.Ready)?.data?.persona
+            UiState.Ready(
+                HomeUi(
+                    greeting = HomeGreeting(feed.data.greeting, firstNameOf(feed.data.userName)),
+                    components = feed.data.knownComponents,
+                    entitledToYoga = persona?.hasYoga == true,
+                    holdsBoth = persona?.hasYoga == true && persona.hasMarathon,
+                ),
+                refreshing = feed.refreshing || (session as? UiState.Ready)?.refreshing == true,
+                refreshError = feed.refreshError,
+            )
+        }
+        else -> UiState.Loading
     }
 }
 

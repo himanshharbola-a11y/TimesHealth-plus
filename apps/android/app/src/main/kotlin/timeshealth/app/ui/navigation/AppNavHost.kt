@@ -165,6 +165,14 @@ fun AppNavHost(
             ComingSoonScreen("Video player", detail = "Session ${route.id}", onBack = navController::back)
         }
 
+        composable<Route.LiveClass>(
+            enterTransition = Transitions.fadeEnter,
+            popExitTransition = Transitions.fadeExit,
+        ) { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.LiveClass>()
+            ComingSoonScreen("Live class", detail = "Class ${route.id}", onBack = navController::back)
+        }
+
         // Instructor reels play in-app (§6.3 "plays inline"), full screen.
         composable<Route.Reel>(
             enterTransition = Transitions.fadeEnter,

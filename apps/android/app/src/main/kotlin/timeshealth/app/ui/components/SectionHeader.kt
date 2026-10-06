@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import timeshealth.app.ui.theme.CoralBrand
@@ -43,17 +44,23 @@ fun SectionHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Two lines: the design's own headings ("Sessions for neck & shoulder release")
+        // don't fit one line beside "See all" on a normal phone.
         Text(
             text = title,
+            modifier = Modifier.weight(1f, fill = false),
             color = TextPrimary,
             fontSize = 18.sp,
+            lineHeight = 22.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = ThFonts.Serif,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
         )
         if (actionText != null && onAction != null) {
             Text(
                 text = actionText,
-                modifier = Modifier.clickable(role = Role.Button, onClick = onAction),
+                modifier = Modifier.padding(start = Spacing.Xl).clickable(role = Role.Button, onClick = onAction),
                 color = CoralBrand,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,

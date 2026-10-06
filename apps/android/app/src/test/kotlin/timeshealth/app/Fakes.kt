@@ -84,6 +84,17 @@ fun networkError(code: String = "NETWORK", message: String = "No connection. Che
 
 fun httpError(status: Int, code: String = "ERR") = ApiRequestException(status, ApiError(code, "server words"))
 
+fun homeResponse(
+    userName: String? = "Priya Sharma",
+    components: List<timeshealth.app.core.model.FeedComponent> = emptyList(),
+) = timeshealth.app.core.model.HomeFeedResponse(
+    greeting = "Good morning · Thursday",
+    userName = userName,
+    components = components,
+    serverTime = "2026-10-08T01:00:00.000Z",
+    ttlSeconds = 60,
+)
+
 // ── Fakes ───────────────────────────────────────────────────────────────────
 
 class FakeSessionGateway(initial: SessionStatus = SessionStatus.Loading) : SessionGateway {
@@ -194,3 +205,18 @@ fun buildInfo(version: String = "1.0.0", debug: Boolean = true, devSignIn: Boole
     devSignIn = devSignIn,
     firebaseEnabled = false,
 )
+
+class FakeHomeGateway(var nowMs: Long = 1_791_427_200_000L) : timeshealth.app.ui.home.HomeGateway {
+    val answers = ArrayDeque<Any>()
+    val calls = mutableListOf<Boolean>()
+    override val homeChanges = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+    override suspend fun home(refresh: Boolean): timeshealth.app.core.model.HomeFeedResponse {
+        calls += refresh
+        val next = if (answers.size > 1) answers.removeFirst() else answers.first()
+        if (next is Throwable) throw next
+        return next as timeshealth.app.core.model.HomeFeedResponse
+    }
+
+    override fun nowMs(): Long = nowMs
+}

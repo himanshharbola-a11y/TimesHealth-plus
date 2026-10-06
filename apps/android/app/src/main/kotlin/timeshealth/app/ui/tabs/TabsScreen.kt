@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -32,9 +33,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import timeshealth.app.BuildConfig
+import timeshealth.app.core.domain.isSafeExternalUrl
 import timeshealth.app.ui.components.BottomNavBar
 import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.TopHeader
+import timeshealth.app.ui.home.FeedTarget
 import timeshealth.app.ui.home.HomeRoute
 import timeshealth.app.ui.navigation.AppTab
 import timeshealth.app.ui.navigation.Route
@@ -95,6 +99,8 @@ fun TabsScreen(
         }
     }
 
+    val uriHandler = LocalUriHandler.current
+
     // Placeholders until the Profile drawer and the notification inbox are built.
     var openSheet by rememberSaveable { mutableStateOf<HeaderSheet?>(null) }
 
@@ -119,7 +125,21 @@ fun TabsScreen(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None },
         ) {
-            composable<TabRoute.Home> { HomeRoute(hiltViewModel()) }
+            composable<TabRoute.Home> {
+                HomeRoute(
+                    viewModel = hiltViewModel(),
+                    onTarget = { target ->
+                        when (target) {
+                            is FeedTarget.Open -> openRoute(target.route)
+                            is FeedTarget.Tab -> tabsNav.selectTab(target.tab)
+                            // Only http(s) (and dev schemes in debug); a bad link is ignored, never a crash.
+                            is FeedTarget.External ->
+                                if (isSafeExternalUrl(target.url, debug = BuildConfig.DEBUG)) runCatching { uriHandler.openUri(target.url) }
+                            FeedTarget.None -> Unit
+                        }
+                    },
+                )
+            }
             composable<TabRoute.Yoga> { ComingSoonScreen("Yoga") }
             composable<TabRoute.Marathon> { ComingSoonScreen("Marathon") }
             composable<TabRoute.Diet> { ComingSoonScreen("Diet") }
