@@ -96,6 +96,13 @@ internal interface RunDao {
     @Query("SELECT lat, lng FROM run_points WHERE run_id = :runId ORDER BY t ASC, id ASC")
     suspend fun route(runId: String): List<RoutePoint>
 
+    /** The route with timestamps, live: re-emits as the service writes fixes (map, splits). */
+    @Query("SELECT lat, lng, t FROM run_points WHERE run_id = :runId ORDER BY t ASC, id ASC")
+    fun observeTimedRoute(runId: String): Flow<List<AnchorRow>>
+
+    @Query("SELECT lat, lng, t FROM run_points WHERE run_id = :runId ORDER BY t ASC, id ASC")
+    suspend fun timedRoute(runId: String): List<AnchorRow>
+
     @Query("SELECT COUNT(*) FROM run_points WHERE run_id = :runId")
     suspend fun pointCount(runId: String): Int
 

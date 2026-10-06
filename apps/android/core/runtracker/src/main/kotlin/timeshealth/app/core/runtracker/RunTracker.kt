@@ -1,5 +1,7 @@
 package timeshealth.app.core.runtracker
 
+import timeshealth.app.core.domain.TimedPoint
+
 import android.Manifest
 import androidx.room.withTransaction
 import javax.inject.Inject
@@ -74,6 +76,17 @@ class RunTracker @Inject internal constructor(
         } else {
             dao.observeUnfinishedFor(owner).map { it?.toActiveRun() }.distinctUntilChanged()
         }
+
+    /**
+     * [runId]'s recorded route with timestamps, live, for the map while running. Points are
+     * kept until the finished run has synced, so read [route] for the summary straight after
+     * [finish].
+     */
+    fun liveRoute(runId: String): Flow<List<TimedPoint>> =
+        dao.observeTimedRoute(runId).map { rows -> rows.map { TimedPoint(it.lat, it.lng, it.t) } }
+
+    /** [runId]'s route with timestamps now (empty once a finished run has synced and been pruned). */
+    suspend fun route(runId: String): List<TimedPoint> = dao.timedRoute(runId).map { TimedPoint(it.lat, it.lng, it.t) }
 
     /** Precise location is granted. Check before [start]/[resume]; request [LOCATION_PERMISSIONS]. */
     fun hasLocationPermission(): Boolean = tracking.hasLocationPermission()

@@ -18,6 +18,8 @@ import timeshealth.app.core.integrations.subscription.ServerCheckoutSubscription
 import timeshealth.app.core.integrations.subscription.SubscriptionProvider
 import timeshealth.app.core.integrations.video.DirectUrlResolver
 import timeshealth.app.core.integrations.video.VideoSourceResolver
+import timeshealth.app.ui.run.map.MapLibreRouteMap
+import timeshealth.app.ui.run.map.RouteMapRenderer
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
@@ -37,6 +39,7 @@ import timeshealth.app.core.integrations.video.VideoSourceResolver
  * | PushHandler (set)      | none: our own notification         | + GrowthRx push            |
  * | VideoSourceResolver(set)| DirectUrlResolver ("url")         | + Slike ("slike")          |
  * | IdentityGateway        | Firebase / QA personas (AppModule) | TIL SSO SDK                |
+ * | RouteMapRenderer       | MapLibre + OpenFreeMap (no key)    | Google Maps SDK            |
  *
  * "(set)" points take ANY number of implementations: add a line, keep the rest.
  */
@@ -46,6 +49,9 @@ abstract class IntegrationsModule {
 
     // ── Subscriptions & payments ── swap to: TilSubscriptionProvider
     @Binds abstract fun subscriptions(impl: ServerCheckoutSubscriptionProvider): SubscriptionProvider
+
+    // ── Run map ── swap to: GoogleRouteMap (needs the team's Maps API key; see RouteMapRenderer)
+    @Binds abstract fun routeMap(impl: MapLibreRouteMap): RouteMapRenderer
 
     // ── In-app campaigns ── swap to: GrowthRxCampaigns
     @Binds abstract fun campaigns(impl: NoOpInAppCampaigns): InAppCampaigns

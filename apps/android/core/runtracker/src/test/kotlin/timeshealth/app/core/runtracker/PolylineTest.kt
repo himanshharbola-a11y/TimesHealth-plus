@@ -39,4 +39,19 @@ class PolylineTest {
         // -0.000005 * 1e5 = -0.5 rounds toward +∞ to 0, as Math.round does in JS.
         assertThat(encodePolyline(listOf(pt(-0.000005, 0.0)))).isEqualTo("??")
     }
+
+    @Test
+    fun `decode is the inverse of encode, to 5 decimals`() {
+        val route = listOf(LatLng(38.5, -120.2), LatLng(40.7, -120.95), LatLng(43.252, -126.453))
+        // Google's documented example.
+        assertThat(encodePolyline(route)).isEqualTo("_p~iF~ps|U_ulLnnqC_mqNvxq`@")
+        assertThat(decodePolyline("_p~iF~ps|U_ulLnnqC_mqNvxq`@")).isEqualTo(route)
+    }
+
+    @Test
+    fun `a truncated polyline decodes what it can, never throws`() {
+        assertThat(decodePolyline("")).isEmpty()
+        assertThat(decodePolyline("_p~iF~ps|U_ulL")).hasSize(1)
+        assertThat(decodePolyline("!!")).isEmpty()
+    }
 }

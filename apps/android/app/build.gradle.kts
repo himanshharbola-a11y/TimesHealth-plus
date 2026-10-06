@@ -121,6 +121,8 @@ dependencies {
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.exoplayer.hls)
     implementation(libs.media3.ui)
+    // Run map: see ui/run/map/RouteMapRenderer.kt (MapLibre now; Google Maps plugs in there).
+    implementation(libs.maplibre.android)
     debugImplementation(libs.androidx.compose.ui.tooling)
     // Hosts composables in Robolectric tests (an empty activity in the manifest).
     debugImplementation(libs.androidx.compose.ui.test.manifest)

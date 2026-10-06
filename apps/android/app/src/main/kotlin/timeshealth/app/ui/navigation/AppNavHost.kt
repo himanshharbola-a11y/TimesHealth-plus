@@ -28,6 +28,7 @@ import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.SheetDestination
 import timeshealth.app.ui.home.YOGA_PLAN_ID
 import timeshealth.app.ui.live.LiveClassRoute
+import timeshealth.app.ui.run.RunTrackerRoute
 import timeshealth.app.ui.components.TagPill
 import timeshealth.app.ui.gate.GateDestination
 import timeshealth.app.ui.gate.GateRoute
@@ -209,7 +210,7 @@ fun AppNavHost(
             enterTransition = Transitions.slideUpEnter,
             popExitTransition = Transitions.slideDownExit,
         ) {
-            ComingSoonScreen("Run tracker", onBack = navController::back)
+            RunTrackerRoute(viewModel = hiltViewModel(), onClose = navController::back)
         }
     }
 }

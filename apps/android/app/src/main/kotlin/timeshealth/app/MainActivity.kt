@@ -8,7 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.compose.runtime.CompositionLocalProvider
 import timeshealth.app.ui.navigation.AppNavHost
+import timeshealth.app.ui.run.map.LocalRouteMap
+import timeshealth.app.ui.run.map.RouteMapRenderer
 import timeshealth.app.ui.navigation.PendingDeepLink
 import timeshealth.app.ui.theme.TimesHealthTheme
 
@@ -26,6 +29,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject lateinit var deepLinks: PendingDeepLink
 
+    /** The run map (plug-in point, chosen in IntegrationsModule). */
+    @Inject lateinit var routeMap: RouteMapRenderer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Android 12+ system splash (canvas + brand mark), handed straight to
         // the Gate's own splash: it is not held, so the Gate can offer the saved
@@ -36,7 +42,9 @@ class MainActivity : ComponentActivity() {
         if (savedInstanceState == null) offerRoute(intent)
         setContent {
             TimesHealthTheme {
-                AppNavHost()
+                CompositionLocalProvider(LocalRouteMap provides routeMap) {
+                    AppNavHost()
+                }
             }
         }
     }
