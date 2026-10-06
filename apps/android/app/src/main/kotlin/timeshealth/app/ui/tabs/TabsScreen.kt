@@ -50,6 +50,7 @@ import timeshealth.app.ui.theme.RnType
 import timeshealth.app.ui.theme.Spacing
 import timeshealth.app.ui.theme.ThLayout
 import timeshealth.app.ui.theme.ThShapes
+import timeshealth.app.ui.yoga.YogaRoute
 
 /**
  * The signed-in shell: the design's MainActivityKt Scaffold. TopHeader in the
@@ -101,6 +102,17 @@ fun TabsScreen(
     }
 
     val uriHandler = LocalUriHandler.current
+    // What a tap on a feed card does, the same from every tab.
+    val onTarget: (FeedTarget) -> Unit = { target ->
+        when (target) {
+            is FeedTarget.Open -> openRoute(target.route)
+            is FeedTarget.Tab -> tabsNav.selectTab(target.tab)
+            // Only http(s) (and dev schemes in debug); a bad link is ignored, never a crash.
+            is FeedTarget.External ->
+                if (isSafeExternalUrl(target.url, debug = BuildConfig.DEBUG)) runCatching { uriHandler.openUri(target.url) }
+            FeedTarget.None -> Unit
+        }
+    }
 
     // Placeholders until the Profile drawer and the notification inbox are built.
     var openSheet by rememberSaveable { mutableStateOf<HeaderSheet?>(null) }
@@ -126,22 +138,8 @@ fun TabsScreen(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None },
         ) {
-            composable<TabRoute.Home> {
-                HomeRoute(
-                    viewModel = hiltViewModel(),
-                    onTarget = { target ->
-                        when (target) {
-                            is FeedTarget.Open -> openRoute(target.route)
-                            is FeedTarget.Tab -> tabsNav.selectTab(target.tab)
-                            // Only http(s) (and dev schemes in debug); a bad link is ignored, never a crash.
-                            is FeedTarget.External ->
-                                if (isSafeExternalUrl(target.url, debug = BuildConfig.DEBUG)) runCatching { uriHandler.openUri(target.url) }
-                            FeedTarget.None -> Unit
-                        }
-                    },
-                )
-            }
-            composable<TabRoute.Yoga> { ComingSoonScreen("Yoga") }
+            composable<TabRoute.Home> { HomeRoute(viewModel = hiltViewModel(), onTarget = onTarget) }
+            composable<TabRoute.Yoga> { YogaRoute(viewModel = hiltViewModel(), openRoute = openRoute, onTarget = onTarget) }
             composable<TabRoute.Marathon> { MarathonRoute(viewModel = hiltViewModel(), openRoute = openRoute) }
             composable<TabRoute.Diet> { ComingSoonScreen("Diet") }
         }

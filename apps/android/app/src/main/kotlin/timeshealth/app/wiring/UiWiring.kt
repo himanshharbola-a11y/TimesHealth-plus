@@ -23,6 +23,8 @@ import timeshealth.app.ui.session.RepositoryAccountGateway
 import timeshealth.app.ui.session.RepositoryInboxGateway
 import timeshealth.app.ui.session.RepositorySessionGateway
 import timeshealth.app.ui.session.SessionGateway
+import timeshealth.app.ui.yoga.RepositoryYogaGateway
+import timeshealth.app.ui.yoga.YogaGateway
 
 /**
  * What the UI layer's ViewModels are given: the gateways over core:data (see
@@ -46,6 +48,8 @@ abstract class UiWiring {
     @Binds abstract fun runGateway(impl: TrackerRunGateway): RunGateway
 
     @Binds abstract fun marathonGateway(impl: RepositoryMarathonGateway): MarathonGateway
+
+    @Binds abstract fun yogaGateway(impl: RepositoryYogaGateway): YogaGateway
 
     /**
      * Google / phone OTP / email on the login card. Unavailable until the
