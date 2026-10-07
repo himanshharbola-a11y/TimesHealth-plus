@@ -9,11 +9,15 @@ import timeshealth.app.AppBuildInfo
 import timeshealth.app.BuildConfig
 import timeshealth.app.ui.home.HomeGateway
 import timeshealth.app.ui.home.RepositoryHomeGateway
+import timeshealth.app.ui.inbox.InboxListGateway
+import timeshealth.app.ui.inbox.RepositoryInboxListGateway
 import timeshealth.app.ui.live.LiveClassGateway
 import timeshealth.app.ui.live.RepositoryLiveClassGateway
 import timeshealth.app.ui.login.InteractiveSignIn
 import timeshealth.app.ui.marathon.MarathonGateway
 import timeshealth.app.ui.marathon.RepositoryMarathonGateway
+import timeshealth.app.ui.profile.ProfileGateway
+import timeshealth.app.ui.profile.RepositoryProfileGateway
 import timeshealth.app.ui.run.RunGateway
 import timeshealth.app.ui.run.TrackerRunGateway
 import timeshealth.app.ui.login.UnavailableSignIn
@@ -54,6 +58,10 @@ abstract class UiWiring {
     @Binds abstract fun yogaGateway(impl: RepositoryYogaGateway): YogaGateway
 
     @Binds abstract fun yogaSessionsGateway(impl: RepositoryYogaSessionsGateway): YogaSessionsGateway
+
+    @Binds abstract fun profileGateway(impl: RepositoryProfileGateway): ProfileGateway
+
+    @Binds abstract fun inboxListGateway(impl: RepositoryInboxListGateway): InboxListGateway
 
     /**
      * Google / phone OTP / email on the login card. Unavailable until the

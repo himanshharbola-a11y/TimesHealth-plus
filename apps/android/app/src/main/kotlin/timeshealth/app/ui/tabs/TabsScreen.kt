@@ -2,18 +2,9 @@ package timeshealth.app.ui.tabs
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,16 +31,16 @@ import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.TopHeader
 import timeshealth.app.ui.home.FeedTarget
 import timeshealth.app.ui.home.HomeRoute
+import timeshealth.app.ui.home.YOGA_PLAN_ID
+import timeshealth.app.ui.inbox.InboxSheet
+import timeshealth.app.ui.navigation.appRouteToDestination
+import timeshealth.app.ui.profile.ProfileDestination
+import timeshealth.app.ui.profile.ProfileSheet
 import timeshealth.app.ui.marathon.MarathonRoute
 import timeshealth.app.ui.navigation.AppTab
 import timeshealth.app.ui.navigation.Route
 import timeshealth.app.ui.navigation.TabRoute
 import timeshealth.app.ui.navigation.route
-import timeshealth.app.ui.theme.PaperWhite
-import timeshealth.app.ui.theme.RnType
-import timeshealth.app.ui.theme.Spacing
-import timeshealth.app.ui.theme.ThLayout
-import timeshealth.app.ui.theme.ThShapes
 import timeshealth.app.ui.yoga.YogaRoute
 
 /**
@@ -114,7 +105,6 @@ fun TabsScreen(
         }
     }
 
-    // Placeholders until the Profile drawer and the notification inbox are built.
     var openSheet by rememberSaveable { mutableStateOf<HeaderSheet?>(null) }
 
     Scaffold(
@@ -145,16 +135,33 @@ fun TabsScreen(
         }
     }
 
-    openSheet?.let { sheet ->
-        HeaderPlaceholderSheet(
-            sheet = sheet,
-            name = header.userName,
-            onSignOut = {
-                openSheet = null
-                viewModel.signOut()
+    when (openSheet) {
+        HeaderSheet.PROFILE -> ProfileSheet(
+            viewModel = hiltViewModel(),
+            onNavigate = { destination ->
+                when (destination) {
+                    ProfileDestination.Paywall -> openRoute(Route.Paywall(YOGA_PLAN_ID))
+                    ProfileDestination.MarathonTab -> tabsNav.selectTab(AppTab.MARATHON)
+                    is ProfileDestination.Race -> openRoute(Route.RaceDetail(destination.eventId))
+                    is ProfileDestination.RaceParticipant -> openRoute(Route.RaceDetail(destination.eventId, edit = "participant"))
+                    is ProfileDestination.RaceResults -> openRoute(Route.RaceResults(destination.eventId))
+                }
             },
             onDismiss = { openSheet = null },
         )
+        HeaderSheet.INBOX -> InboxSheet(
+            viewModel = hiltViewModel(),
+            onOpenRoute = { route ->
+                openSheet = null
+                when (val destination = appRouteToDestination(route)) {
+                    null -> Unit
+                    is Route.Tabs -> tabsNav.selectTab(destination.tab)
+                    else -> openRoute(destination)
+                }
+            },
+            onDismiss = { openSheet = null },
+        )
+        null -> Unit
     }
 }
 
@@ -168,41 +175,3 @@ private fun NavHostController.selectTab(tab: AppTab) {
 }
 
 private enum class HeaderSheet { PROFILE, INBOX }
-
-/**
- * TEMPORARY stand-ins for the Profile drawer and the notification inbox
- * (screen agents replace them). The profile one carries Sign out, so QA can
- * switch personas and the signed-out guard can be seen working.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun HeaderPlaceholderSheet(sheet: HeaderSheet, name: String?, onSignOut: () -> Unit, onDismiss: () -> Unit) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = PaperWhite,
-    ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = ThLayout.Gutter)
-                .padding(bottom = Spacing.X6l)
-                .navigationBarsPadding(),
-        ) {
-            Text(
-                if (sheet == HeaderSheet.PROFILE) name ?: "Your profile" else "Notifications",
-                style = MaterialTheme.typography.headlineLarge,
-            )
-            Text(
-                if (sheet == HeaderSheet.PROFILE) "Your profile and products are coming soon." else "Your inbox is coming soon.",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = Spacing.Xs, bottom = Spacing.X4l),
-            )
-            if (sheet == HeaderSheet.PROFILE) {
-                OutlinedButton(onClick = onSignOut, shape = ThShapes.Md, modifier = Modifier.fillMaxWidth()) {
-                    Text("Sign out", style = RnType.titleSmall)
-                }
-            }
-        }
-    }
-}

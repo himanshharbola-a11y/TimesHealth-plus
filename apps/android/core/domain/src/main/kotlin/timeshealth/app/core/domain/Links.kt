@@ -8,6 +8,15 @@ package timeshealth.app.core.domain
  * "/paywall\n" through where JavaScript's `test` does not.
  */
 
+/**
+ * WhatsApp support (Help & Support). PLACEHOLDER, as in the RN app: the business
+ * supplies the real support number before launch.
+ */
+const val SUPPORT_WHATSAPP_URL: String = "https://wa.me/910000000000"
+
+/** Privacy & Terms. PLACEHOLDER until the policy page is published. */
+const val PRIVACY_URL: String = "https://timeshealthplus.invalid/privacy"
+
 /** Schemes always allowed. Debug builds add plain `http` (see [allowedSchemes]). */
 private val RELEASE_SCHEMES = setOf("https", "whatsapp", "market", "tel", "mailto")
 private val DEBUG_SCHEMES = RELEASE_SCHEMES + "http"

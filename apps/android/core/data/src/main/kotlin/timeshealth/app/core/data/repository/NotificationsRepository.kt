@@ -39,6 +39,9 @@ class NotificationsRepository @Inject constructor(
     /** Reads the saved "seen" marker (once per process). Until then [hasUnread] is false. */
     suspend fun loadSeen(): Unit = seen.load()
 
+    /** When the user last looked (the newest item then), or null: what counts as "new" in the list. */
+    val seenAtMs: Long? get() = seen.state.value.seenAtMs
+
     /** Opening the inbox marks everything in it as seen. */
     suspend fun markSeen(items: List<NotificationItem>): Unit = seen.markSeen(items)
 
