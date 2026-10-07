@@ -19,6 +19,30 @@ plugins {
 val apiBaseUrl: String = (findProperty("apiBaseUrl") as String?) ?: "http://10.0.2.2:4000/v1"
 
 /**
+ * Debug builds may use plain http, but only to the local hosts and to the host
+ * of [apiBaseUrl] (a laptop on the same Wi-Fi when testing on a phone:
+ * -PapiBaseUrl=http://192.168.x.y:4100/v1). Generated, so the allowed host
+ * always matches the build. Release builds stay https-only.
+ */
+val debugNetworkConfigDir = layout.buildDirectory.dir("generated/debugNetworkConfig").get().asFile
+run {
+    val apiHost = apiBaseUrl.substringAfter("://").substringBefore("/").substringBefore(":").ifEmpty { "10.0.2.2" }
+    val hosts = (listOf("10.0.2.2", "localhost", "127.0.0.1") + apiHost).distinct()
+    val xml = debugNetworkConfigDir.resolve("xml/network_security_config.xml")
+    xml.parentFile.mkdirs()
+    xml.writeText(
+        buildString {
+            appendLine("""<?xml version="1.0" encoding="utf-8"?>""")
+            appendLine("<network-security-config>")
+            appendLine("""    <domain-config cleartextTrafficPermitted="true">""")
+            hosts.forEach { appendLine("""        <domain includeSubdomains="false">$it</domain>""") }
+            appendLine("    </domain-config>")
+            appendLine("</network-security-config>")
+        },
+    )
+}
+
+/**
  * QA persona sign-in on the login screen. Always on in debug builds; a test APK
  * built as release turns it on with -PdevSignIn=true (the RN app's
  * EXPO_PUBLIC_DEV_SIGNIN=1). The server must also run with ALLOW_DEV_TOKENS=true
@@ -41,6 +65,7 @@ if (firebaseEnabled) {
 }
 
 android {
+    sourceSets.getByName("debug").res.srcDir(debugNetworkConfigDir)
     namespace = "timeshealth.app"
     compileSdk = 36
 
