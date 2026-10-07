@@ -58,6 +58,7 @@ import timeshealth.app.core.integrations.subscription.PurchaseRequest
 import timeshealth.app.core.model.MarathonEvent
 import timeshealth.app.core.model.ProductType
 import timeshealth.app.core.model.RaceDetailResponse
+import timeshealth.app.core.domain.formatPhone
 import timeshealth.app.core.model.RaceLifecycleStatus
 import timeshealth.app.core.model.RaceTier
 import timeshealth.app.ui.checkout.CheckoutItem
@@ -370,7 +371,7 @@ private fun Logistics(data: RaceDetailResponse, onEdit: (() -> Unit)?) {
         expo?.requiredDocuments?.takeIf { it.isNotEmpty() }?.let { DetailRow("Mandatory", it.joinToString(", ")) }
         if (registered) {
             DetailRow("T-shirt Size", data.participant?.tshirtSize ?: data.kit?.tshirtSize ?: "Not chosen yet")
-            val contact = listOfNotNull(data.participant?.emergencyContactName, data.participant?.emergencyContactPhone).joinToString(" · ")
+            val contact = listOfNotNull(data.participant?.emergencyContactName, data.participant?.emergencyContactPhone?.let(::formatPhone)).joinToString(" · ")
             DetailRow("Emergency Contact", contact.ifEmpty { "Not added yet" })
         }
         data.kit?.let { DetailRow("Runner Kit", it.status.name.replace('_', ' ').lowercase().replaceFirstChar { c -> c.uppercase() }) }

@@ -17,7 +17,6 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import timeshealth.app.core.data.session.SessionStatus
-import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.SheetDestination
 import timeshealth.app.ui.home.YOGA_PLAN_ID
 import timeshealth.app.ui.live.LiveClassRoute
@@ -28,6 +27,7 @@ import timeshealth.app.ui.run.RunTrackerRoute
 import timeshealth.app.ui.gate.GateDestination
 import timeshealth.app.ui.gate.GateRoute
 import timeshealth.app.ui.login.LoginRoute
+import timeshealth.app.ui.onboarding.OnboardingRoute
 import timeshealth.app.ui.paywall.PaywallSheetContent
 import timeshealth.app.ui.reel.ReelScreen
 import timeshealth.app.ui.tabs.TabsScreen
@@ -112,11 +112,9 @@ fun AppNavHost(
         }
 
         composable<Route.Onboarding> {
-            ComingSoonScreen(
-                screenName = "Onboarding",
-                detail = "The 4-step personalisation (PRD §5).",
-                actionLabel = "Continue to Home",
-                onAction = {
+            OnboardingRoute(
+                viewModel = hiltViewModel(),
+                onDone = {
                     navController.navigate(Route.Tabs()) {
                         popUpTo<Route.Onboarding> { inclusive = true }
                     }
