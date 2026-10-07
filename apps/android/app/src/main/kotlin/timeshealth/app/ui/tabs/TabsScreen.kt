@@ -27,8 +27,8 @@ import androidx.navigation.compose.rememberNavController
 import timeshealth.app.BuildConfig
 import timeshealth.app.core.domain.isSafeExternalUrl
 import timeshealth.app.ui.components.BottomNavBar
-import timeshealth.app.ui.components.ComingSoonScreen
 import timeshealth.app.ui.components.TopHeader
+import timeshealth.app.ui.diet.DietRoute
 import timeshealth.app.ui.home.FeedTarget
 import timeshealth.app.ui.home.HomeRoute
 import timeshealth.app.ui.home.YOGA_PLAN_ID
@@ -131,7 +131,7 @@ fun TabsScreen(
             composable<TabRoute.Home> { HomeRoute(viewModel = hiltViewModel(), onTarget = onTarget) }
             composable<TabRoute.Yoga> { YogaRoute(viewModel = hiltViewModel(), openRoute = openRoute, onTarget = onTarget) }
             composable<TabRoute.Marathon> { MarathonRoute(viewModel = hiltViewModel(), openRoute = openRoute) }
-            composable<TabRoute.Diet> { ComingSoonScreen("Diet") }
+            composable<TabRoute.Diet> { DietRoute(viewModel = hiltViewModel()) }
         }
     }
 

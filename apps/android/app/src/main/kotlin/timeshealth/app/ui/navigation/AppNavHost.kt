@@ -29,6 +29,7 @@ import timeshealth.app.ui.gate.GateDestination
 import timeshealth.app.ui.gate.GateRoute
 import timeshealth.app.ui.login.LoginRoute
 import timeshealth.app.ui.paywall.PaywallSheetContent
+import timeshealth.app.ui.reel.ReelScreen
 import timeshealth.app.ui.tabs.TabsScreen
 import timeshealth.app.ui.yoga.SessionDetailRoute
 import timeshealth.app.ui.yoga.VideoPlayerRoute
@@ -202,7 +203,7 @@ fun AppNavHost(
             popExitTransition = Transitions.fadeExit,
         ) { backStackEntry ->
             val route = backStackEntry.toRoute<Route.Reel>()
-            ComingSoonScreen("Reel", detail = listOfNotNull(route.title, route.handle).joinToString(" · "), onBack = navController::back)
+            ReelScreen(url = route.url, title = route.title, handle = route.handle, onClose = navController::back)
         }
 
         composable<Route.RaceDetail> {
