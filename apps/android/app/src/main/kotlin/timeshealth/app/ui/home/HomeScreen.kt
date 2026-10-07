@@ -1,5 +1,11 @@
 package timeshealth.app.ui.home
 
+import timeshealth.app.ui.workshop.WorkshopSheet
+import timeshealth.app.core.model.LiveWorkshop
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,8 +64,16 @@ import timeshealth.app.ui.theme.ThLayout
 @Composable
 fun HomeRoute(viewModel: HomeViewModel, onTarget: (FeedTarget) -> Unit, modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    var workshop by remember { mutableStateOf<LiveWorkshop?>(null) }
     CompositionLocalProvider(LocalServerNow provides viewModel::nowMs) {
-        HomeScreen(state = state, onRetry = viewModel::retry, onRefresh = viewModel::refresh, onTarget = onTarget, modifier = modifier)
+        HomeScreen(state = state, onRetry = viewModel::retry, onRefresh = viewModel::refresh, onTarget = onTarget, modifier = modifier, onWorkshop = { workshop = it })
+        workshop?.let {
+            WorkshopSheet(it, hiltViewModel(), onDismiss = {
+                workshop = null
+                // Seats changed: the rail's counts and "Registered" refresh.
+                viewModel.refresh()
+            })
+        }
     }
 }
 
@@ -80,15 +94,17 @@ fun HomeScreen(
     onRefresh: () -> Unit,
     onTarget: (FeedTarget) -> Unit,
     modifier: Modifier = Modifier,
+    onWorkshop: (LiveWorkshop) -> Unit = {},
 ) {
     UiStateContent(state = state, onRetry = onRetry, modifier = modifier) { ui ->
         val refreshing = (state as? UiState.Ready)?.refreshing == true
         PullToRefreshBox(isRefreshing = refreshing, onRefresh = onRefresh, modifier = modifier.fillMaxSize().background(CanvasBg)) {
             LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 24.dp)) {
                 item(key = "greeting") { Greeting(ui.greeting) }
+                item(key = "primer") { NotificationPrimer() }
                 for (component in ui.components) {
                     item(key = component.id, contentType = component.type) {
-                        FeedComponentView(component, ui, onTarget)
+                        FeedComponentView(component, ui, onTarget, onWorkshop)
                     }
                 }
             }
@@ -97,7 +113,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun FeedComponentView(component: KnownFeedComponent, ui: HomeUi, onTarget: (FeedTarget) -> Unit) {
+private fun FeedComponentView(component: KnownFeedComponent, ui: HomeUi, onTarget: (FeedTarget) -> Unit, onWorkshop: (LiveWorkshop) -> Unit) {
     when (component) {
         is HeroStackComponent -> {
             val slots = component.knownSlots
@@ -149,7 +165,7 @@ private fun FeedComponentView(component: KnownFeedComponent, ui: HomeUi, onTarge
         }
 
         is WorkshopRailComponent -> Rail(component.title, modifier = Modifier.padding(top = 10.dp)) {
-            items(component.items, key = { it.id }) { w -> WorkshopCard(w, onClick = { onTarget(targetFor(FeedAction.OpenWorkshop(w.id))) }) }
+            items(component.items, key = { it.id }) { w -> WorkshopCard(w, onClick = { onWorkshop(w) }) }
         }
 
         is EntryTileComponent -> EntryTile(

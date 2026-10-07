@@ -23,7 +23,9 @@ import timeshealth.app.core.domain.Split
 import timeshealth.app.core.domain.TimedPoint
 import timeshealth.app.core.domain.computeSplits
 import timeshealth.app.core.domain.paceSeries
+import timeshealth.app.core.data.repository.RunsRepository
 import timeshealth.app.core.integrations.analytics.Analytics
+import timeshealth.app.core.model.RunHistoryResponse
 import timeshealth.app.core.integrations.analytics.AnalyticsEvents
 import timeshealth.app.core.runtracker.ActiveRun
 import timeshealth.app.core.runtracker.FinishedRun
@@ -49,6 +51,9 @@ interface RunGateway {
     fun enqueueUpload(owner: String)
     suspend fun imperial(): Boolean
     fun nowMs(): Long
+
+    /** Recent runs and totals from the server. */
+    suspend fun history(refresh: Boolean): RunHistoryResponse
     fun track(event: timeshealth.app.core.integrations.analytics.AnalyticsEvent)
 }
 
@@ -57,6 +62,7 @@ class TrackerRunGateway @Inject constructor(
     private val owners: RunOwnerProvider,
     private val display: RunDisplayPreferences,
     private val analytics: Analytics,
+    private val runs: RunsRepository,
     @ApplicationContext private val context: Context,
 ) : RunGateway {
     override suspend fun owner() = owners.currentOwner()
@@ -76,6 +82,7 @@ class TrackerRunGateway @Inject constructor(
     override fun enqueueUpload(owner: String) = RunSync.enqueue(context, owner)
     override suspend fun imperial() = display.imperial()
     override fun nowMs() = System.currentTimeMillis()
+    override suspend fun history(refresh: Boolean) = runs.history.get(refresh)
     override fun track(event: timeshealth.app.core.integrations.analytics.AnalyticsEvent) = analytics.track(event)
 }
 
@@ -132,6 +139,22 @@ class RunTrackerViewModel @Inject constructor(private val gateway: RunGateway) :
 
     private var owner: String? = null
 
+    /** Past runs for the start sheet. Optional: a failure just leaves it out. */
+    private val _history = MutableStateFlow<RunHistoryResponse?>(null)
+    val history: StateFlow<RunHistoryResponse?> = _history.asStateFlow()
+
+    private fun loadHistory(refresh: Boolean) {
+        viewModelScope.launch {
+            try {
+                _history.value = gateway.history(refresh)
+            } catch (e: kotlin.coroutines.cancellation.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Unit
+            }
+        }
+    }
+
     /** Set while the summary is showing: the live stream (which emits null after finish) must not replace it. */
     private var showingResult = false
 
@@ -144,6 +167,7 @@ class RunTrackerViewModel @Inject constructor(private val gateway: RunGateway) :
                 _ui.value = RunUi.NoOwner
                 return@launch
             }
+            loadHistory(refresh = false)
             gateway.recover(who)
             gateway.activeRun(who)
                 .flatMapLatest { run -> if (run == null) flowOf(null) else gateway.liveRoute(run.id).map { RunUi.Active(run, it) } }
@@ -238,6 +262,8 @@ class RunTrackerViewModel @Inject constructor(private val gateway: RunGateway) :
     fun done() {
         showingResult = false
         _ui.value = RunUi.Ready
+        // The run just finished uploads in the background; refresh so it appears once synced.
+        loadHistory(refresh = true)
     }
 
     companion object {

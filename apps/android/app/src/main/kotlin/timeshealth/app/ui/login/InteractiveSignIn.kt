@@ -45,7 +45,13 @@ fun interface PhoneChallenge {
 }
 
 @Immutable
-data class SignInAvailability(val google: Boolean, val phone: Boolean, val email: Boolean) {
+data class SignInAvailability(
+    val google: Boolean,
+    val phone: Boolean,
+    val email: Boolean,
+    /** Shown under the OTP / email forms by a stand-in provider (demo builds only). */
+    val demoHint: String? = null,
+) {
     /** Anything at all: RN `identityConfigured`. */
     val any: Boolean get() = google || phone || email
 

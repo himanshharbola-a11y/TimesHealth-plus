@@ -15,6 +15,7 @@ import timeshealth.app.ui.inbox.InboxListGateway
 import timeshealth.app.ui.inbox.RepositoryInboxListGateway
 import timeshealth.app.ui.live.LiveClassGateway
 import timeshealth.app.ui.live.RepositoryLiveClassGateway
+import timeshealth.app.ui.login.DemoSignIn
 import timeshealth.app.ui.login.InteractiveSignIn
 import timeshealth.app.ui.marathon.MarathonGateway
 import timeshealth.app.ui.onboarding.OnboardingGateway
@@ -31,6 +32,8 @@ import timeshealth.app.ui.session.RepositoryAccountGateway
 import timeshealth.app.ui.session.RepositoryInboxGateway
 import timeshealth.app.ui.session.RepositorySessionGateway
 import timeshealth.app.ui.session.SessionGateway
+import timeshealth.app.ui.workshop.RepositoryWorkshopGateway
+import timeshealth.app.ui.workshop.WorkshopGateway
 import timeshealth.app.ui.yoga.RepositoryYogaGateway
 import timeshealth.app.ui.yoga.RepositoryYogaSessionsGateway
 import timeshealth.app.ui.yoga.YogaGateway
@@ -71,14 +74,18 @@ abstract class UiWiring {
 
     @Binds abstract fun onboardingGateway(impl: RepositoryOnboardingGateway): OnboardingGateway
 
-    /**
-     * Google / phone OTP / email on the login card. Unavailable until the
-     * Firebase flows are wired: then bind a FirebaseInteractiveSignIn here when
-     * BuildConfig.FIREBASE_ENABLED (as AppModule does for the IdentityGateway).
-     */
-    @Binds abstract fun interactiveSignIn(impl: UnavailableSignIn): InteractiveSignIn
+    @Binds abstract fun workshopGateway(impl: RepositoryWorkshopGateway): WorkshopGateway
 
     companion object {
+        /**
+         * Google / phone OTP / email on the login card. PLUG-IN POINT for the TIL SSO SDK:
+         * bind its InteractiveSignIn here. Until then debug / test builds use the DemoSignIn
+         * stand-in (OTP 123456) and release builds say sign-in isn't available.
+         */
+        @Provides
+        fun interactiveSignIn(demo: javax.inject.Provider<DemoSignIn>): InteractiveSignIn =
+            if (BuildConfig.DEBUG || BuildConfig.DEV_SIGNIN) demo.get() else UnavailableSignIn()
+
         @Provides
         fun buildInfo(): AppBuildInfo = AppBuildInfo(
             versionName = BuildConfig.VERSION_NAME,

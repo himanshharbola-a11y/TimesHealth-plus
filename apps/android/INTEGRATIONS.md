@@ -13,7 +13,7 @@ The interfaces are in `core/integrations`, and each interface's KDoc has the ste
 | Dependency | Interface | Stand-in today | Real system | Change |
 |---|---|---|---|---|
 | Subscriptions and payments | `SubscriptionProvider` | `ServerCheckoutSubscriptionProvider`: server checkout with a simulated payment | TIL Subscription SDK | New class + 1 `@Binds` line |
-| Sign-in (SSO) | `IdentityGateway` (`core/data`), `InteractiveSignIn` (`ui/login`) | Firebase, or QA personas when Firebase isn't configured | TIL SSO SDK | Bind in `AppModule.identity()` and `UiWiring.interactiveSignIn` |
+| Sign-in (SSO) | `IdentityGateway` (`core/data`), `InteractiveSignIn` (`ui/login`) | `DemoSignIn` in debug/test builds (any mobile, OTP 123456; email; Google), mapped to QA accounts; release builds refuse | TIL SSO SDK | Bind in `UiWiring.interactiveSignIn` and `AppModule.identity()` |
 | Analytics | `AnalyticsTracker` (a set) | Logcat, debug builds only | GrowthRx, Google Analytics | Add 1 `@IntoSet` line per tracker |
 | Push | `PushHandler` (a set) + Firebase Messaging | Our own notifications | GrowthRx push campaigns | Add 1 `@IntoSet` line |
 | In-app campaigns | `InAppCampaigns` | No-op | GrowthRx in-app | 1 `@Binds` line |
@@ -43,7 +43,8 @@ answers that contract can sit behind it.
   - Yoga: schedule, reminders, tracker, library, player, live classes (premieres);
   - Marathon: races, checkout, digital bib (works offline), results, participant details;
   - GPS run tracker;
-  - Diet lead form;
+  - Diet lead form, workshops (details, free registration, paid seats through checkout);
+  - run history (totals and recent runs), notification permission primer;
   - profile, inbox, onboarding, paywall.
 - Loading, slow-network and failure handling:
   - cached responses are shown first and refreshed quietly;

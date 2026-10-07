@@ -65,6 +65,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.roundToLong
 import kotlinx.coroutines.delay
+import timeshealth.app.core.domain.formatDayAndTime
+import timeshealth.app.core.domain.parseIsoInstant
+import timeshealth.app.core.model.RunHistoryResponse
 import timeshealth.app.core.domain.IST
 import timeshealth.app.core.domain.PacePoint
 import timeshealth.app.core.domain.Split
@@ -100,6 +103,7 @@ fun RunTrackerRoute(viewModel: RunTrackerViewModel, onClose: () -> Unit) {
     val ui by viewModel.ui.collectAsStateWithLifecycle()
     val needsPermission by viewModel.needsPermission.collectAsStateWithLifecycle()
     val message by viewModel.message.collectAsStateWithLifecycle()
+    val history by viewModel.history.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
 
     val permissions = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -123,7 +127,7 @@ fun RunTrackerRoute(viewModel: RunTrackerViewModel, onClose: () -> Unit) {
         when (val state = ui) {
             RunUi.Loading -> ThSpinner(Modifier.align(Alignment.Center), size = 28.dp)
             RunUi.NoOwner -> Text("Sign in to track a run.", Modifier.align(Alignment.Center), color = TextSecondary)
-            RunUi.Ready -> ReadyScreen(onStart = viewModel::start, onClose = onClose)
+            RunUi.Ready -> ReadyScreen(history, viewModel.imperial, onStart = viewModel::start, onClose = onClose)
             is RunUi.Active -> ActiveScreen(state, viewModel.imperial, viewModel::nowMs, viewModel::pause, viewModel::resume, viewModel::finish)
             is RunUi.Summary -> SummaryScreen(state, viewModel.imperial, onDone = viewModel::done, onClose = onClose)
             RunUi.TooShort -> TooShortScreen(onDone = viewModel::done)
@@ -135,7 +139,7 @@ fun RunTrackerRoute(viewModel: RunTrackerViewModel, onClose: () -> Unit) {
 // ── Ready ─────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun ReadyScreen(onStart: () -> Unit, onClose: () -> Unit) {
+private fun ReadyScreen(history: RunHistoryResponse?, imperial: Boolean, onStart: () -> Unit, onClose: () -> Unit) {
     Box(Modifier.fillMaxSize()) {
         LocalRouteMap.current.RouteMap(RouteMapState(emptyList(), RouteMapState.Mode.FOLLOW, DefaultCenter), Modifier.fillMaxSize())
         CloseButton(onClose, Modifier.align(Alignment.TopStart))
@@ -157,9 +161,43 @@ private fun ReadyScreen(onStart: () -> Unit, onClose: () -> Unit) {
                 Icon(Icons.Filled.GpsFixed, contentDescription = null, tint = TextMuted, modifier = Modifier.size(14.dp))
                 Text("GPS tracks distance, pace & route, even with the screen off.", color = TextMuted, fontSize = 12.sp)
             }
+            history?.takeIf { it.totals.runs > 0 }?.let { RunHistory(it, imperial) }
             Spacer(Modifier.height(18.dp))
             RoundButton("Start", Icons.Filled.PlayArrow, CoralBrand, size = 84, onClick = onStart)
         }
+    }
+}
+
+/** Totals and the last few runs, so the start sheet shows progress (Strava's "You" strip). */
+@Composable
+private fun RunHistory(h: RunHistoryResponse, imperial: Boolean) {
+    val unit = unitLabel(imperial)
+    Column(Modifier.padding(top = 14.dp).fillMaxWidth()) {
+        Row(Modifier.fillMaxWidth().clip(ThShapes.Md).background(CanvasBg).padding(vertical = 10.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
+            HistoryStat("${h.totals.runs}", "Runs")
+            HistoryStat(distanceText(h.totals.distanceKm * 1000, imperial), "Total $unit")
+            HistoryStat(distanceText(h.totals.monthDistanceKm * 1000, imperial), "This month")
+            HistoryStat(distanceText(h.totals.longestKm * 1000, imperial), "Longest")
+        }
+        h.runs.take(3).forEach { r ->
+            val started = parseIsoInstant(r.startedAt)
+            Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(started?.let { runName(it.toEpochMilli()) } ?: "Run", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                    Text(started?.let { formatDayAndTime(it, System.currentTimeMillis()) }.orEmpty(), color = TextMuted, fontSize = 11.sp)
+                }
+                Text("${distanceText(r.distanceKm * 1000, imperial)} $unit", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Bold, style = TabularNums)
+                Text("  ${paceText(r.avgPaceSecPerKm.toDouble(), imperial)} /$unit", color = TextMuted, fontSize = 11.5.sp, style = TabularNums)
+            }
+        }
+    }
+}
+
+@Composable
+private fun HistoryStat(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.ExtraBold, style = TabularNums)
+        Text(label, color = TextMuted, fontSize = 10.sp)
     }
 }
 

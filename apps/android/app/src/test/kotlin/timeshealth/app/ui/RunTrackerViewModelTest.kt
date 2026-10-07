@@ -27,6 +27,7 @@ class RunTrackerViewModelTest {
     @get:Rule val main = MainDispatcherRule()
 
     private class FakeRuns(var owner: String? = "user_1") : RunGateway {
+        override suspend fun history(refresh: Boolean): timeshealth.app.core.model.RunHistoryResponse = throw java.io.IOException("offline")
         val active = MutableStateFlow<ActiveRun?>(null)
         var permission = true
         var finishResult: FinishedRun? = null

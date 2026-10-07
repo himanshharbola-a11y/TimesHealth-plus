@@ -205,6 +205,9 @@ private fun ColumnScope.OtpFace(state: LoginUiState, actions: AuthActions) {
         color = TextMuted,
         modifier = Modifier.padding(bottom = Spacing.X4l),
     )
+    state.methods.demoHint?.let {
+        Text(it, style = MaterialTheme.typography.bodySmall, color = TextMuted, modifier = Modifier.padding(bottom = Spacing.Md))
+    }
     OutlinedTextField(
         value = state.otp,
         onValueChange = actions.onOtpChange,
