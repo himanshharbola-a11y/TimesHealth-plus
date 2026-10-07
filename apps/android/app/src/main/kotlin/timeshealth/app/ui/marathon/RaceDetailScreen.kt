@@ -32,6 +32,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,6 +72,7 @@ import timeshealth.app.ui.theme.CoralBrand
 import timeshealth.app.ui.theme.GoldAccent
 import timeshealth.app.ui.theme.GoldTint
 import timeshealth.app.ui.theme.PaperWhite
+import timeshealth.app.ui.theme.PlumBrand
 import timeshealth.app.ui.theme.SurfaceSand
 import timeshealth.app.ui.theme.TagTone
 import timeshealth.app.ui.theme.TextMuted
@@ -98,6 +100,20 @@ fun RaceDetailRoute(viewModel: RaceDetailViewModel, onBack: () -> Unit, openRout
     val claiming by viewModel.claiming.collectAsStateWithLifecycle()
     var checkout by remember { mutableStateOf<CheckoutItem?>(null) }
     var confirmClaim by remember { mutableStateOf(false) }
+    var editing by rememberSaveable { mutableStateOf(false) }
+    val participantSaving by viewModel.participantSaving.collectAsStateWithLifecycle()
+    val participantError by viewModel.participantError.collectAsStateWithLifecycle()
+    val ready = (state as? timeshealth.app.ui.state.UiState.Ready)?.data
+    // Only an entry that isn't finished can be edited.
+    val editable = ready?.event?.registration?.let { it.status != RaceLifecycleStatus.COMPLETED } == true
+    // From the profile's "Race participant details": open the editor once the page knows the entry.
+    var openedFromProfile by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(editable) {
+        if (viewModel.editRequested && editable && !openedFromProfile) {
+            openedFromProfile = true
+            editing = true
+        }
+    }
 
     Column(Modifier.fillMaxSize().background(CanvasBg).statusBarsPadding()) {
         Row(Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -112,11 +128,30 @@ fun RaceDetailRoute(viewModel: RaceDetailViewModel, onBack: () -> Unit, openRout
                 onClaim = { confirmClaim = true },
                 claiming = claiming,
                 openRoute = openRoute,
+                onEditParticipant = if (editable) {
+                    {
+                        viewModel.clearParticipantError()
+                        editing = true
+                    }
+                } else {
+                    null
+                },
             )
         }
     }
 
     CheckoutSheet(item = checkout, onClose = { checkout = null }, onSuccess = viewModel::refresh)
+
+    if (editing && ready != null) {
+        ParticipantEditor(
+            initial = ready.participant,
+            saving = participantSaving,
+            error = participantError,
+            onSave = { size, name, phone -> viewModel.saveParticipant(size, name, phone, ready.participant) { editing = false } },
+            onEdited = viewModel::clearParticipantError,
+            onClose = { editing = false },
+        )
+    }
 
     val event = (state as? timeshealth.app.ui.state.UiState.Ready)?.data?.event
     if (confirmClaim && event != null) {
@@ -146,6 +181,7 @@ private fun RaceDetailContent(
     onClaim: () -> Unit,
     claiming: Boolean,
     openRoute: (Route) -> Unit,
+    onEditParticipant: (() -> Unit)?,
 ) {
     val event = data.event
     val reg = event.registration
@@ -229,7 +265,7 @@ private fun RaceDetailContent(
             }
         }
 
-        Logistics(data)
+        Logistics(data, onEditParticipant)
 
         // §8.3: Refer & Win, while the race is ahead.
         data.referral?.let { ref ->
@@ -320,7 +356,7 @@ private fun RegisterCard(event: MarathonEvent, initialDistance: String?, onCheck
 
 /** Event logistics: one outlined card of label / value rows. */
 @Composable
-private fun Logistics(data: RaceDetailResponse) {
+private fun Logistics(data: RaceDetailResponse, onEdit: (() -> Unit)?) {
     val event = data.event
     val expo = event.expo
     val registered = event.registration != null
@@ -339,6 +375,13 @@ private fun Logistics(data: RaceDetailResponse) {
         }
         data.kit?.let { DetailRow("Runner Kit", it.status.name.replace('_', ' ').lowercase().replaceFirstChar { c -> c.uppercase() }) }
         listOfNotNull(data.kit?.courierName, data.kit?.trackingRef?.let { "#$it" }).joinToString(" ").takeIf { it.isNotBlank() }?.let { DetailRow("Courier", it) }
+        onEdit?.let {
+            Box(
+                Modifier.padding(top = 8.dp, bottom = 6.dp).fillMaxWidth().height(42.dp).clip(ThShapes.Md).border(1.dp, BorderRule, ThShapes.Md)
+                    .clickable(role = Role.Button, onClick = it),
+                contentAlignment = Alignment.Center,
+            ) { Text("Edit Participant Details", color = PlumBrand, fontSize = 13.sp, fontWeight = FontWeight.Bold) }
+        }
     }
 }
 

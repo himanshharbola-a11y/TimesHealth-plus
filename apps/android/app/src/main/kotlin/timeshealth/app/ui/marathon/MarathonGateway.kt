@@ -7,6 +7,7 @@ import timeshealth.app.core.data.repository.MarathonRepository
 import timeshealth.app.core.model.BibTokenResponse
 import timeshealth.app.core.model.ClaimUpgradeResponse
 import timeshealth.app.core.model.MarathonListResponse
+import timeshealth.app.core.model.UpdateParticipantRequest
 import timeshealth.app.core.model.RaceDetailResponse
 import timeshealth.app.core.model.ReferralState
 import timeshealth.app.core.network.ServerClock
@@ -21,6 +22,9 @@ interface MarathonGateway {
     suspend fun bibToken(eventId: String): BibTokenResponse
     suspend fun offlinePass(eventId: String): OfflinePass?
     suspend fun claimUpgrade(eventId: String): ClaimUpgradeResponse
+
+    /** T-shirt size and emergency contact; null fields are left as they are. */
+    suspend fun updateParticipant(request: UpdateParticipantRequest)
     fun nowMs(): Long
 }
 
@@ -36,5 +40,8 @@ class RepositoryMarathonGateway @Inject constructor(
     override suspend fun bibToken(eventId: String) = marathon.bibToken(eventId)
     override suspend fun offlinePass(eventId: String) = marathon.offlinePass(eventId)
     override suspend fun claimUpgrade(eventId: String) = marathon.claimUpgrade(eventId)
+    override suspend fun updateParticipant(request: UpdateParticipantRequest) {
+        marathon.updateParticipant(request)
+    }
     override fun nowMs(): Long = clock.now()
 }

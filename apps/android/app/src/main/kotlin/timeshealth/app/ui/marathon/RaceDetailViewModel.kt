@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timeshealth.app.core.model.RaceDetailResponse
+import timeshealth.app.core.model.RaceParticipant
+import timeshealth.app.core.model.UpdateParticipantRequest
 import timeshealth.app.core.network.ApiRequestException
 import timeshealth.app.ui.state.Loadable
 import timeshealth.app.ui.state.UiState
@@ -26,6 +28,15 @@ class RaceDetailViewModel @Inject constructor(
 
     /** The distance chip carried over from the Marathon tab, if any. */
     val initialDistance: String? = savedStateHandle.get<String>("distance")
+
+    /** Opened from the profile's "Race participant details": land in the editor. */
+    val editRequested: Boolean = savedStateHandle.get<String>("edit") == "participant"
+
+    private val _participantSaving = MutableStateFlow(false)
+    val participantSaving: StateFlow<Boolean> = _participantSaving.asStateFlow()
+
+    private val _participantError = MutableStateFlow<String?>(null)
+    val participantError: StateFlow<String?> = _participantError.asStateFlow()
 
     private val detail = Loadable(
         scope = viewModelScope,
@@ -48,6 +59,46 @@ class RaceDetailViewModel @Inject constructor(
 
     fun consumeMessage() {
         _message.value = null
+    }
+
+    fun clearParticipantError() {
+        _participantError.value = null
+    }
+
+    /**
+     * Saves the T-shirt size and emergency contact (§8.3). A field is sent when it has a value,
+     * or to clear one that had a value ([had]); the server answers bad numbers and started races
+     * in its own words.
+     */
+    fun saveParticipant(size: String?, contactName: String, contactPhone: String, had: RaceParticipant?, done: () -> Unit) {
+        if (_participantSaving.value) return
+        val phone = contactPhone.trim()
+        if (phone.isNotEmpty() && phone.count(Char::isDigit) < 10) {
+            _participantError.value = "Enter a 10-digit mobile number."
+            return
+        }
+        val request = UpdateParticipantRequest(
+            eventId = eventId,
+            tshirtSize = size,
+            emergencyContactName = contactName.trim().takeIf { it.isNotEmpty() || had?.emergencyContactName != null },
+            emergencyContactPhone = phone.takeIf { it.isNotEmpty() || had?.emergencyContactPhone != null },
+        )
+        _participantError.value = null
+        _participantSaving.value = true
+        viewModelScope.launch {
+            try {
+                gateway.updateParticipant(request)
+                done()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: ApiRequestException) {
+                _participantError.value = if (!e.isNetworkFailure && e.error.message.isNotBlank()) e.error.message else SAVE_FAILED
+            } catch (e: Exception) {
+                _participantError.value = SAVE_FAILED
+            } finally {
+                _participantSaving.value = false
+            }
+        }
     }
 
     /** Claims the Refer & Win free Premium upgrade. The server re-checks everything. */
@@ -73,6 +124,7 @@ class RaceDetailViewModel @Inject constructor(
 
     companion object {
         private const val GENERIC = "Something went wrong on our side. Please try again."
+        private const val SAVE_FAILED = "Couldn’t save. Check your connection and try again."
         val CLAIM_ERRORS = mapOf(
             "NO_FREE_UPGRADE" to "There’s no earned upgrade left to claim on this account.",
             "ALREADY_PREMIUM" to "This entry is already Premium VIP.",
