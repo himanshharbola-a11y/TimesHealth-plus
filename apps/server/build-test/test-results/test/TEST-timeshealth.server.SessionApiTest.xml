@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="timeshealth.server.SessionApiTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-08T12:52:15.896Z" hostname="HIMANSH" time="2.386">
+  <properties/>
+  <testcase name="the sign-in email is not editable from the profile()" classname="timeshealth.server.SessionApiTest" time="0.195"/>
+  <testcase name="deleting an account keeps its payment records, detached from the person()" classname="timeshealth.server.SessionApiTest" time="0.865"/>
+  <testcase name="no token is a 401 in the app error shape()" classname="timeshealth.server.SessionApiTest" time="0.063"/>
+  <testcase name="launch config is public()" classname="timeshealth.server.SessionApiTest" time="0.084"/>
+  <testcase name="a persona token can never claim a real person's email or number()" classname="timeshealth.server.SessionApiTest" time="0.04"/>
+  <testcase name="a new user is free and goes through onboarding()" classname="timeshealth.server.SessionApiTest" time="0.151"/>
+  <testcase name="an impossible date of birth is refused()" classname="timeshealth.server.SessionApiTest" time="0.28"/>
+  <testcase name="a typed mobile is stored in one format and an uncallable one is refused()" classname="timeshealth.server.SessionApiTest" time="0.243"/>
+  <testcase name="health reports the database()" classname="timeshealth.server.SessionApiTest" time="0.053"/>
+  <testcase name="a lapsed member is not sent through onboarding again()" classname="timeshealth.server.SessionApiTest" time="0.335"/>
+  <testcase name="an unknown route answers in the standard error shape()" classname="timeshealth.server.SessionApiTest" time="0.041"/>
+  <system-out><![CDATA[12:52:10.937  INFO [] timeshealth.server.SessionApiTest        : Starting SessionApiTest using Java 17.0.20.1 with PID 19640 (started by himan in C:\Users\himan\Desktop\Health App\apps\server)
+12:52:10.937  INFO [] timeshealth.server.SessionApiTest        : The following 1 profile is active: "test"
+12:52:12.370  WARN [] o.f.c.i.s.DefaultSqlScriptExecutor       : DB: schema "public" already exists, skipping (SQL State: 42P06 - Error Code: 0)
+12:52:13.610  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.760  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.761  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.762  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.762  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.762  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.763  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.763  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.764  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.764  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.765  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.766  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.767  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.767  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.768  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.768  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.769  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.769  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.770  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.770  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.771  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.771  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.772  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.773  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.774  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.774  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.775  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.775  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.776  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.776  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.777  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.777  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.777  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.778  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.778  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.778  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.779  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.781  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.781  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.781  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:13.789  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+12:52:15.884  INFO [] timeshealth.server.SessionApiTest        : Started SessionApiTest in 5.011 seconds (process running for 101.072)
+12:52:15.887  WARN [] t.server.identity.IdentityStartup        : DEV AUTH MODE — Firebase is not configured. Persona tokens ("uid|email|phone") are accepted unverified. Never expose this server to real users.
+12:52:17.133  WARN [req-6] t.server.security.BearerAuthFilter       : token rejected cause=Persona tokens are limited to QA identities
+12:52:17.140  WARN [req-7] t.server.security.BearerAuthFilter       : token rejected cause=Persona tokens are limited to QA identities
+12:52:17.148  WARN [req-8] t.server.security.BearerAuthFilter       : token rejected cause=Persona token must be "[redacted-token]"
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

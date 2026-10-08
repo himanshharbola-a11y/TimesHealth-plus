@@ -118,7 +118,8 @@ Each script sends identical requests to both servers and diffs the JSON. Timesta
 | `routes/yoga.ts` + `services/attendance.ts` | `yoga/AttendanceService.kt` (record, best streak); `GET /yoga/sessions/{id}/playback` in `yoga/SessionPlaybackService.kt` (adds the dashboard's video for the app's video plug-in) | Partly |
 | `routes/marathon.ts` + `services/media.ts` (bib/playback signing) | — | To do |
 | `routes/orders.ts` (pricing, settlement, referrals) | — | To do |
-| `routes/runs.ts`, `routes/diet.ts` + `services/dietLeads.ts` | — | To do |
+| `routes/runs.ts` | `runs/RunsController.kt`: `GET /runs/{id}` (one run with its route, owner only) | Partly |
+| `routes/diet.ts` + `services/dietLeads.ts` | — | To do |
 | `routes/content.ts` + `services/workshops.ts`, `contentCache.ts` | `feed/Workshops.kt`, `cms/ContentCache.kt` | Partly (routes to do) |
 | `routes/devices.ts`, `services/push.ts`, `services/scheduler.ts` | — | To do |
 | `prisma/seed.ts`, `personas.ts` → Kotlin demo-data loader | — | To do |

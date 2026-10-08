@@ -185,6 +185,10 @@ class EndpointContractTest(private val case: Case) {
                 )
             },
             Case("runHistory", "GET", "/v1/runs", null, Fixtures.text("runs.json")) { runHistory() },
+            Case(
+                "run", "GET", "/v1/runs/run_1", null,
+                """{"id":"run_1","startedAt":"2026-10-06T00:30:00.000Z","endedAt":"2026-10-06T01:00:00.000Z","distanceKm":5.02,"durationSeconds":1800,"avgPaceSecPerKm":358,"caloriesBurned":320,"routePolyline":"_p~iF~ps|U","hasAccuracyWarning":false,"synced":true}""",
+            ) { run("run_1") },
 
             // Diet, workshops, content
             Case(

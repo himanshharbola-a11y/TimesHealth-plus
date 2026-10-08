@@ -27,6 +27,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DirectionsRun
 import androidx.compose.material.icons.filled.GpsFixed
 import androidx.compose.material.icons.filled.Pause
@@ -127,7 +128,7 @@ fun RunTrackerRoute(viewModel: RunTrackerViewModel, onClose: () -> Unit) {
         when (val state = ui) {
             RunUi.Loading -> ThSpinner(Modifier.align(Alignment.Center), size = 28.dp)
             RunUi.NoOwner -> Text("Sign in to track a run.", Modifier.align(Alignment.Center), color = TextSecondary)
-            RunUi.Ready -> ReadyScreen(history, viewModel.imperial, onStart = viewModel::start, onClose = onClose)
+            RunUi.Ready -> ReadyScreen(history, viewModel.imperial, onStart = viewModel::start, onClose = onClose, onOpenRun = viewModel::openPast)
             is RunUi.Active -> ActiveScreen(state, viewModel.imperial, viewModel::nowMs, viewModel::pause, viewModel::resume, viewModel::finish)
             is RunUi.Summary -> SummaryScreen(state, viewModel.imperial, onDone = viewModel::done, onClose = onClose)
             RunUi.TooShort -> TooShortScreen(onDone = viewModel::done)
@@ -139,7 +140,7 @@ fun RunTrackerRoute(viewModel: RunTrackerViewModel, onClose: () -> Unit) {
 // ── Ready ─────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun ReadyScreen(history: RunHistoryResponse?, imperial: Boolean, onStart: () -> Unit, onClose: () -> Unit) {
+private fun ReadyScreen(history: RunHistoryResponse?, imperial: Boolean, onStart: () -> Unit, onClose: () -> Unit, onOpenRun: (timeshealth.app.core.model.RunRecord) -> Unit) {
     Box(Modifier.fillMaxSize()) {
         LocalRouteMap.current.RouteMap(RouteMapState(emptyList(), RouteMapState.Mode.FOLLOW, DefaultCenter), Modifier.fillMaxSize())
         CloseButton(onClose, Modifier.align(Alignment.TopStart))
@@ -161,7 +162,7 @@ private fun ReadyScreen(history: RunHistoryResponse?, imperial: Boolean, onStart
                 Icon(Icons.Filled.GpsFixed, contentDescription = null, tint = TextMuted, modifier = Modifier.size(14.dp))
                 Text("GPS tracks distance, pace & route, even with the screen off.", color = TextMuted, fontSize = 12.sp)
             }
-            history?.takeIf { it.totals.runs > 0 }?.let { RunHistory(it, imperial) }
+            history?.takeIf { it.totals.runs > 0 }?.let { RunHistory(it, imperial, onOpenRun) }
             Spacer(Modifier.height(18.dp))
             RoundButton("Start", Icons.Filled.PlayArrow, CoralBrand, size = 84, onClick = onStart)
         }
@@ -170,7 +171,7 @@ private fun ReadyScreen(history: RunHistoryResponse?, imperial: Boolean, onStart
 
 /** Totals and the last few runs, so the start sheet shows progress (Strava's "You" strip). */
 @Composable
-private fun RunHistory(h: RunHistoryResponse, imperial: Boolean) {
+private fun RunHistory(h: RunHistoryResponse, imperial: Boolean, onOpen: (timeshealth.app.core.model.RunRecord) -> Unit) {
     val unit = unitLabel(imperial)
     Column(Modifier.padding(top = 14.dp).fillMaxWidth()) {
         Row(Modifier.fillMaxWidth().clip(ThShapes.Md).background(CanvasBg).padding(vertical = 10.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -181,13 +182,18 @@ private fun RunHistory(h: RunHistoryResponse, imperial: Boolean) {
         }
         h.runs.take(3).forEach { r ->
             val started = parseIsoInstant(r.startedAt)
-            Row(Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                Modifier.fillMaxWidth().padding(top = 4.dp).clip(ThShapes.Sm)
+                    .clickable(role = Role.Button) { onOpen(r) }.padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Column(Modifier.weight(1f)) {
                     Text(started?.let { runName(it.toEpochMilli()) } ?: "Run", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
                     Text(started?.let { formatDayAndTime(it, System.currentTimeMillis()) }.orEmpty(), color = TextMuted, fontSize = 11.sp)
                 }
                 Text("${distanceText(r.distanceKm * 1000, imperial)} $unit", color = TextPrimary, fontSize = 13.sp, fontWeight = FontWeight.Bold, style = TabularNums)
                 Text("  ${paceText(r.avgPaceSecPerKm.toDouble(), imperial)} /$unit", color = TextMuted, fontSize = 11.5.sp, style = TabularNums)
+                Icon(Icons.Filled.ChevronRight, contentDescription = "Open run", tint = TextMuted, modifier = Modifier.size(18.dp))
             }
         }
     }

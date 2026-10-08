@@ -37,7 +37,7 @@ class MarathonOpsTest {
     companion object {
         @Container
         @JvmStatic
-        val postgres = PostgreSQLContainer("postgres:16")
+        val postgres = PostgreSQLContainer("postgres:16-alpine")
 
         @DynamicPropertySource
         @JvmStatic

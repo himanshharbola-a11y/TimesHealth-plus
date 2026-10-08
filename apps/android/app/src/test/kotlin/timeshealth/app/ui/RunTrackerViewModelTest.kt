@@ -28,6 +28,11 @@ class RunTrackerViewModelTest {
 
     private class FakeRuns(var owner: String? = "user_1") : RunGateway {
         override suspend fun history(refresh: Boolean): timeshealth.app.core.model.RunHistoryResponse = throw java.io.IOException("offline")
+        var pastRoute: String? = "_p~iF~ps|U_ulLnnqC"
+        override suspend fun pastRun(id: String) = timeshealth.app.core.model.RunRecord(
+            id = id, startedAt = "2026-10-06T00:30:00.000Z", endedAt = "2026-10-06T01:00:00.000Z", distanceKm = 5.0,
+            durationSeconds = 1800, avgPaceSecPerKm = 360, caloriesBurned = 300, routePolyline = pastRoute, hasAccuracyWarning = false, synced = true,
+        )
         val active = MutableStateFlow<ActiveRun?>(null)
         var permission = true
         var finishResult: FinishedRun? = null
@@ -56,6 +61,29 @@ class RunTrackerViewModelTest {
         id = "r1", owner = "user_1", startedAt = 0, endedAt = 150_000, distanceM = distanceM, distanceKm = distanceM / 1000,
         durationSeconds = 150, avgPaceSecPerKm = 300, caloriesBurned = 30, routePolyline = null, hasAccuracyWarning = false,
     )
+
+    @Test
+    fun `a past run opens on the summary and its route is fetched for the map`() = runTest {
+        val runs = FakeRuns()
+        val vm = RunTrackerViewModel(runs)
+        advanceUntilIdle()
+        val record = timeshealth.app.core.model.RunRecord(
+            id = "past_1", startedAt = "2026-10-06T00:30:00.000Z", endedAt = "2026-10-06T01:00:00.000Z", distanceKm = 5.0,
+            durationSeconds = 1800, avgPaceSecPerKm = 360, caloriesBurned = 300, routePolyline = null, hasAccuracyWarning = false, synced = true,
+        )
+        vm.openPast(record)
+        advanceUntilIdle()
+        val summary = vm.ui.value as RunUi.Summary
+        assertThat(summary.run.distanceM).isEqualTo(5000.0)
+        assertThat(summary.route).hasSize(2)
+
+        // A run with no stored route: the summary still opens, just without the line.
+        vm.done()
+        runs.pastRoute = null
+        vm.openPast(record.copy(id = "past_2"))
+        advanceUntilIdle()
+        assertThat((vm.ui.value as RunUi.Summary).route).isEmpty()
+    }
 
     @Test
     fun `without precise location, start asks for it and retries after it is granted`() = runTest {

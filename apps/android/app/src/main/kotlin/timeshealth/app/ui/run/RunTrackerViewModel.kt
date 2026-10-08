@@ -54,6 +54,9 @@ interface RunGateway {
 
     /** Recent runs and totals from the server. */
     suspend fun history(refresh: Boolean): RunHistoryResponse
+
+    /** One past run with its route. */
+    suspend fun pastRun(id: String): timeshealth.app.core.model.RunRecord
     fun track(event: timeshealth.app.core.integrations.analytics.AnalyticsEvent)
 }
 
@@ -83,6 +86,7 @@ class TrackerRunGateway @Inject constructor(
     override suspend fun imperial() = display.imperial()
     override fun nowMs() = System.currentTimeMillis()
     override suspend fun history(refresh: Boolean) = runs.history.get(refresh)
+    override suspend fun pastRun(id: String) = runs.run(id)
     override fun track(event: timeshealth.app.core.integrations.analytics.AnalyticsEvent) = analytics.track(event)
 }
 
@@ -256,6 +260,49 @@ class RunTrackerViewModel @Inject constructor(private val gateway: RunGateway) :
             splits = computeSplits(timed, if (imperial) METERS_PER_MILE else 1000.0),
             pace = paceSeries(timed),
         )
+    }
+
+    /**
+     * A past run from the history, reopened on the summary screen with its route map.
+     * Only the route line is stored for past runs (no timestamps per point), so splits and the
+     * pace chart show for the run just finished, not here.
+     */
+    fun openPast(record: timeshealth.app.core.model.RunRecord) {
+        if (_ui.value !is RunUi.Ready) return
+        showingResult = true
+        _ui.value = RunUi.Summary(
+            run = FinishedRun(
+                id = record.id,
+                owner = owner.orEmpty(),
+                startedAt = timeshealth.app.core.domain.parseIsoInstant(record.startedAt)?.toEpochMilli() ?: 0L,
+                endedAt = timeshealth.app.core.domain.parseIsoInstant(record.endedAt)?.toEpochMilli() ?: 0L,
+                distanceM = record.distanceKm * 1000,
+                distanceKm = record.distanceKm,
+                durationSeconds = record.durationSeconds,
+                avgPaceSecPerKm = record.avgPaceSecPerKm,
+                caloriesBurned = record.caloriesBurned,
+                routePolyline = record.routePolyline,
+                hasAccuracyWarning = record.hasAccuracyWarning,
+            ),
+            route = record.routePolyline?.let { runCatching { decodePolyline(it) }.getOrNull() }.orEmpty(),
+            splits = emptyList(),
+            pace = emptyList(),
+        )
+        // The list carries no route; fetch it. No network: the summary stays, without the line.
+        if (record.routePolyline == null) {
+            viewModelScope.launch {
+                val route = try {
+                    gateway.pastRun(record.id).routePolyline?.let { decodePolyline(it) }
+                } catch (e: kotlin.coroutines.cancellation.CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    _message.value = "Couldn’t load this run’s map. Check your connection."
+                    null
+                }
+                val shown = _ui.value as? RunUi.Summary
+                if (route != null && shown != null && shown.run.id == record.id) _ui.value = shown.copy(route = route)
+            }
+        }
     }
 
     /** "Done" on the summary or "Too short": back to Ready for another run. */

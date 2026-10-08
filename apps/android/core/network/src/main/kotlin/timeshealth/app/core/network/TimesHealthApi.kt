@@ -262,6 +262,10 @@ interface TimesHealthApi {
     @GET("runs")
     suspend fun runHistory(): RunHistoryResponse
 
+    /** One past run WITH its route (the list leaves routes out). 404 for anyone but its owner. */
+    @GET("runs/{id}")
+    suspend fun run(@Path("id") runId: String): timeshealth.app.core.model.RunRecord
+
     // ── Diet, workshops, content (diet.ts, content.ts) ──────────────────────
 
     /**

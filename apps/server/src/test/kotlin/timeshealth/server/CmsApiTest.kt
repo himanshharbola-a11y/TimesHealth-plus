@@ -55,7 +55,7 @@ class CmsApiTest {
     companion object {
         @Container
         @JvmStatic
-        val postgres = PostgreSQLContainer("postgres:16")
+        val postgres = PostgreSQLContainer("postgres:16-alpine")
 
         @DynamicPropertySource
         @JvmStatic
@@ -377,6 +377,53 @@ class CmsApiTest {
             jsonPath("$.video") { doesNotExist() }
         }
         playback("nope", freshUserToken()).andExpect { status { isNotFound() } }
+    }
+
+    @Test
+    fun `a past run with its route goes to its owner only`() {
+        val owner = freshUserToken()
+        home(owner)
+        val ownerId = jdbc.sql("""SELECT "id" FROM "User" WHERE "firebaseUid" = :u""")
+            .param("u", owner.substringBefore('|')).query(String::class.java).single()
+        jdbc.sql(
+            """INSERT INTO "RunRecord" ("id","userId","startedAt","endedAt","distanceKm","durationSeconds","avgPaceSecPerKm","caloriesBurned","routePolyline","hasAccuracyWarning")
+               VALUES ('run_t1', :u, :a, :b, 5.02, 1800, 358, 320, '_p~iF~ps|U_ulLnnqC', false)""",
+        ).param("u", ownerId).param("a", LocalDateTime.ofInstant(NOW.minus(Duration.ofHours(2)), ZoneOffset.UTC))
+            .param("b", LocalDateTime.ofInstant(NOW.minus(Duration.ofHours(1)), ZoneOffset.UTC)).update()
+
+        mvc.get("/v1/runs/run_t1") { header("Authorization", "Bearer $owner") }.andExpect {
+            status { isOk() }
+            jsonPath("$.routePolyline") { value("_p~iF~ps|U_ulLnnqC") }
+            jsonPath("$.distanceKm") { value(5.02) }
+        }
+        mvc.get("/v1/runs/run_t1") { header("Authorization", "Bearer ${freshUserToken()}") }.andExpect { status { isNotFound() } }
+        mvc.get("/v1/runs/nope") { header("Authorization", "Bearer $owner") }.andExpect { status { isNotFound() } }
+    }
+
+    @Test
+    fun `a past run's route is given to its owner only`() {
+        val owner = freshUserToken()
+        home(owner)
+        val ownerId = jdbc.sql("""SELECT "id" FROM "User" WHERE "firebaseUid" = :u""")
+            .param("u", owner.substringBefore('|')).query(String::class.java).single()
+        jdbc.sql(
+            """INSERT INTO "RunRecord" ("id","userId","startedAt","endedAt","distanceKm","durationSeconds","avgPaceSecPerKm","caloriesBurned","routePolyline","hasAccuracyWarning")
+               VALUES (:id, :u, :s, :e, 5.02, 1800, 358, 320, '_p~iF~ps|U_ulLnnqC', false)""",
+        ).param("id", "run_" + UUID.randomUUID().toString().take(8)).param("u", ownerId)
+            .param("s", LocalDateTime.ofInstant(NOW.minus(Duration.ofHours(2)), ZoneOffset.UTC))
+            .param("e", LocalDateTime.ofInstant(NOW.minus(Duration.ofMinutes(90)), ZoneOffset.UTC))
+            .update()
+        val runId = jdbc.sql("""SELECT "id" FROM "RunRecord" WHERE "userId" = :u""").param("u", ownerId).query(String::class.java).single()
+
+        mvc.get("/v1/runs/$runId") { header("Authorization", "Bearer $owner") }.andExpect {
+            status { isOk() }
+            jsonPath("$.routePolyline") { value("_p~iF~ps|U_ulLnnqC") }
+            jsonPath("$.distanceKm") { value(5.02) }
+            jsonPath("$.synced") { value(true) }
+        }
+        // Someone else's run looks exactly like a missing one.
+        mvc.get("/v1/runs/$runId") { header("Authorization", "Bearer ${freshUserToken()}") }.andExpect { status { isNotFound() } }
+        mvc.get("/v1/runs/nope") { header("Authorization", "Bearer $owner") }.andExpect { status { isNotFound() } }
     }
 
     // ── Live classes ──────────────────────────────────────────────────────────

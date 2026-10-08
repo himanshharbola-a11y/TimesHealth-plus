@@ -22,6 +22,9 @@ class RunsRepository @Inject constructor(
     val history: CachedResource<RunHistoryResponse> =
         CachedResource(cache, CacheKeys.Runs, Duration.ZERO) { api.runHistory() }
 
+    /** One past run with its route, for the run map. Not cached: routes are large. */
+    suspend fun run(runId: String) = api.run(runId)
+
     /**
      * Uploads a recorded run. The client owns the id, so a retry is a no-op on the server: safe
      * for the run tracker's upload worker to repeat after a lost response. Throws on any failure,

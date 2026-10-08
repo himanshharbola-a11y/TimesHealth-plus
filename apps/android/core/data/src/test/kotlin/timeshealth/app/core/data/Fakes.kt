@@ -231,6 +231,7 @@ class FakeTimesHealthApi(private val log: EventLog = EventLog()) : TimesHealthAp
     override suspend fun simulatePayment(orderId: String) = record("simulatePayment $orderId") { onSimulatePayment(orderId) }
     override suspend fun uploadRun(body: UploadRunRequest) = record("uploadRun ${body.id}") { onUploadRun(body) }
     override suspend fun runHistory() = record("runHistory") { onRunHistory() }
+    override suspend fun run(runId: String): timeshealth.app.core.model.RunRecord = unexpected("run")
     override suspend fun submitDietLead(body: DietLeadRequest) = record("submitDietLead") { onSubmitDietLead(body) }
     override suspend fun workshops() = record("workshops") { onWorkshops() }
     override suspend fun setWorkshopRegistration(workshopId: String, body: SetRegisteredRequest) =
