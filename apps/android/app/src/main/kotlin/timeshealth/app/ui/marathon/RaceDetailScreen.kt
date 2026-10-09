@@ -1,5 +1,7 @@
 package timeshealth.app.ui.marathon
 
+import timeshealth.app.ui.theme.softShadow
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -270,7 +272,7 @@ private fun RaceDetailContent(
 
         // §8.3: Refer & Win, while the race is ahead.
         data.referral?.let { ref ->
-            if (reg != null && !completed) ReferAndWinCard(ref, event.name, Modifier.padding(top = 18.dp))
+            if (reg != null && !completed) ReferAndWinCard(ref, event.name, Modifier.padding(top = 18.dp), alreadyPremium = reg.tier == RaceTier.PREMIUM)
         }
 
         if (data.faqs.isNotEmpty()) {
@@ -306,7 +308,8 @@ private fun RegisterCard(event: MarathonEvent, initialDistance: String?, onCheck
         Text(event.name, color = PaperWhite, fontFamily = ThFonts.Serif, fontSize = 22.sp, lineHeight = 27.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp))
         Text("${event.city} · ${longDate(event.startsAt)} · ${event.venue}", color = Color.White.copy(alpha = 0.85f), fontSize = 12.5.sp, modifier = Modifier.padding(top = 4.dp))
     }
-    Column(Modifier.fillMaxWidth().padding(top = 12.dp).clip(ThShapes.Xl).background(PaperWhite).border(1.dp, BorderRule, ThShapes.Xl).padding(18.dp)) {
+    val premium = tier == RaceTier.PREMIUM
+    Column(Modifier.fillMaxWidth().padding(top = 12.dp).softShadow(ThShapes.Xl).clip(ThShapes.Xl).background(PaperWhite).padding(18.dp)) {
         Eyebrow("CHOOSE YOUR DISTANCE")
         FlowRow(Modifier.padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             options.forEach { o -> DistanceChip(o.code, o.code == code) { code = o.code } }
@@ -315,12 +318,31 @@ private fun RegisterCard(event: MarathonEvent, initialDistance: String?, onCheck
         Row(Modifier.padding(top = 8.dp).fillMaxWidth().clip(ThShapes.Md).background(SurfaceSand).padding(4.dp)) {
             listOf(RaceTier.CLASSIC, RaceTier.PREMIUM).forEach { t ->
                 val on = tier == t
-                Box(
-                    Modifier.weight(1f).clip(ThShapes.Sm).background(if (on) PaperWhite else Color.Transparent).clickable(role = Role.RadioButton) { tier = t }.padding(vertical = 9.dp),
-                    contentAlignment = Alignment.Center,
+                val vip = t == RaceTier.PREMIUM
+                Row(
+                    Modifier.weight(1f).clip(ThShapes.Sm)
+                        .then(if (on && vip) Modifier.background(PremiumCard) else Modifier.background(if (on) PaperWhite else Color.Transparent))
+                        .clickable(role = Role.RadioButton) { tier = t }.padding(vertical = 9.dp),
+                    horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(if (t == RaceTier.CLASSIC) "Classic" else "Premium VIP", color = if (on) CoralBrand else TextSecondary, fontSize = 13.sp, fontWeight = if (on) FontWeight.Bold else FontWeight.Medium)
+                    if (vip) Icon(Icons.Filled.WorkspacePremium, contentDescription = null, tint = if (on) PremiumGold else GoldAccent, modifier = Modifier.size(15.dp))
+                    Text(
+                        if (vip) "Premium VIP" else "Classic",
+                        color = when { on && vip -> PremiumGold; on -> CoralBrand; else -> TextSecondary },
+                        fontSize = 13.sp, fontWeight = if (on) FontWeight.Bold else FontWeight.Medium,
+                    )
                 }
+            }
+        }
+        // Premium shows what it adds, on the dark VIP card.
+        androidx.compose.animation.AnimatedVisibility(premium) {
+            Column(Modifier.padding(top = 12.dp).fillMaxWidth().clip(ThShapes.Md).background(PremiumCard).border(1.dp, PremiumGold.copy(alpha = 0.5f), ThShapes.Md).padding(14.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Filled.WorkspacePremium, contentDescription = null, tint = PremiumGold, modifier = Modifier.size(18.dp))
+                    Text("Premium VIP includes", color = PremiumGold, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold)
+                }
+                PremiumPerks(Modifier.padding(top = 10.dp))
             }
         }
         Row(Modifier.fillMaxWidth().padding(top = 16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -332,7 +354,7 @@ private fun RegisterCard(event: MarathonEvent, initialDistance: String?, onCheck
                 Text(if (tier == RaceTier.PREMIUM) "Premium VIP entry · race-morning perks" else "Classic Entry with chip & t-shirt", color = TextMuted, fontSize = 11.sp)
             }
             if (open && d != null) {
-                SolidButton("Register", CoralBrand, {
+                SolidButton(if (premium) "Go VIP" else "Register", if (premium) Color(0xFFB8862B) else CoralBrand, {
                     onCheckout(
                         CheckoutItem(
                             request = PurchaseRequest(

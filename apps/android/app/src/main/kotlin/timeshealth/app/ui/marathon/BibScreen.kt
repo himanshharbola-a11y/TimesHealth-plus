@@ -1,5 +1,8 @@
 package timeshealth.app.ui.marathon
 
+import timeshealth.app.ui.theme.softShadow
+import timeshealth.app.ui.theme.Carbon950
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -184,36 +187,56 @@ private fun Centered(text: String) {
 
 @Composable
 private fun Pass(pass: BibPass) {
+    val premium = pass.tier == RaceTier.PREMIUM
+    val ink = if (premium) PaperWhite else TextPrimary
+    val sub = if (premium) Color.White.copy(alpha = 0.72f) else TextMuted
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = ThLayout.Gutter, vertical = 8.dp).navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        TagPill("Official race pass · expo scan", TagTone.CORAL)
+        if (premium) TagPill("Premium VIP pass · expo scan", TagTone.GOLD) else TagPill("Official race pass · expo scan", TagTone.CORAL)
         Column(
-            Modifier.padding(top = 12.dp).fillMaxWidth().clip(ThShapes.Hero).background(PaperWhite).border(1.dp, BorderRule, ThShapes.Hero),
+            Modifier.padding(top = 12.dp).fillMaxWidth()
+                .softShadow(ThShapes.Hero, if (premium) 18.dp else 10.dp)
+                .clip(ThShapes.Hero)
+                .then(if (premium) Modifier.background(PremiumCard).border(1.dp, PremiumGold.copy(alpha = 0.55f), ThShapes.Hero) else Modifier.background(PaperWhite)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // Header strip: gold foil for Premium, carbon for Classic.
             Text(
-                "${pass.eventName.uppercase()} · ${pass.category}", color = PaperWhite, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.6.sp,
+                "${if (premium) "PREMIUM VIP · " else ""}${pass.eventName.uppercase()} · ${pass.category}",
+                color = if (premium) Carbon950 else PaperWhite, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 0.6.sp,
                 textAlign = TextAlign.Center, maxLines = 2,
-                modifier = Modifier.fillMaxWidth().background(Carbon900).padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth().then(if (premium) Modifier.background(PremiumFoil) else Modifier.background(Carbon900))
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
             )
-            Text(pass.bibNumber, color = TextPrimary, fontFamily = ThFonts.Serif, fontSize = 56.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.padding(top = 14.dp))
-            Text(pass.participantName.ifBlank { "Registered runner" }, color = TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            if (premium) {
+                Row(Modifier.padding(top = 14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Filled.WorkspacePremium, contentDescription = null, tint = PremiumGold, modifier = Modifier.size(18.dp))
+                    Text("VIP RUNNER", color = PremiumGold, fontSize = 12.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = 1.5.sp)
+                }
+            }
             Text(
-                "${if (pass.tier == RaceTier.PREMIUM) "Premium VIP" else "Classic"} Runner${pass.flagOffTime?.let { " · $it" } ?: ""}",
-                color = TextMuted, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp),
+                pass.bibNumber, color = if (premium) PremiumGold else TextPrimary, fontFamily = ThFonts.Serif, fontSize = 56.sp, fontWeight = FontWeight.Bold,
+                maxLines = 1, modifier = Modifier.padding(top = if (premium) 4.dp else 14.dp),
             )
-            Box(Modifier.padding(16.dp).clip(ThShapes.Md).border(1.dp, BorderRule, ThShapes.Md).padding(10.dp)) {
+            Text(pass.participantName.ifBlank { "Registered runner" }, color = ink, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "${if (premium) "Premium VIP" else "Classic"} Runner${pass.flagOffTime?.let { " · $it" } ?: ""}",
+                color = sub, fontSize = 12.sp, modifier = Modifier.padding(top = 2.dp),
+            )
+            // The QR always sits on white: scanners need the contrast.
+            Box(Modifier.padding(16.dp).clip(ThShapes.Md).background(PaperWhite).border(if (premium) 2.dp else 1.dp, if (premium) PremiumGold else BorderRule, ThShapes.Md).padding(10.dp)) {
                 QrCode(pass.qrValue, Modifier.size(180.dp))
             }
+            if (premium) PremiumPerks(Modifier.padding(horizontal = 16.dp).padding(bottom = 10.dp))
             if (pass.offline) {
-                Text("Offline pass · valid at the gate without signal", color = CoralBrand, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text("Offline pass · valid at the gate without signal", color = if (premium) PremiumGold else CoralBrand, fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
             Text(
                 pass.expo?.instructions?.takeIf { it.isNotBlank() } ?: "Show this QR code at the expo bib counter to collect your race timing chip, bib, and t-shirt.",
-                color = TextSecondary, fontSize = 12.sp, lineHeight = 17.sp, textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 10.dp).fillMaxWidth().background(SurfaceSand).padding(14.dp),
+                color = if (premium) Color.White.copy(alpha = 0.8f) else TextSecondary, fontSize = 12.sp, lineHeight = 17.sp, textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 10.dp).fillMaxWidth().background(if (premium) Color.White.copy(alpha = 0.06f) else SurfaceSand).padding(14.dp),
             )
         }
         pass.expo?.let { expo ->

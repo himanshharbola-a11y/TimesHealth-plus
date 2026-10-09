@@ -134,7 +134,7 @@ private fun Races(ui: RacesUi, openRoute: (Route) -> Unit) {
         }
         ui.referral?.let { ref ->
             item(key = "refer") {
-                ReferAndWinCard(ref, ui.myNext?.name.orEmpty(), Modifier.padding(horizontal = ThLayout.Gutter, vertical = 8.dp))
+                ReferAndWinCard(ref, ui.myNext?.name.orEmpty(), Modifier.padding(horizontal = ThLayout.Gutter, vertical = 8.dp), alreadyPremium = ui.myNext?.registration?.tier == RaceTier.PREMIUM)
             }
         }
         if (ui.past.isNotEmpty()) {
@@ -348,7 +348,7 @@ private fun RaceRow(event: MarathonEvent, onOpen: () -> Unit, onAction: () -> Un
 
 /** §8.3: share your code; 5 friends registering earns a guaranteed Premium upgrade, each one a lucky-draw entry. */
 @Composable
-internal fun ReferAndWinCard(referral: ReferralState, eventName: String, modifier: Modifier = Modifier) {
+internal fun ReferAndWinCard(referral: ReferralState, eventName: String, modifier: Modifier = Modifier, alreadyPremium: Boolean = false) {
     val context = LocalContext.current
     val count = referral.confirmedReferrals.coerceAtMost(5)
     Column(modifier.fillMaxWidth().clip(ThShapes.Xl).background(PlumTint).padding(18.dp)) {
@@ -359,6 +359,8 @@ internal fun ReferAndWinCard(referral: ReferralState, eventName: String, modifie
         Text(
             when {
                 referral.upgradeClaimed -> "Your free Premium upgrade has been claimed. Every friend still earns you a lucky-draw entry."
+                // Already VIP: the upgrade can't be the reward, so don't promise it.
+                alreadyPremium -> "You’re already Premium VIP. Every friend who registers with your code still earns you a lucky-draw entry."
                 referral.guaranteedUpgradeUnlocked -> "5 friends registered — your free Premium upgrade is ready to claim on the race page."
                 else -> "Get 5 friends to register for $eventName with your code and your entry becomes Premium VIP, free."
             },
