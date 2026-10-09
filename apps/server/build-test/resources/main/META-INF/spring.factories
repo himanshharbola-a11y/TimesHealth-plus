@@ -1,3 +1,0 @@
-org.springframework.boot.env.EnvironmentPostProcessor=\
-timeshealth.server.config.NodeEnvProfilePostProcessor,\
-timeshealth.server.config.DatabaseUrlPostProcessor

@@ -1,7 +1,0 @@
-# NODE_ENV=test. Used by the test suite (src/test), which also supplies the database through
-# Testcontainers. Quiet logs; a failing test prints what it needs.
-logging:
-  level:
-    root: WARN
-    timeshealth.server: INFO
-    timeshealth.server.web.RequestLogFilter: WARN

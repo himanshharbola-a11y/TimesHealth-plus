@@ -1,5 +1,0 @@
-# Any NODE_ENV other than development/test (fail closed, like env.ts). ServerEnv refuses to boot
-# without a Firebase service account and real signing secrets, and refuses ALLOW_DEV_TOKENS.
-logging:
-  level:
-    timeshealth.server: INFO

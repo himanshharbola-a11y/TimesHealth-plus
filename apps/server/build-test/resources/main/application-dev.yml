@@ -1,4 +1,0 @@
-# NODE_ENV=development (or unset). Local work against the docker-compose database.
-logging:
-  level:
-    timeshealth.server: DEBUG
