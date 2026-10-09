@@ -175,6 +175,12 @@ class ContentRepository(private val jdbc: JdbcClient, private val cache: Content
         }.list()
     }
 
+    /** Dashboard switch: re-rank Home per user. On unless an admin turned it off. */
+    fun personalizeHome(): Boolean = cache.get("config:personalizeHome") {
+        jdbc.sql("""SELECT "personalizeHome" FROM "AppConfig" ORDER BY "id" LIMIT 1""")
+            .query(Boolean::class.java).optional().orElse(true)
+    }
+
     fun categories(): List<CategoryRow> = cache.get("categories") {
         jdbc.sql("""SELECT "id", "name", "sortOrder" FROM "YogaCategory" WHERE "visible" ORDER BY "sortOrder", "id"""")
             .query { rs, _ -> CategoryRow(rs.getString("id"), rs.getString("name"), rs.getInt("sortOrder")) }

@@ -646,6 +646,8 @@ model AppConfig {
   minSupportedAppVersion String   @default("1.0.0")
   maintenanceActive      Boolean  @default(false)
   maintenanceMessage     String?
+  /// Home sections re-ranked per user (Kotlin server, core:domain Personalization.kt).
+  personalizeHome        Boolean  @default(true)
   updatedAt              DateTime @updatedAt
 }
 

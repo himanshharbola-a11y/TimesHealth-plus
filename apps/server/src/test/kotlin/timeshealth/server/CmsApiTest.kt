@@ -293,6 +293,25 @@ class CmsApiTest {
     }
 
     @Test
+    fun `home is personalised per user, and an admin can switch it off`() {
+        val member = memberToken()
+        // A yoga member: their live classes come before the free-sample rail (admin order has free first).
+        val personal = componentIds(home(member))
+        assertThat(personal).first().isEqualTo("sec_home_hero")
+        assertThat(personal.indexOf("sec_home_live")).isLessThan(personal.indexOf("sec_home_free"))
+        // A newcomer keeps the free samples early.
+        val newcomer = componentIds(home(freshUserToken()))
+        assertThat(newcomer.indexOf("sec_home_free")).isLessThan(newcomer.indexOf("sec_home_live"))
+
+        // Switched off in the dashboard: everyone gets the admin's exact order.
+        jdbc.sql("""INSERT INTO "AppConfig" ("id","updatedAt") VALUES (1, now()) ON CONFLICT DO NOTHING""").update()
+        adminPatch("/r/app-config/1", """{"personalizeHome":false}""").andExpect { status { isOk() } }
+        val exact = componentIds(home(member))
+        assertThat(exact.indexOf("sec_home_free")).isLessThan(exact.indexOf("sec_home_live"))
+        adminPatch("/r/app-config/1", """{"personalizeHome":true}""").andExpect { status { isOk() } }
+    }
+
+    @Test
     fun `a scheduled section shows only inside its window, and audiences are respected`() {
         val section = json(
             adminPost(

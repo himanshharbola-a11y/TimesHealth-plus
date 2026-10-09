@@ -80,6 +80,7 @@ class YogaViewModelTest {
         }
         override fun nowMs() = nowMs
         override suspend fun workshops(refresh: Boolean) = emptyList<timeshealth.app.core.model.LiveWorkshop>()
+        override suspend fun mySessions(refresh: Boolean) = timeshealth.app.core.model.MySessionsResponse()
 
         private fun answer(a: Any): Any = if (a is Throwable) throw a else a
     }

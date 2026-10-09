@@ -37,6 +37,7 @@ class ParticipantEditTest {
             error?.let { throw it }
             updates += request
         }
+        override suspend fun signals() = timeshealth.app.core.domain.UserSignals()
         override fun nowMs() = 0L
     }
 

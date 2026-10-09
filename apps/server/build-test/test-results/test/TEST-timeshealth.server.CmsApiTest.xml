@@ -1,102 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="timeshealth.server.CmsApiTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-10-08T12:51:26.911Z" hostname="HIMANSH" time="21.447">
+<testsuite name="timeshealth.server.CmsApiTest" tests="22" skipped="0" failures="0" errors="0" timestamp="2026-10-09T08:26:04.262Z" hostname="HIMANSH" time="21.453">
   <properties/>
-  <testcase name="live class states follow the clock and the stream is only given on join()" classname="timeshealth.server.CmsApiTest" time="4.33"/>
-  <testcase name="deleting content that is still used is refused clearly()" classname="timeshealth.server.CmsApiTest" time="0.653"/>
-  <testcase name="schedule a week of classes for a batch, safely re-runnable()" classname="timeshealth.server.CmsApiTest" time="0.744"/>
-  <testcase name="admin API is never offered to other origins()" classname="timeshealth.server.CmsApiTest" time="0.602"/>
-  <testcase name="playback hands the dashboard video or a signed URL, members only for paid sessions()" classname="timeshealth.server.CmsApiTest" time="1.228"/>
-  <testcase name="members-only classes need the membership, and a member join counts attendance()" classname="timeshealth.server.CmsApiTest" time="0.845"/>
-  <testcase name="validation reports every field problem at once()" classname="timeshealth.server.CmsApiTest" time="0.609"/>
-  <testcase name="hand-picked rail shows exactly the chosen videos in order()" classname="timeshealth.server.CmsApiTest" time="0.792"/>
-  <testcase name="the live classes rail appears on Home once classes are scheduled()" classname="timeshealth.server.CmsApiTest" time="0.728"/>
-  <testcase name="writes need the dashboard header()" classname="timeshealth.server.CmsApiTest" time="0.634"/>
-  <testcase name="create, edit and delete a testimonial, with an audit trail()" classname="timeshealth.server.CmsApiTest" time="0.89"/>
-  <testcase name="viewers are read-only()" classname="timeshealth.server.CmsApiTest" time="1.81"/>
-  <testcase name="routes not ported yet are 404 when no Node upstream is configured()" classname="timeshealth.server.CmsApiTest" time="0.602"/>
-  <testcase name="a past run's route is given to its owner only()" classname="timeshealth.server.CmsApiTest" time="0.786"/>
-  <testcase name="too early and cancelled classes can't be joined()" classname="timeshealth.server.CmsApiTest" time="0.804"/>
-  <testcase name="home follows the admin's sections, order and visibility()" classname="timeshealth.server.CmsApiTest" time="0.934"/>
-  <testcase name="wrong password is refused and a forged cookie is ignored()" classname="timeshealth.server.CmsApiTest" time="1.166"/>
-  <testcase name="dashboard API needs a session()" classname="timeshealth.server.CmsApiTest" time="0.621"/>
-  <testcase name="a past run with its route goes to its owner only()" classname="timeshealth.server.CmsApiTest" time="0.775"/>
-  <testcase name="a scheduled section shows only inside its window, and audiences are respected()" classname="timeshealth.server.CmsApiTest" time="1.049"/>
-  <testcase name="a session's dashboard video is offered only to those who may play it()" classname="timeshealth.server.CmsApiTest" time="0.807"/>
-  <system-out><![CDATA[12:50:43.682 [Test worker] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
-12:50:43.703 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
-12:50:43.740 [Test worker] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
-12:50:44.455 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
-12:50:45.606 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
-12:50:45.610 [Test worker] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
-12:50:45.779 [Test worker] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  <testcase name="live class states follow the clock and the stream is only given on join()" classname="timeshealth.server.CmsApiTest" time="5.144"/>
+  <testcase name="deleting content that is still used is refused clearly()" classname="timeshealth.server.CmsApiTest" time="0.644"/>
+  <testcase name="schedule a week of classes for a batch, safely re-runnable()" classname="timeshealth.server.CmsApiTest" time="0.715"/>
+  <testcase name="admin API is never offered to other origins()" classname="timeshealth.server.CmsApiTest" time="0.669"/>
+  <testcase name="home is personalised per user, and an admin can switch it off()" classname="timeshealth.server.CmsApiTest" time="1.297"/>
+  <testcase name="playback hands the dashboard video or a signed URL, members only for paid sessions()" classname="timeshealth.server.CmsApiTest" time="0.864"/>
+  <testcase name="members-only classes need the membership, and a member join counts attendance()" classname="timeshealth.server.CmsApiTest" time="0.717"/>
+  <testcase name="validation reports every field problem at once()" classname="timeshealth.server.CmsApiTest" time="0.535"/>
+  <testcase name="hand-picked rail shows exactly the chosen videos in order()" classname="timeshealth.server.CmsApiTest" time="0.712"/>
+  <testcase name="the live classes rail appears on Home once classes are scheduled()" classname="timeshealth.server.CmsApiTest" time="0.634"/>
+  <testcase name="writes need the dashboard header()" classname="timeshealth.server.CmsApiTest" time="0.513"/>
+  <testcase name="create, edit and delete a testimonial, with an audit trail()" classname="timeshealth.server.CmsApiTest" time="0.727"/>
+  <testcase name="viewers are read-only()" classname="timeshealth.server.CmsApiTest" time="1.583"/>
+  <testcase name="routes not ported yet are 404 when no Node upstream is configured()" classname="timeshealth.server.CmsApiTest" time="0.528"/>
+  <testcase name="a past run's route is given to its owner only()" classname="timeshealth.server.CmsApiTest" time="0.701"/>
+  <testcase name="too early and cancelled classes can't be joined()" classname="timeshealth.server.CmsApiTest" time="0.718"/>
+  <testcase name="home follows the admin's sections, order and visibility()" classname="timeshealth.server.CmsApiTest" time="0.822"/>
+  <testcase name="wrong password is refused and a forged cookie is ignored()" classname="timeshealth.server.CmsApiTest" time="1.028"/>
+  <testcase name="dashboard API needs a session()" classname="timeshealth.server.CmsApiTest" time="0.526"/>
+  <testcase name="a past run with its route goes to its owner only()" classname="timeshealth.server.CmsApiTest" time="0.711"/>
+  <testcase name="a scheduled section shows only inside its window, and audiences are respected()" classname="timeshealth.server.CmsApiTest" time="0.977"/>
+  <testcase name="a session's dashboard video is offered only to those who may play it()" classname="timeshealth.server.CmsApiTest" time="0.652"/>
+  <system-out><![CDATA[08:25:39.761 [Test worker] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+08:25:39.773 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+08:25:39.795 [Test worker] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
+08:25:40.195 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+08:25:40.777 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+08:25:40.780 [Test worker] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+08:25:40.815 [Test worker] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
   Server Version: 29.4.3
   API Version: 1.54
   Operating System: Docker Desktop
   Total Memory: 7607 MB
   Labels: 
     com.docker.desktop.address=npipe://\\.\pipe\docker_cli
-12:50:46.501 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
-12:50:47.024 [Test worker] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
-12:50:48.232 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: 0131aa3be225e77bc0795d870efeee69dc54be141cecf465083a01bdd9f6c19d
-12:50:49.888 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT3.3871399S
-12:50:49.909 [Test worker] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
-12:50:49.910 [Test worker] INFO org.testcontainers.DockerClientFactory -- Checking the system...
-12:50:49.911 [Test worker] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
-12:50:49.913 [Test worker] INFO tc.postgres:16-alpine -- Creating container for image: postgres:16-alpine
-12:50:50.255 [Test worker] INFO tc.postgres:16-alpine -- Container postgres:16-alpine is starting: f30d7d0d9c42e9389d38ab4916ff01bf61bac12200018874c03a3a635857026c
-12:50:57.406 [Test worker] INFO tc.postgres:16-alpine -- Container postgres:16-alpine started in PT7.492523S
-12:50:57.410 [Test worker] INFO tc.postgres:16-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:53724/test?loggerLevel=OFF)
-12:50:57.862 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [timeshealth.server.CmsApiTest]: CmsApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-12:50:58.376 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration timeshealth.server.Application for test class timeshealth.server.CmsApiTest
-12:51:02.046  INFO [] timeshealth.server.CmsApiTest            : Starting CmsApiTest using Java 17.0.20.1 with PID 19640 (started by himan in C:\Users\himan\Desktop\Health App\apps\server)
-12:51:02.061  INFO [] timeshealth.server.CmsApiTest            : The following 1 profile is active: "test"
-12:51:09.952  WARN [] o.f.c.i.s.DefaultSqlScriptExecutor       : DB: schema "public" already exists, skipping (SQL State: 42P06 - Error Code: 0)
-12:51:13.777  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.565  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.567  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.568  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.572  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.573  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.573  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.573  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.574  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.575  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.575  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.591  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.596  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.598  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.599  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.600  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.602  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.604  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.606  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.616  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.616  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.620  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.628  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.629  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.632  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.636  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.637  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.638  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.641  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.642  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.643  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.644  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.644  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.645  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.646  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.647  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.650  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.651  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.651  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.651  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:14.717  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
-12:51:26.197  INFO [] timeshealth.server.CmsApiTest            : Started CmsApiTest in 27.117 seconds (process running for 51.385)
-12:51:26.872  INFO [] t.server.admin.AdminBootstrap            : admin bootstrap: created the first dashboard owner
-12:51:26.875  WARN [] t.server.identity.IdentityStartup        : DEV AUTH MODE — Firebase is not configured. Persona tokens ("uid|email|phone") are accepted unverified. Never expose this server to real users.
+08:25:41.054 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
+08:25:41.237 [Test worker] INFO org.testcontainers.utility.RegistryAuthLocator -- Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+08:25:41.516 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: dfe4c2c1e2bd79cbab85e8e8af430c97fab7237418f63b6cdb9a34be2d765275
+08:25:42.246 [Test worker] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT1.191639S
+08:25:42.257 [Test worker] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+08:25:42.257 [Test worker] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+08:25:42.258 [Test worker] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+08:25:42.259 [Test worker] INFO tc.postgres:16-alpine -- Creating container for image: postgres:16-alpine
+08:25:42.442 [Test worker] INFO tc.postgres:16-alpine -- Container postgres:16-alpine is starting: 950d7423964ef127e4116af61d4035d0aa701a266d2b2fdb7a997a6eaeea4fc1
+08:25:46.385 [Test worker] INFO tc.postgres:16-alpine -- Container postgres:16-alpine started in PT4.1261347S
+08:25:46.386 [Test worker] INFO tc.postgres:16-alpine -- Container is started (JDBC URL: jdbc:postgresql://localhost:62323/test?loggerLevel=OFF)
+08:25:46.561 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [timeshealth.server.CmsApiTest]: CmsApiTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+08:25:46.873 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration timeshealth.server.Application for test class timeshealth.server.CmsApiTest
+08:25:48.702  INFO [] timeshealth.server.CmsApiTest            : Starting CmsApiTest using Java 17.0.20.1 with PID 15396 (started by himan in C:\Users\himan\Desktop\Health App\apps\server)
+08:25:48.711  INFO [] timeshealth.server.CmsApiTest            : The following 1 profile is active: "test"
+08:25:52.694  WARN [] o.f.c.i.s.DefaultSqlScriptExecutor       : DB: schema "public" already exists, skipping (SQL State: 42P06 - Error Code: 0)
+08:25:55.019  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.456  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.457  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.458  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.460  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.461  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.461  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.461  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.462  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.463  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.463  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.473  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.476  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.477  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.478  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.478  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.479  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.479  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.480  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.481  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.481  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.482  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.484  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.485  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.486  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.487  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.487  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.488  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.488  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.489  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.489  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.490  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.490  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.491  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.492  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.492  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.494  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.494  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.494  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.495  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:25:55.531  WARN [] org.hibernate.orm.incubating             : HHH90006001: Encountered incubating setting [hibernate.type.preferred_instant_jdbc_type].  See javadoc on corresponding `org.hibernate.cfg.AvailableSettings` constant for details.
+08:26:03.521  INFO [] timeshealth.server.CmsApiTest            : Started CmsApiTest in 16.337 seconds (process running for 25.712)
+08:26:04.235  INFO [] t.server.admin.AdminBootstrap            : admin bootstrap: created the first dashboard owner
+08:26:04.237  WARN [] t.server.identity.IdentityStartup        : DEV AUTH MODE — Firebase is not configured. Persona tokens ("uid|email|phone") are accepted unverified. Never expose this server to real users.
 ]]></system-out>
-  <system-err><![CDATA[12:51:01,167 |-WARN in ch.qos.logback.core.joran.action.ConversionRuleAction - [converterClass] attribute is deprecated and replaced by [class]. See element [conversionRule] near line 10
-12:51:01,169 |-WARN in ch.qos.logback.core.joran.action.ConversionRuleAction - [converterClass] attribute is deprecated and replaced by [class]. See element [conversionRule] near line 11
+  <system-err><![CDATA[08:25:48,318 |-WARN in ch.qos.logback.core.joran.action.ConversionRuleAction - [converterClass] attribute is deprecated and replaced by [class]. See element [conversionRule] near line 10
+08:25:48,321 |-WARN in ch.qos.logback.core.joran.action.ConversionRuleAction - [converterClass] attribute is deprecated and replaced by [class]. See element [conversionRule] near line 11
 ]]></system-err>
 </testsuite>

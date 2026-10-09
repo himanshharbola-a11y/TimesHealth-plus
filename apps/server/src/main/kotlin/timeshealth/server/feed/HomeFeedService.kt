@@ -5,7 +5,10 @@ import java.time.Instant
 import kotlinx.serialization.json.decodeFromJsonElement
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import timeshealth.app.core.domain.UserSignals
 import timeshealth.app.core.domain.greetingFor
+import timeshealth.app.core.domain.personalRail
+import timeshealth.app.core.domain.personaliseOrder
 import timeshealth.app.core.model.ArticleRailComponent
 import timeshealth.app.core.model.Article
 import timeshealth.app.core.model.EntryTileComponent
@@ -61,6 +64,7 @@ class HomeFeedService(
     private val attendance: AttendanceService,
     private val workshops: Workshops,
     private val media: MediaSigning,
+    private val signalsRepo: UserSignalsRepository,
     private val clock: Clock,
 ) {
     private val log = LoggerFactory.getLogger(HomeFeedService::class.java)
@@ -70,6 +74,9 @@ class HomeFeedService(
         val ctx = Context(user, entitlements.resolve(user.id, now), now)
         val sections = content.sections(SectionPage.HOME.name).ifEmpty { DEFAULT_LAYOUT }
             .filter { it.isShowingAt(now) && audienceMatches(it, ctx.entitled) }
+            // The admin's order, fine-tuned per person (core:domain Personalization.kt):
+            // the hero stays first and nothing moves more than a few places.
+            .let { visible -> if (content.personalizeHome()) personaliseOrder(visible, { it.kind }, ctx.signals) else visible }
 
         val components = sections.mapNotNull { section ->
             try {
@@ -94,6 +101,17 @@ class HomeFeedService(
     private inner class Context(val user: UserEntity, val resolved: ResolvedEntitlements, val now: Instant) {
         val entitled: Boolean get() = resolved.persona.hasYoga
 
+        /** What personalisation knows about this user; read once per request. */
+        val signals: UserSignals by lazy {
+            try {
+                signalsRepo.load(user.id, user.healthGoal, user.concern, resolved, now)
+            } catch (e: Exception) {
+                // Never let personalisation take Home down: fall back to the onboarding answers.
+                log.warn("signals unavailable user={} cause={}", user.id, e.toString())
+                UserSignals(goal = user.healthGoal, concern = user.concern, isYogaMember = resolved.persona.hasYoga)
+            }
+        }
+
         val hero: List<HeroSlot> by lazy {
             val ent = resolved.entitlements
             // The renew prompt quotes the real best streak, not a count of classes.
@@ -111,11 +129,12 @@ class HomeFeedService(
             SectionKind.HERO -> HeroStackComponent(id = s.id, slots = ctx.hero)
 
             SectionKind.PERSONALISED_RAIL -> {
-                val rail = resolveConcernRail(ctx.user.concern, ctx.user.healthGoal)
                 val categories = content.categories()
+                val rail = personalRail(ctx.signals, categories.associate { it.id to it.name })
                 val primary = categories.firstOrNull { it.id == rail.categoryId } ?: categories.firstOrNull()
                 primary?.let {
-                    videoRail(s, rail.heading, content.sessionsInCategory(it.id, s.maxItems), ctx, it.id, s.actionLabel ?: "See all")
+                    val heading = if (it.id == rail.categoryId) rail.heading else s.title
+                    videoRail(s, heading, content.sessionsInCategory(it.id, s.maxItems), ctx, it.id, s.actionLabel ?: "See all")
                 }
             }
 
@@ -269,34 +288,7 @@ class HomeFeedService(
         SectionAudience.NON_MEMBERS -> !entitled
     }
 
-    data class ConcernRail(val categoryId: String, val heading: String)
-
     companion object {
-        /**
-         * Concern → rail heading and category. Headings are the design's copy (HomeScreen.kt);
-         * every onboarding concern maps explicitly (the prototype's substring match silently
-         * sent 4 of 6 to the default).
-         */
-        private val CONCERN_RAIL = mapOf(
-            "LOWER_BACK" to ConcernRail("cat_spine", "Sessions for lower back relief"),
-            "NECK_SHOULDERS" to ConcernRail("cat_desk", "Sessions for neck & shoulder release"),
-            "KNEES_JOINTS" to ConcernRail("cat_flex", "Sessions for knee & joint stability"),
-            "HIPS_PELVIS" to ConcernRail("cat_flex", "Sessions for hip & pelvic release"),
-            "SLEEP_ENERGY" to ConcernRail("cat_sleep", "Sessions for deep evening sleep"),
-        )
-
-        /** With no specific concern, the onboarding goal picks the rail. */
-        private val GOAL_RAIL = mapOf(
-            "STRESS_ANXIETY" to ConcernRail("cat_sleep", "Sessions for calm & stress release"),
-            "WEIGHT_LOSS" to ConcernRail("cat_core", "Sessions for weight loss & agility"),
-            "STRENGTH_FLEXIBILITY" to ConcernRail("cat_flex", "Sessions for weight loss & agility"),
-            "MARATHON_TRAINING" to ConcernRail("cat_flex", "Sessions for knee & joint stability"),
-        )
-
-        private val DEFAULT_RAIL = ConcernRail("cat_morning", "Sessions for weight loss & agility")
-
-        fun resolveConcernRail(concern: String?, goal: String?): ConcernRail =
-            concern?.let(CONCERN_RAIL::get) ?: goal?.let(GOAL_RAIL::get) ?: DEFAULT_RAIL
 
         private fun section(id: String, kind: SectionKind, title: String, sort: Int, max: Int = 10, action: String? = null) =
             SectionRow(id, "HOME", kind.name, title, null, action, null, null, max, sort, true, "ALL", null, null)

@@ -1,5 +1,8 @@
 package timeshealth.app.ui.marathon
 
+import timeshealth.app.core.domain.suggestDistance
+import timeshealth.app.core.domain.UserSignals
+import timeshealth.app.core.domain.DistanceSuggestion
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,7 +42,17 @@ data class RacesUi(
     val referral: ReferralState? = null,
     /** The race a free Refer & Win upgrade would apply to: an upcoming CLASSIC entry. */
     val claimTargetId: String? = null,
+    /** The distance their running and goal point to, among the open races' distances. */
+    val suggestion: DistanceSuggestion? = null,
 )
+
+/** The suggested distance across the races they could still enter. */
+internal fun suggestionFor(ui: RacesUi, signals: UserSignals?): DistanceSuggestion? {
+    if (signals == null) return null
+    val open = listOfNotNull(ui.hero) + ui.rest
+    val codes = open.filter { it.registrationOpen }.flatMap { e -> e.distanceOptions.map { it.code } }.distinct()
+    return suggestDistance(codes, signals)
+}
 
 /**
  * Splits the server's list (already ordered nearest/date first) into the tab's
@@ -80,9 +93,20 @@ class MarathonViewModel @Inject constructor(private val gateway: MarathonGateway
     )
 
     private val referral = MutableStateFlow<ReferralState?>(null)
+    private val signals = MutableStateFlow<UserSignals?>(null)
 
-    val state: StateFlow<UiState<RacesUi>> = combine(events.state, referral) { list, ref -> list.toUi(ref) }
+    val state: StateFlow<UiState<RacesUi>> = combine(events.state, referral, signals) { list, ref, sig ->
+        when (val ui = list.toUi(ref)) {
+            is UiState.Ready -> UiState.Ready(ui.data.copy(suggestion = suggestionFor(ui.data, sig)), ui.refreshing, ui.refreshError)
+            else -> ui
+        }
+    }
         .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
+
+    init {
+        // Optional: without it the tab simply shows no suggestion.
+        viewModelScope.launch { signals.value = runCatching { gateway.signals() }.getOrNull() }
+    }
 
     fun retry() = events.retry()
 

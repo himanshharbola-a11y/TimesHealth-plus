@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -232,7 +233,8 @@ private fun LazyListScope.memberItems(
         }
     }
     liveClassesRail(ui, onTarget, title = "Live classes this week")
-    ui.catalog?.categories?.takeIf { it.isNotEmpty() }?.let { categories ->
+    forYouRail(ui, openRoute)
+    ui.tracks.ifEmpty { ui.catalog?.categories.orEmpty() }.takeIf { it.isNotEmpty() }?.let { categories ->
         item(key = "tracks-title") { SectionHeader("Programme tracks", actionText = "Library", onAction = { openRoute(Route.YogaExplorer()) }) }
         item(key = "tracks") {
             LazyRow(contentPadding = PaddingValues(horizontal = ThLayout.Gutter), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -264,6 +266,25 @@ private fun LazyListScope.memberItems(
         item(key = "rec-title") { SectionHeader("Past session recordings", actionText = "Library", onAction = { openRoute(Route.YogaExplorer()) }) }
         items(sessions.take(12), key = { "rec-${it.id}" }) { s ->
             RecordingRow(s, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 4.dp)) { openRoute(Route.SessionDetail(s.id)) }
+        }
+    }
+}
+
+/** "Recommended for you": personal picks, each card saying why it was picked. */
+private fun LazyListScope.forYouRail(ui: YogaUi, openRoute: (Route) -> Unit) {
+    if (ui.forYou.isEmpty()) return
+    item(key = "foryou-title") { SectionHeader("Recommended for you", actionText = "Library", onAction = { openRoute(Route.YogaExplorer()) }) }
+    item(key = "foryou") {
+        LazyRow(contentPadding = PaddingValues(horizontal = ThLayout.Gutter), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            items(ui.forYou, key = { "fy-${it.session.id}" }) { rec ->
+                Column(Modifier.width(200.dp)) {
+                    VideoCard(rec.session, locked = !rec.session.isFree && !ui.member, onClick = { openRoute(Route.SessionDetail(rec.session.id)) })
+                    Row(Modifier.padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = CoralBrand, modifier = Modifier.size(12.dp))
+                        Text(rec.reason, color = CoralBrand, fontSize = 11.sp, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+            }
         }
     }
 }
@@ -527,6 +548,12 @@ private fun LazyListScope.freeItems(ui: YogaUi, openRoute: (Route) -> Unit, onTa
                 if (ui.expired) "Welcome back to your practice" else "Eight live classes,\nevery single day",
                 color = TextPrimary, fontFamily = ThFonts.Serif, fontSize = 28.sp, lineHeight = 33.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 10.dp),
             )
+            ui.focusLine?.let {
+                Row(Modifier.padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Filled.AutoAwesome, contentDescription = null, tint = CoralBrand, modifier = Modifier.size(14.dp))
+                    Text("Personalised: ${it.replaceFirstChar { c -> c.lowercase() }}", color = CoralBrand, fontSize = 12.5.sp, fontWeight = FontWeight.Bold)
+                }
+            }
             Text(
                 "A full morning and evening schedule taught by master instructors from The Yoga Institute. Join any batch on any day.",
                 color = TextSecondary, fontSize = 13.sp, lineHeight = 19.sp, modifier = Modifier.padding(top = 6.dp),
@@ -538,6 +565,7 @@ private fun LazyListScope.freeItems(ui: YogaUi, openRoute: (Route) -> Unit, onTa
             ) { Text(if (ui.expired) "Renew Yoga Membership" else "Subscribe — Explore Membership", color = PaperWhite, fontWeight = FontWeight.Bold) }
         }
     }
+    forYouRail(ui, openRoute)
     liveClassesRail(ui, onTarget, title = "Free live classes", freeOnly = true)
     ui.catalog?.sessions?.filter { it.isFree }?.takeIf { it.isNotEmpty() }?.let { free ->
         item(key = "free-title") { SectionHeader("Watch sample sessions (Free)") }

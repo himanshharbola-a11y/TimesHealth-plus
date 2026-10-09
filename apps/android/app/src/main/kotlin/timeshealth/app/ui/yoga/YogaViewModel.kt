@@ -16,6 +16,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timeshealth.app.core.data.repository.WorkshopsRepository
 import timeshealth.app.core.data.repository.YogaRepository
+import timeshealth.app.core.domain.SessionFacts
+import timeshealth.app.core.domain.UserSignals
+import timeshealth.app.core.domain.personalRail
+import timeshealth.app.core.domain.rankCategories
+import timeshealth.app.core.domain.recommendSessions
+import timeshealth.app.core.model.MySessionsResponse
+import timeshealth.app.core.model.UserProfile
+import timeshealth.app.core.model.YogaCategory
+import timeshealth.app.core.model.YogaSession
 import timeshealth.app.core.model.LiveWorkshop
 import timeshealth.app.core.domain.istDate
 import timeshealth.app.core.domain.parseIsoInstant
@@ -44,6 +53,8 @@ interface YogaGateway {
     suspend fun join(batchId: String): JoinSessionResponse
     suspend fun setReminderSlot(batchId: String)
     suspend fun workshops(refresh: Boolean = false): List<LiveWorkshop>
+    /** Saved and completed recordings: personalisation reads what they practise. */
+    suspend fun mySessions(refresh: Boolean = false): MySessionsResponse
     fun nowMs(): Long
 }
 
@@ -53,6 +64,7 @@ class RepositoryYogaGateway @Inject constructor(
     private val clock: ServerClock,
 ) : YogaGateway {
     override suspend fun workshops(refresh: Boolean) = workshopsRepo.workshops.get(refresh).workshops
+    override suspend fun mySessions(refresh: Boolean) = yoga.mySessions.get(refresh)
     override suspend fun today(refresh: Boolean) = yoga.today.get(refresh)
     override val todayChanges: Flow<Unit> get() = yoga.today.changes
     override suspend fun catalog(refresh: Boolean) = yoga.catalog.get(refresh)
@@ -76,7 +88,48 @@ data class YogaUi(
     val liveClasses: LiveClassListResponse?,
     /** Upcoming live workshops (masterclasses); optional, left out on failure. */
     val workshops: List<LiveWorkshop> = emptyList(),
+    /** "Recommended for you": recordings ranked for this person, each with its reason. */
+    val forYou: List<RecommendedSession> = emptyList(),
+    /** Programme tracks in personal order (focus area, goal, what they practise). */
+    val tracks: List<YogaCategory> = emptyList(),
+    /** Why the top track leads ("For your lower back"), for the sales page. */
+    val focusLine: String? = null,
 )
+
+/** A recording picked for this person, and the one-line reason shown on its card. */
+@Immutable
+data class RecommendedSession(val session: YogaSession, val reason: String)
+
+/**
+ * Yoga's personal layer (core:domain Personalization.kt): tracks ranked and
+ * "Recommended for you" from the onboarding answers, membership and what they
+ * have completed and saved. Pure, so it is unit-tested.
+ */
+internal fun personaliseYoga(ui: YogaUi, profile: UserProfile?, mine: MySessionsResponse?, hourOfDay: Int): YogaUi {
+    val catalog = ui.catalog ?: return ui
+    val byId = catalog.sessions.associateBy { it.id }
+    val completed = mine?.completedSessionIds.orEmpty().toSet()
+    val saved = mine?.savedSessionIds.orEmpty().toSet()
+    fun perCategory(ids: Set<String>) = ids.mapNotNull { byId[it]?.categoryId }.groupingBy { it }.eachCount()
+    val signals = UserSignals(
+        goal = profile?.healthGoal?.name,
+        concern = profile?.concern?.name,
+        isYogaMember = ui.member,
+        isLapsedMember = ui.expired,
+        completedByCategory = perCategory(completed),
+        savedByCategory = perCategory(saved),
+        hourOfDay = hourOfDay,
+    )
+    val names = catalog.categories.associate { it.id to it.name }
+    val order = rankCategories(catalog.categories.map { it.id }, signals)
+    val tracks = order.mapNotNull { id -> catalog.categories.firstOrNull { it.id == id } }
+    val facts = catalog.sessions.map {
+        SessionFacts(it.id, it.categoryId, it.level, it.durationMinutes, it.id in completed, it.id in saved, playable = it.isFree || ui.member)
+    }
+    val forYou = recommendSessions(facts, signals, names, limit = 8).mapNotNull { r -> byId[r.sessionId]?.let { RecommendedSession(it, r.reason) } }
+    val focus = personalRail(signals, names).takeIf { signals.concern != null || signals.goal != null || signals.favouriteCategory != null }?.reason
+    return ui.copy(forYou = forYou, tracks = tracks, focusLine = focus)
+}
 
 /** What a tap on "Join" should do. */
 sealed interface JoinTarget {
@@ -104,8 +157,19 @@ class YogaViewModel @Inject constructor(
     private val catalog = MutableStateFlow<YogaCatalogResponse?>(null)
     private val live = MutableStateFlow<LiveClassListResponse?>(null)
     private val workshops = MutableStateFlow<List<LiveWorkshop>>(emptyList())
+    private val mine = MutableStateFlow<MySessionsResponse?>(null)
+    private val extras = combine(workshops, mine) { w, m -> w to m }
 
-    val state: StateFlow<UiState<YogaUi>> = combine(session.state, today.state, catalog, live, workshops) { s, t, c, l, w -> merge(s, t, c, l).withWorkshops(w) }
+    val state: StateFlow<UiState<YogaUi>> = combine(session.state, today.state, catalog, live, extras) { s, t, c, l, (w, m) ->
+        val merged = merge(s, t, c, l).withWorkshops(w)
+        if (merged is UiState.Ready) {
+            val profile = (s as? UiState.Ready)?.data?.profile
+            val hour = java.time.Instant.ofEpochMilli(gateway.nowMs()).atZone(timeshealth.app.core.domain.IST).hour
+            UiState.Ready(personaliseYoga(merged.data, profile, m, hour), refreshing = merged.refreshing)
+        } else {
+            merged
+        }
+    }
         .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
 
     private val _attendance = MutableStateFlow<UiState<YogaAttendance>?>(null)
@@ -147,6 +211,7 @@ class YogaViewModel @Inject constructor(
         viewModelScope.launch { catalog.value = quietly { gateway.catalog(refresh) } ?: catalog.value }
         viewModelScope.launch { live.value = quietly { gateway.liveClasses(refresh) } ?: live.value }
         viewModelScope.launch { workshops.value = quietly { gateway.workshops(refresh) } ?: workshops.value }
+        viewModelScope.launch { mine.value = quietly { gateway.mySessions(refresh) } ?: mine.value }
     }
 
     /** The Tracker segment: attendance, members only (non-members get 403). */

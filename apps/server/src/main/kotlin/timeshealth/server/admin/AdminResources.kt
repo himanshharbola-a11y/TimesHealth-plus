@@ -499,6 +499,8 @@ object AdminResources {
                 help = "Older versions must update before using the app, e.g. 1.2.0."),
             AdminField("maintenanceActive", "Maintenance mode", FieldType.BOOL, list = true, default = false, help = "Shows \"Back shortly\" to everyone."),
             AdminField("maintenanceMessage", "Maintenance message", FieldType.TEXT, maxLength = 200),
+            AdminField("personalizeHome", "Personalise Home", FieldType.BOOL, list = true, default = true,
+                help = "On: each user's Home sections are fine-tuned to their goal, membership and activity (your order still leads; nothing moves more than 3 places). Off: everyone sees your exact order."),
         ),
     )
 

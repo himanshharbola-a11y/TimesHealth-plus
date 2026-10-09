@@ -143,14 +143,19 @@ private fun Races(ui: RacesUi, openRoute: (Route) -> Unit) {
                 RegisteredRaceBox(e, onOpen = { openRace(e, null) }, onBib = { openBib(e) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp))
             }
         }
+        ui.suggestion?.let { sug ->
+            item(key = "suggestion") { SuggestionCard(sug, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp)) }
+        }
         ui.hero?.let { e ->
-            item(key = "hero-${e.id}") { FreePrimaryRaceHero(e, onOpen = { d -> openRace(e, d) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp)) }
+            item(key = "hero-${e.id}") { FreePrimaryRaceHero(e, onOpen = { d -> openRace(e, d) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp), suggested = ui.suggestion?.code) }
         }
         if (ui.rest.isNotEmpty()) {
             item(key = "rest-title") { SectionHeader(if (ui.hasEntries) "Other upcoming editions" else "Upcoming editions across India") }
         }
         items(ui.rest, key = { "rest-${it.id}" }) { e ->
-            RaceRow(e, onOpen = { openRace(e, null) }, onAction = { openRace(e, null) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 5.dp))
+            // Opens on the suggested distance when this race offers it.
+            val d = ui.suggestion?.code?.takeIf { code -> e.distanceOptions.any { it.code == code } }
+            RaceRow(e, onOpen = { openRace(e, d) }, onAction = { openRace(e, d) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 5.dp))
         }
     }
 }
@@ -211,13 +216,35 @@ private fun RegisteredRaceBox(event: MarathonEvent, onOpen: () -> Unit, onBib: (
     }
 }
 
+/** "Recommended for you": the distance their running and goal point to, and why. */
+@Composable
+private fun SuggestionCard(s: timeshealth.app.core.domain.DistanceSuggestion, modifier: Modifier) {
+    Row(
+        modifier.fillMaxWidth().clip(ThShapes.Lg).background(CoralBrand.copy(alpha = 0.08f))
+            .border(1.dp, CoralBrand.copy(alpha = 0.25f), ThShapes.Lg).padding(14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Box(Modifier.size(44.dp).clip(ThShapes.Md).background(CoralBrand), contentAlignment = Alignment.Center) {
+            Text(s.code, color = PaperWhite, fontSize = 13.sp, fontWeight = FontWeight.ExtraBold)
+        }
+        Column(Modifier.weight(1f)) {
+            Text("Recommended for you: ${s.code}", color = TextPrimary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            Text(s.reason, color = TextSecondary, fontSize = 12.sp)
+        }
+    }
+}
+
 // ── Free primary box: design FreePrimaryRaceHero ──────────────────────────────
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun FreePrimaryRaceHero(event: MarathonEvent, onOpen: (String?) -> Unit, modifier: Modifier) {
+private fun FreePrimaryRaceHero(event: MarathonEvent, onOpen: (String?) -> Unit, modifier: Modifier, suggested: String? = null) {
     val options = event.distanceOptions
-    var picked by rememberSaveable(event.id) { mutableStateOf((options.firstOrNull { it.code == "21K" } ?: options.lastOrNull())?.code) }
+    // Starts on their suggested distance when offered, else the half marathon.
+    var picked by rememberSaveable(event.id, suggested) {
+        mutableStateOf((options.firstOrNull { it.code == suggested } ?: options.firstOrNull { it.code == "21K" } ?: options.lastOrNull())?.code)
+    }
     val selected = options.firstOrNull { it.code == picked }
     val open = event.registrationOpen && (selected?.registrationOpen ?: true)
     val price = selected?.pricePaise?.get(RaceTier.CLASSIC)?.takeIf { it > 0 } ?: fromPaise(event)
