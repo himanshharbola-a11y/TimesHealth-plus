@@ -14,7 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timeshealth.app.core.data.repository.WorkshopsRepository
 import timeshealth.app.core.data.repository.YogaRepository
+import timeshealth.app.core.model.LiveWorkshop
 import timeshealth.app.core.domain.istDate
 import timeshealth.app.core.domain.parseIsoInstant
 import timeshealth.app.core.model.JoinSessionResponse
@@ -41,10 +43,16 @@ interface YogaGateway {
     suspend fun attendance(refresh: Boolean = false): YogaAttendance
     suspend fun join(batchId: String): JoinSessionResponse
     suspend fun setReminderSlot(batchId: String)
+    suspend fun workshops(refresh: Boolean = false): List<LiveWorkshop>
     fun nowMs(): Long
 }
 
-class RepositoryYogaGateway @Inject constructor(private val yoga: YogaRepository, private val clock: ServerClock) : YogaGateway {
+class RepositoryYogaGateway @Inject constructor(
+    private val yoga: YogaRepository,
+    private val workshopsRepo: WorkshopsRepository,
+    private val clock: ServerClock,
+) : YogaGateway {
+    override suspend fun workshops(refresh: Boolean) = workshopsRepo.workshops.get(refresh).workshops
     override suspend fun today(refresh: Boolean) = yoga.today.get(refresh)
     override val todayChanges: Flow<Unit> get() = yoga.today.changes
     override suspend fun catalog(refresh: Boolean) = yoga.catalog.get(refresh)
@@ -66,6 +74,8 @@ data class YogaUi(
     val today: YogaTodayResponse,
     val catalog: YogaCatalogResponse?,
     val liveClasses: LiveClassListResponse?,
+    /** Upcoming live workshops (masterclasses); optional, left out on failure. */
+    val workshops: List<LiveWorkshop> = emptyList(),
 )
 
 /** What a tap on "Join" should do. */
@@ -93,8 +103,9 @@ class YogaViewModel @Inject constructor(
     private val today = Loadable(viewModelScope, { r -> gateway.today(r) }, gateway.todayChanges)
     private val catalog = MutableStateFlow<YogaCatalogResponse?>(null)
     private val live = MutableStateFlow<LiveClassListResponse?>(null)
+    private val workshops = MutableStateFlow<List<LiveWorkshop>>(emptyList())
 
-    val state: StateFlow<UiState<YogaUi>> = combine(session.state, today.state, catalog, live, ::merge)
+    val state: StateFlow<UiState<YogaUi>> = combine(session.state, today.state, catalog, live, workshops) { s, t, c, l, w -> merge(s, t, c, l).withWorkshops(w) }
         .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
 
     private val _attendance = MutableStateFlow<UiState<YogaAttendance>?>(null)
@@ -135,6 +146,7 @@ class YogaViewModel @Inject constructor(
         // Optional sections: a failure leaves them out, never blanks the tab.
         viewModelScope.launch { catalog.value = quietly { gateway.catalog(refresh) } ?: catalog.value }
         viewModelScope.launch { live.value = quietly { gateway.liveClasses(refresh) } ?: live.value }
+        viewModelScope.launch { workshops.value = quietly { gateway.workshops(refresh) } ?: workshops.value }
     }
 
     /** The Tracker segment: attendance, members only (non-members get 403). */
@@ -225,6 +237,9 @@ class YogaViewModel @Inject constructor(
         )
         else -> UiState.Loading
     }
+
+    private fun UiState<YogaUi>.withWorkshops(w: List<LiveWorkshop>): UiState<YogaUi> =
+        if (this is UiState.Ready) UiState.Ready(data.copy(workshops = w), refreshing = refreshing) else this
 
     private suspend fun <T> quietly(block: suspend () -> T): T? = try {
         block()

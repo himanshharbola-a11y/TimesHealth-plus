@@ -79,6 +79,7 @@ class YogaViewModelTest {
             slots += batchId
         }
         override fun nowMs() = nowMs
+        override suspend fun workshops(refresh: Boolean) = emptyList<timeshealth.app.core.model.LiveWorkshop>()
 
         private fun answer(a: Any): Any = if (a is Throwable) throw a else a
     }

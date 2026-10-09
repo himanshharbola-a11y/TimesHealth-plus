@@ -2,6 +2,9 @@ package timeshealth.app.ui.run
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.layout.heightIn
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
@@ -180,7 +183,12 @@ private fun RunHistory(h: RunHistoryResponse, imperial: Boolean, onOpen: (timesh
             HistoryStat(distanceText(h.totals.monthDistanceKm * 1000, imperial), "This month")
             HistoryStat(distanceText(h.totals.longestKm * 1000, imperial), "Longest")
         }
-        h.runs.take(3).forEach { r ->
+        // The last few runs; "View all" opens the rest in a scrolling list, so a long history
+        // stays one tap away without pushing Start off the screen.
+        var showAll by rememberSaveable { mutableStateOf(false) }
+        val visible = if (showAll) h.runs else h.runs.take(HISTORY_PREVIEW)
+        Column(if (showAll) Modifier.heightIn(max = 280.dp).verticalScroll(rememberScrollState()) else Modifier) {
+        visible.forEach { r ->
             val started = parseIsoInstant(r.startedAt)
             Row(
                 Modifier.fillMaxWidth().padding(top = 4.dp).clip(ThShapes.Sm)
@@ -196,8 +204,20 @@ private fun RunHistory(h: RunHistoryResponse, imperial: Boolean, onOpen: (timesh
                 Icon(Icons.Filled.ChevronRight, contentDescription = "Open run", tint = TextMuted, modifier = Modifier.size(18.dp))
             }
         }
+        }
+        if (h.runs.size > HISTORY_PREVIEW) {
+            Text(
+                if (showAll) "Show less" else "View all ${h.runs.size} runs",
+                color = CoralBrand, fontSize = 12.5.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp)
+                    .clickable(role = Role.Button) { showAll = !showAll }.padding(6.dp),
+            )
+        }
     }
 }
+
+/** Recent runs shown before "View all". */
+private const val HISTORY_PREVIEW = 5
 
 @Composable
 private fun HistoryStat(value: String, label: String) {

@@ -77,6 +77,10 @@ import timeshealth.app.ui.feed.InstructorAvatar
 import timeshealth.app.ui.feed.LiveClassCardView
 import timeshealth.app.ui.feed.LocalServerNow
 import timeshealth.app.ui.feed.VideoCard
+import timeshealth.app.ui.feed.WorkshopCard
+import timeshealth.app.ui.workshop.WorkshopSheet
+import timeshealth.app.core.model.LiveWorkshop
+import androidx.hilt.navigation.compose.hiltViewModel
 import timeshealth.app.ui.feed.gradient
 import timeshealth.app.ui.feed.rememberServerNow
 import timeshealth.app.ui.home.FeedTarget
@@ -116,6 +120,7 @@ fun YogaRoute(viewModel: YogaViewModel, openRoute: (Route) -> Unit, onTarget: (F
     val message by viewModel.message.collectAsStateWithLifecycle()
     val uri = LocalUriHandler.current
     val snackbar = remember { SnackbarHostState() }
+    var workshop by remember { mutableStateOf<LiveWorkshop?>(null) }
     LaunchedEffect(message) {
         message?.let {
             snackbar.showSnackbar(it)
@@ -143,8 +148,15 @@ fun YogaRoute(viewModel: YogaViewModel, openRoute: (Route) -> Unit, onTarget: (F
                 onRemind = viewModel::setReminderSlot,
                 openRoute = openRoute,
                 onTarget = onTarget,
+                onWorkshop = { workshop = it },
             )
             SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter))
+            workshop?.let {
+                WorkshopSheet(it, hiltViewModel(), onDismiss = {
+                    workshop = null
+                    viewModel.refresh()
+                })
+            }
         }
     }
 }
@@ -162,6 +174,7 @@ fun YogaScreen(
     onRemind: (String) -> Unit,
     openRoute: (Route) -> Unit,
     onTarget: (FeedTarget) -> Unit,
+    onWorkshop: (LiveWorkshop) -> Unit = {},
 ) {
     var trackerTab by rememberSaveable { mutableStateOf(false) }
     // Also after the tab is restored (rotation, process death), not only on a tap.
@@ -173,7 +186,7 @@ fun YogaScreen(
                     item(key = "header") {
                         Header(trackerTab) { trackerTab = it }
                     }
-                    if (trackerTab) trackerItems(attendance, onTracker) else memberItems(ui, busyBatch, onJoin, onRemind, openRoute, onTarget)
+                    if (trackerTab) trackerItems(attendance, onTracker) else memberItems(ui, busyBatch, onJoin, onRemind, openRoute, onTarget, onWorkshop)
                 } else {
                     freeItems(ui, openRoute, onTarget)
                 }
@@ -207,6 +220,7 @@ private fun LazyListScope.memberItems(
     onRemind: (String) -> Unit,
     openRoute: (Route) -> Unit,
     onTarget: (FeedTarget) -> Unit,
+    onWorkshop: (LiveWorkshop) -> Unit,
 ) {
     val today = ui.today
     val next = today.batches.firstOrNull { it.id == (today.liveBatchId ?: today.nextBatchId) }
@@ -237,6 +251,14 @@ private fun LazyListScope.memberItems(
     }
     items(today.batches, key = { "batch-${it.id}" }) { b ->
         BatchRow(b, busyBatch == b.id, onJoin, onRemind, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 4.dp))
+    }
+    if (ui.workshops.isNotEmpty()) {
+        item(key = "ws-title") { SectionHeader("Live workshops & masterclasses") }
+        item(key = "ws") {
+            LazyRow(contentPadding = PaddingValues(horizontal = ThLayout.Gutter), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(ui.workshops, key = { it.id }) { w -> WorkshopCard(w, onClick = { onWorkshop(w) }) }
+            }
+        }
     }
     ui.catalog?.sessions?.takeIf { it.isNotEmpty() }?.let { sessions ->
         item(key = "rec-title") { SectionHeader("Past session recordings", actionText = "Library", onAction = { openRoute(Route.YogaExplorer()) }) }
