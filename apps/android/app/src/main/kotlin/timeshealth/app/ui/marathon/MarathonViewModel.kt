@@ -1,5 +1,7 @@
 package timeshealth.app.ui.marathon
 
+import kotlinx.coroutines.flow.asStateFlow
+import timeshealth.app.location.ApproxLocation
 import timeshealth.app.core.domain.suggestDistance
 import timeshealth.app.core.domain.UserSignals
 import timeshealth.app.core.domain.DistanceSuggestion
@@ -86,9 +88,16 @@ fun fromPaise(event: MarathonEvent): Long =
 @HiltViewModel
 class MarathonViewModel @Inject constructor(private val gateway: MarathonGateway) : ViewModel() {
 
+    /** Where the races are sorted from; null until located (or when nothing answers). */
+    private val _location = MutableStateFlow<ApproxLocation?>(null)
+    val location: StateFlow<ApproxLocation?> = _location.asStateFlow()
+
+    private val _locating = MutableStateFlow(false)
+    val locating: StateFlow<Boolean> = _locating.asStateFlow()
+
     private val events = Loadable(
         scope = viewModelScope,
-        fetch = { refresh -> gateway.events(refresh) },
+        fetch = { refresh -> gateway.events(refresh, _location.value) },
         refetchWhen = gateway.eventsChanges,
     )
 
@@ -106,6 +115,26 @@ class MarathonViewModel @Inject constructor(private val gateway: MarathonGateway
     init {
         // Optional: without it the tab simply shows no suggestion.
         viewModelScope.launch { signals.value = runCatching { gateway.signals() }.getOrNull() }
+        locate()
+    }
+
+    fun hasLocationPermission(): Boolean = gateway.hasLocationPermission()
+
+    /**
+     * Finds the person (device, else IP) and re-sorts the races nearest first. Called on open
+     * and again after they grant location. The races show meanwhile in date order.
+     */
+    fun locate() {
+        if (_locating.value) return
+        _locating.value = true
+        viewModelScope.launch {
+            val found = runCatching { gateway.locate() }.getOrNull()
+            _locating.value = false
+            if (found != null && found != _location.value) {
+                _location.value = found
+                events.refresh()
+            }
+        }
     }
 
     fun retry() = events.retry()

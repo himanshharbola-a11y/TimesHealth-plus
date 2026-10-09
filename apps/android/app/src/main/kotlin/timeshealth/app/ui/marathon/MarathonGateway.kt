@@ -1,5 +1,7 @@
 package timeshealth.app.ui.marathon
 
+import timeshealth.app.location.UserLocator
+import timeshealth.app.location.ApproxLocation
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import timeshealth.app.core.data.pass.OfflinePass
@@ -19,8 +21,13 @@ import timeshealth.app.core.network.ServerClock
 
 /** What the marathon screens need from core:data (an interface, so their ViewModels are testable). */
 interface MarathonGateway {
-    suspend fun events(refresh: Boolean = false): MarathonListResponse
+    /** The races; with a location, nearest first and each with its distance. */
+    suspend fun events(refresh: Boolean = false, location: ApproxLocation? = null): MarathonListResponse
     val eventsChanges: Flow<Unit>
+
+    /** Device location if allowed, else the IP's approximation; null when neither answers. */
+    suspend fun locate(): ApproxLocation?
+    fun hasLocationPermission(): Boolean
     suspend fun raceDetail(eventId: String, refresh: Boolean = false): RaceDetailResponse
     fun raceDetailChanges(eventId: String): Flow<Unit>
     suspend fun referral(refresh: Boolean = false): ReferralState
@@ -40,6 +47,7 @@ class RepositoryMarathonGateway @Inject constructor(
     private val marathon: MarathonRepository,
     private val runs: RunsRepository,
     private val account: AccountGateway,
+    private val locator: UserLocator,
     private val clock: ServerClock,
 ) : MarathonGateway {
     override suspend fun signals(): UserSignals {
@@ -58,7 +66,10 @@ class RepositoryMarathonGateway @Inject constructor(
         )
     }
 
-    override suspend fun events(refresh: Boolean) = marathon.events().get(refresh)
+    override suspend fun events(refresh: Boolean, location: ApproxLocation?) =
+        marathon.events(location?.lat?.round3(), location?.lng?.round3()).get(refresh)
+    override suspend fun locate() = locator.locate()
+    override fun hasLocationPermission() = locator.hasDevicePermission()
     override val eventsChanges: Flow<Unit> get() = marathon.events().changes
     override suspend fun raceDetail(eventId: String, refresh: Boolean) = marathon.raceDetail(eventId).get(refresh)
     override fun raceDetailChanges(eventId: String): Flow<Unit> = marathon.raceDetail(eventId).changes
@@ -71,3 +82,6 @@ class RepositoryMarathonGateway @Inject constructor(
     }
     override fun nowMs(): Long = clock.now()
 }
+
+/** ~100 m: plenty for "nearest race", and the cache key doesn't change with every metre. */
+private fun Double.round3(): Double = kotlin.math.round(this * 1000) / 1000

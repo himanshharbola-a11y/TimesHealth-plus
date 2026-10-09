@@ -83,6 +83,7 @@ class PersonalizationTest {
         assertThat(trainee.code).isEqualTo("21K")
         // 42K-ready but no 42K on offer: the longest offered.
         assertThat(suggestDistance(offered, UserSignals(longestRunKm = 30.0, runsLast30Days = 8))!!.code).isEqualTo("21K")
+        assertThat(suggestDistance(offered, UserSignals(runsLast30Days = 3, longestRunKm = 0.2))!!.reason).isEqualTo("A great first race")
         assertThat(suggestDistance(emptyList(), UserSignals())).isNull()
     }
 }

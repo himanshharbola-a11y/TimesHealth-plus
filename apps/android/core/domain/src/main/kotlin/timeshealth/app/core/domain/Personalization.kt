@@ -239,7 +239,8 @@ fun suggestDistance(available: List<String>, s: UserSignals): DistanceSuggestion
     val offered = ladder.filter { code -> available.any { it.equals(code, ignoreCase = true) } }
     val pick = offered.lastOrNull { ladder.indexOf(it) <= level } ?: offered.firstOrNull() ?: available.first()
     val reason = when {
-        s.runsLast30Days == 0 && s.longestRunKm == 0.0 -> "A great first race"
+        // No real run logged yet (or only GPS blips): never quote a 0.0 km "longest run".
+        s.longestRunKm < 1.0 -> "A great first race"
         stepUp -> "Your training says you’re ready for a step up"
         else -> "Fits your longest run of ${"%.1f".format(s.longestRunKm)} km"
     }

@@ -1,5 +1,11 @@
 package timeshealth.app.ui.marathon
 
+import timeshealth.app.ui.components.ThSpinner
+import timeshealth.app.location.ApproxLocation
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.rememberLauncherForActivityResult
+import android.Manifest
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -98,8 +104,19 @@ private fun statusPill(status: RaceLifecycleStatus): Pair<String, TagTone> = whe
 @Composable
 fun MarathonRoute(viewModel: MarathonViewModel, openRoute: (Route) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    MarathonScreen(state, viewModel::retry, viewModel::refresh, openRoute)
+    val location by viewModel.location.collectAsStateWithLifecycle()
+    val locating by viewModel.locating.collectAsStateWithLifecycle()
+    // Asked in context (the "near you" strip), never on open; granted or not, locate again:
+    // a refusal still finds races through the IP fallback.
+    val askLocation = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { viewModel.locate() }
+    val near = NearYou(location, locating, viewModel.hasLocationPermission()) {
+        askLocation.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+    }
+    MarathonScreen(state, viewModel::retry, viewModel::refresh, openRoute, near)
 }
+
+/** The "races near you" state for the strip under the header. */
+data class NearYou(val location: ApproxLocation?, val locating: Boolean, val permitted: Boolean, val onUsePrecise: () -> Unit)
 
 /**
  * The Marathon tab (PRD §8, design MarathonScreenKt): the title and the
@@ -107,18 +124,18 @@ fun MarathonRoute(viewModel: MarathonViewModel, openRoute: (Route) -> Unit) {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MarathonScreen(state: UiState<RacesUi>, onRetry: () -> Unit, onRefresh: () -> Unit, openRoute: (Route) -> Unit) {
+fun MarathonScreen(state: UiState<RacesUi>, onRetry: () -> Unit, onRefresh: () -> Unit, openRoute: (Route) -> Unit, near: NearYou? = null) {
     Column(Modifier.fillMaxSize().background(CanvasBg)) {
         UiStateContent(state, onRetry, Modifier.fillMaxSize()) { ui ->
             PullToRefreshBox(isRefreshing = (state as? UiState.Ready)?.refreshing == true, onRefresh = onRefresh, modifier = Modifier.fillMaxSize()) {
-                Races(ui, openRoute)
+                Races(ui, openRoute, near)
             }
         }
     }
 }
 
 @Composable
-private fun Races(ui: RacesUi, openRoute: (Route) -> Unit) {
+private fun Races(ui: RacesUi, openRoute: (Route) -> Unit, near: NearYou?) {
     // §8.4: once run, a race's box opens its result, not the registration page.
     val openRace = { e: MarathonEvent, distance: String? ->
         openRoute(if (e.registration?.status == RaceLifecycleStatus.COMPLETED) Route.RaceResults(e.id) else Route.RaceDetail(e.id, distance))
@@ -142,6 +159,11 @@ private fun Races(ui: RacesUi, openRoute: (Route) -> Unit) {
             items(ui.past, key = { "past-${it.id}" }) { e ->
                 RegisteredRaceBox(e, onOpen = { openRace(e, null) }, onBib = { openBib(e) }, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp))
             }
+        }
+        // Above the races they could still enter (a registrant's own race stays on top).
+        if (near != null && (ui.hero != null || ui.rest.isNotEmpty())) {
+            val nearest = (listOfNotNull(ui.hero) + ui.rest).firstOrNull { it.distanceFromUserKm != null }
+            item(key = "near-you") { NearYouStrip(near, nearest, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp)) }
         }
         ui.suggestion?.let { sug ->
             item(key = "suggestion") { SuggestionCard(sug, Modifier.padding(horizontal = ThLayout.Gutter, vertical = 6.dp)) }
@@ -212,6 +234,41 @@ private fun RegisteredRaceBox(event: MarathonEvent, onOpen: () -> Unit, onBib: (
                     OutlineButton("Race Details", onOpen, Modifier.weight(1f))
                 }
             }
+        }
+    }
+}
+
+/**
+ * Where the races are sorted from: a precise device fix, the network's (IP)
+ * approximation, or nothing yet; with a way to grant precise location.
+ */
+@Composable
+private fun NearYouStrip(near: NearYou, nearest: MarathonEvent?, modifier: Modifier) {
+    val loc = near.location
+    val (line, sub) = when {
+        loc == null && near.locating -> "Finding races near you…" to null
+        loc == null -> "See the races nearest to you" to "Uses your location once, to sort races by distance."
+        loc.precise -> "Races sorted by distance from you" to nearest?.let { "Nearest: ${it.name} · ${it.distanceFromUserKm?.roundToLong()} km away" }
+        else -> "Races near ${loc.city ?: "you"}" to "Approximate, from your network.${nearest?.let { " Nearest: ${it.name}." } ?: ""}"
+    }
+    Row(
+        modifier.fillMaxWidth().clip(ThShapes.Lg).background(PaperWhite).border(1.dp, BorderRule, ThShapes.Lg).padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        if (near.locating && loc == null) ThSpinner(size = 18.dp) else Icon(Icons.Filled.LocationOn, contentDescription = null, tint = CoralBrand, modifier = Modifier.size(20.dp))
+        Column(Modifier.weight(1f)) {
+            Text(line, color = TextPrimary, fontSize = 13.5.sp, fontWeight = FontWeight.Bold)
+            sub?.let { Text(it, color = TextMuted, fontSize = 11.5.sp, maxLines = 2) }
+        }
+        // Offer precise location when we only have the IP's guess (or nothing) and it isn't granted.
+        if (!near.permitted && loc?.precise != true && !near.locating) {
+            Text(
+                if (loc == null) "Allow" else "Use precise",
+                color = CoralBrand, fontSize = 12.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.clip(ThShapes.Pill).background(CoralBrand.copy(alpha = 0.10f))
+                    .clickable(role = Role.Button, onClick = near.onUsePrecise).padding(horizontal = 12.dp, vertical = 6.dp),
+            )
         }
     }
 }

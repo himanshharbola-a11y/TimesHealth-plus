@@ -25,7 +25,9 @@ class ParticipantEditTest {
     private class FakeMarathon : MarathonGateway {
         val updates = mutableListOf<UpdateParticipantRequest>()
         var error: Exception? = null
-        override suspend fun events(refresh: Boolean) = error("unused")
+        override suspend fun events(refresh: Boolean, location: timeshealth.app.location.ApproxLocation?) = error("unused")
+        override suspend fun locate() = null
+        override fun hasLocationPermission() = false
         override val eventsChanges = emptyFlow<Unit>()
         override suspend fun raceDetail(eventId: String, refresh: Boolean) = error("not loaded in this test")
         override fun raceDetailChanges(eventId: String) = emptyFlow<Unit>()

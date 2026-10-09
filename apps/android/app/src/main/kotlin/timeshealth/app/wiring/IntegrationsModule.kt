@@ -40,6 +40,7 @@ import timeshealth.app.ui.run.map.RouteMapRenderer
  * | VideoSourceResolver(set)| DirectUrlResolver ("url")         | + Slike ("slike")          |
  * | IdentityGateway        | Firebase / QA personas (AppModule) | TIL SSO SDK                |
  * | RouteMapRenderer       | MapLibre + OpenFreeMap (no key)    | Google Maps SDK            |
+ * | IpGeolocator           | Public geo-IP (ipapi.co, ipwho.is) | Company geo-IP / server    |
  *
  * "(set)" points take ANY number of implementations: add a line, keep the rest.
  */
@@ -55,6 +56,9 @@ abstract class IntegrationsModule {
 
     // ── In-app campaigns ── swap to: GrowthRxCampaigns
     @Binds abstract fun campaigns(impl: NoOpInAppCampaigns): InAppCampaigns
+
+    // ── Approximate location from IP (fallback for "races near you") ── swap for a company geo-IP here.
+    @Binds abstract fun ipGeolocator(impl: timeshealth.app.location.PublicIpGeolocator): timeshealth.app.location.IpGeolocator
 
     // ── Video sources ── add: @Binds @IntoSet abstract fun slike(impl: SlikeResolver): VideoSourceResolver
     @Binds @IntoSet abstract fun directUrlVideos(impl: DirectUrlResolver): VideoSourceResolver

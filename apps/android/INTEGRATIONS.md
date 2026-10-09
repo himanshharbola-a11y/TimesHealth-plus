@@ -19,6 +19,7 @@ The interfaces are in `core/integrations`, and each interface's KDoc has the ste
 | In-app campaigns | `InAppCampaigns` | No-op | GrowthRx in-app | 1 `@Binds` line |
 | Video (live and recorded) | `VideoSourceResolver` (a set) | Direct HLS/MP4 URLs (`"url"`) | Slike (`"slike"`) | Add 1 `@IntoSet` line; PMs then enter Slike ids in the dashboard |
 | Run map | `RouteMapRenderer` | MapLibre + OpenFreeMap (no key needed) | Google Maps SDK + key | 1 `@Binds` line |
+| Approximate location (IP fallback for races near you) | `IpGeolocator` (`location/UserLocator.kt`) | Public geo-IP (ipapi.co, then ipwho.is) | Company geo-IP or a server-side lookup | 1 `@Binds` line |
 
 ## 2. Behind the API: backend data
 

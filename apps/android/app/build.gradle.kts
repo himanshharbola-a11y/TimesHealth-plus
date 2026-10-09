@@ -160,6 +160,8 @@ dependencies {
     implementation(libs.work.runtime)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.play.services)
+    // "Races near you": the device location (IP fallback in location/UserLocator.kt).
+    implementation(libs.play.services.location)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
