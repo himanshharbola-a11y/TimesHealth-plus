@@ -1,5 +1,7 @@
 package timeshealth.app.ui.components
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -95,6 +97,9 @@ fun BottomNavBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .shadow(16.dp, RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp), clip = false,
+                ambientColor = Color.Black.copy(alpha = 0.06f), spotColor = Color.Black.copy(alpha = 0.12f))
+            .clip(RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp))
             .background(PaperWhite)
             .navigationBarsPadding()
             .height(ThLayout.BottomNavHeight)
@@ -115,12 +120,21 @@ fun BottomNavBar(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                    contentDescription = item.label,
-                    modifier = Modifier.size(24.dp),
-                    tint = color,
-                )
+                // The active tab sits in a soft pill of its own colour.
+                Box(
+                    Modifier
+                        .clip(CircleShape)
+                        .background(if (selected) item.activeColor.copy(alpha = 0.12f) else Color.Transparent)
+                        .padding(horizontal = 18.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                        contentDescription = item.label,
+                        modifier = Modifier.size(24.dp),
+                        tint = color,
+                    )
+                }
                 Spacer(Modifier.height(3.dp))
                 Text(
                     text = item.label,
@@ -128,15 +142,6 @@ fun BottomNavBar(
                     fontSize = 10.sp,
                     fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
                 )
-                if (selected) {
-                    Box(
-                        Modifier
-                            .padding(top = Spacing.Xxs)
-                            .size(4.dp)
-                            .clip(CircleShape)
-                            .background(color),
-                    )
-                }
             }
         }
     }

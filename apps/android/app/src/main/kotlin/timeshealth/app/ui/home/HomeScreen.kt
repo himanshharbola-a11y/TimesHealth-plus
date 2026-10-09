@@ -1,5 +1,7 @@
 package timeshealth.app.ui.home
 
+import timeshealth.app.ui.theme.TextSecondary
+import timeshealth.app.ui.theme.CoralBrand
 import timeshealth.app.ui.workshop.WorkshopSheet
 import timeshealth.app.core.model.LiveWorkshop
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -208,11 +210,16 @@ private fun Rail(
  */
 @Composable
 fun Greeting(greeting: HomeGreeting, modifier: Modifier = Modifier) {
-    Column(modifier.padding(horizontal = ThLayout.Gutter, vertical = Spacing.Md)) {
-        Text(greeting.dayLine, color = TextMuted, fontSize = 12.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    // Refreshed: the time of day as a small coral kicker, the name large and bold.
+    Column(modifier.padding(horizontal = ThLayout.Gutter).padding(top = Spacing.Lg, bottom = Spacing.Md)) {
         Text(
-            "Hello, ${greeting.firstName} 👋", color = TextPrimary, fontSize = 24.sp, fontWeight = FontWeight.SemiBold,
-            fontFamily = ThFonts.Serif, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            greeting.dayLine.uppercase(), color = CoralBrand, fontSize = 11.sp, fontWeight = FontWeight.ExtraBold,
+            letterSpacing = 1.2.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
         )
+        Text(
+            "Hi ${greeting.firstName} 👋", color = TextPrimary, fontSize = 30.sp, lineHeight = 36.sp, fontWeight = FontWeight.ExtraBold,
+            letterSpacing = (-0.5).sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(top = 4.dp),
+        )
+        Text("Here’s what’s good for you today.", color = TextSecondary, fontSize = 13.5.sp, modifier = Modifier.padding(top = 2.dp))
     }
 }

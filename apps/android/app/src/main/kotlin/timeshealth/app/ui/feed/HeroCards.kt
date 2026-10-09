@@ -1,5 +1,6 @@
 package timeshealth.app.ui.feed
 
+import timeshealth.app.ui.theme.softShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -227,9 +228,9 @@ private fun RenewHero(slot: HeroYogaRenew, onClick: () -> Unit, modifier: Modifi
     Column(
         modifier
             .fillMaxWidth()
+            .softShadow(ThShapes.Hero)
             .clip(ThShapes.Hero)
             .background(PlumTint)
-            .border(1.dp, PlumLine, ThShapes.Hero)
             .clickable(role = Role.Button, onClick = onClick)
             .semantics(mergeDescendants = true) { contentDescription = "Membership expired. ${slot.title}. ${slot.ctaLabel}" }
             .padding(18.dp),
@@ -262,9 +263,9 @@ private fun PhotoShell(
     Box(
         modifier
             .fillMaxWidth()
+            .softShadow(ThShapes.Hero, 14.dp)
             .clip(ThShapes.Hero)
             .background(Carbon900)
-            .border(1.dp, if (yoga) PlumLine else BorderRule, ThShapes.Hero)
             .clickable(role = Role.Button, onClick = onClick)
             .semantics(mergeDescendants = true) { contentDescription = description },
     ) {
@@ -381,9 +382,9 @@ private fun SecondaryRow(
     Row(
         modifier
             .fillMaxWidth()
+            .softShadow(ThShapes.Lg)
             .clip(ThShapes.Lg)
             .background(PaperWhite)
-            .border(1.dp, BorderRule, ThShapes.Lg)
             .clickable(role = Role.Button, onClick = onClick)
             .semantics(mergeDescendants = true) { contentDescription = listOfNotNull(title, subtitle).joinToString(". ") }
             .padding(paddingDp.dp),

@@ -1,5 +1,6 @@
 package timeshealth.app.ui.feed
 
+import timeshealth.app.ui.theme.softShadow
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -116,7 +117,7 @@ fun VideoCard(session: YogaSession, locked: Boolean, onClick: () -> Unit, modifi
             onClick,
         ),
     ) {
-        Box(Modifier.fillMaxWidth().height(115.dp).clip(ThShapes.Lg).background(SurfaceSand)) {
+        Box(Modifier.fillMaxWidth().height(115.dp).softShadow(ThShapes.Lg).clip(ThShapes.Lg).background(SurfaceSand)) {
             FeedImage(session.imageUrl, fallbackFor(session.id), Scrim25to75, Modifier.matchParentSize())
             // Top-start badge: FREE wins; a paid session the user can't play says so.
             Box(Modifier.padding(8.dp)) {
@@ -186,7 +187,7 @@ fun LiveClassCardView(card: LiveClassCard, onClick: () -> Unit, modifier: Modifi
     val now = rememberServerNow(ticking = card.state == LiveClassState.STARTING_SOON || card.state == LiveClassState.LIVE)
     val (pill, tone) = liveClassPill(card, now)
     Column(modifier.width(220.dp).card("${card.title}. $pill${if (!card.canJoin) ", members only" else ""}", onClick)) {
-        Box(Modifier.fillMaxWidth().height(124.dp).clip(ThShapes.Lg).background(SurfaceSand)) {
+        Box(Modifier.fillMaxWidth().height(124.dp).softShadow(ThShapes.Lg).clip(ThShapes.Lg).background(SurfaceSand)) {
             FeedImage(card.imageUrl, fallbackFor(card.id), Scrim25to75, Modifier.matchParentSize())
             Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 TagPill(pill, tone)
@@ -211,7 +212,7 @@ internal fun formatReelDuration(seconds: Int): String =
 @Composable
 fun ReelCard(reel: Reel, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Column(modifier.width(115.dp).card("Play reel by ${reel.instructorName}", onClick)) {
-        Box(Modifier.fillMaxWidth().height(180.dp).clip(ThShapes.Lg).background(Carbon900)) {
+        Box(Modifier.fillMaxWidth().height(180.dp).softShadow(ThShapes.Lg).clip(ThShapes.Lg).background(Carbon900)) {
             FeedImage(reel.thumbnailUrl, gradient(Carbon800, Carbon950, GradientDir.VERTICAL), Scrim25to75, Modifier.matchParentSize())
             Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement = Arrangement.SpaceBetween) {
                 TagPill("Reel", TagTone.CORAL)
@@ -234,9 +235,9 @@ fun ArticleCard(article: Article, onClick: () -> Unit, modifier: Modifier = Modi
     Column(
         modifier
             .width(250.dp)
+            .softShadow(ThShapes.Lg)
             .clip(ThShapes.Lg)
             .background(PaperWhite)
-            .border(1.dp, BorderSubtle, ThShapes.Lg)
             .card("${article.title}. ${article.source}, ${article.readTimeMinutes} minute read", onClick),
     ) {
         Box(Modifier.fillMaxWidth().height(95.dp).background(SurfaceSand)) {
@@ -297,9 +298,9 @@ fun WorkshopCard(workshop: LiveWorkshop, onClick: () -> Unit, modifier: Modifier
     Column(
         modifier
             .width(280.dp)
+            .softShadow(ThShapes.Lg)
             .clip(ThShapes.Lg)
             .background(PaperWhite)
-            .border(1.dp, BorderRule, ThShapes.Lg)
             .card("${w.title}. $price", onClick),
     ) {
         Box(Modifier.fillMaxWidth().height(130.dp)) {

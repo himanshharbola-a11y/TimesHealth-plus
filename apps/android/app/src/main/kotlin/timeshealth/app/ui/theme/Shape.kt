@@ -1,5 +1,6 @@
 package timeshealth.app.ui.theme
 
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
@@ -15,19 +16,19 @@ object Radii {
     /** TagPill. */
     val Tag = 6.dp
     val Sm = 8.dp
-    val Md = 12.dp
+    val Md = 14.dp
 
     /** Promo strip, plan cards, onboarding options, form fields. */
-    val Option = 14.dp
+    val Option = 16.dp
 
     /** Content cards: video, reel, article, quote, secondary hero. */
-    val Lg = 16.dp
+    val Lg = 20.dp
 
     /** Run tracker tile; the pre-login "Get Started" card. */
-    val Xl = 20.dp
+    val Xl = 24.dp
 
     /** Hero cards. */
-    val Hero = 22.dp
+    val Hero = 26.dp
     val Xxl = 24.dp
 
     /** Bottom sheets: the login panel, the paywall. Top corners only. */
@@ -59,3 +60,16 @@ object ThShapes {
  * so M3 components (cards, sheets, text fields) keep the design's corners.
  */
 val TimesHealthShapes = Shapes()
+
+/**
+ * The refreshed card lift: a soft, wide, low-contrast shadow (not Material's
+ * hard elevation), so cards float a little off the warm canvas.
+ */
+fun androidx.compose.ui.Modifier.softShadow(shape: Shape, elevation: androidx.compose.ui.unit.Dp = 10.dp): androidx.compose.ui.Modifier =
+    this.shadow(
+        elevation = elevation,
+        shape = shape,
+        clip = false,
+        ambientColor = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.05f),
+        spotColor = androidx.compose.ui.graphics.Color(0xFF3B0E4A).copy(alpha = 0.10f),
+    )

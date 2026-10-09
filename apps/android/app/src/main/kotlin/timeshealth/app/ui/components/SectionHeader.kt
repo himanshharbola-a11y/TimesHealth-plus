@@ -1,5 +1,13 @@
 package timeshealth.app.ui.components
 
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,21 +58,27 @@ fun SectionHeader(
             text = title,
             modifier = Modifier.weight(1f, fill = false),
             color = TextPrimary,
-            fontSize = 18.sp,
-            lineHeight = 22.sp,
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = ThFonts.Serif,
+            fontSize = 19.sp,
+            lineHeight = 24.sp,
+            fontWeight = FontWeight.ExtraBold,
+            letterSpacing = (-0.3).sp,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
         )
         if (actionText != null && onAction != null) {
-            Text(
-                text = actionText,
-                modifier = Modifier.padding(start = Spacing.Xl).clickable(role = Role.Button, onClick = onAction),
-                color = CoralBrand,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-            )
+            // A soft pill reads as a button, unlike a bare coral word.
+            Row(
+                modifier = Modifier
+                    .padding(start = Spacing.Xl)
+                    .clip(CircleShape)
+                    .background(CoralBrand.copy(alpha = 0.10f))
+                    .clickable(role = Role.Button, onClick = onAction)
+                    .padding(start = 12.dp, end = 6.dp, top = 5.dp, bottom = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(text = actionText, color = CoralBrand, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = CoralBrand, modifier = Modifier.size(16.dp))
+            }
         }
     }
 }
